@@ -6,6 +6,9 @@ import me.nicolas.adventofcode.readFileDirectlyAsText
 // https://adventofcode.com/2020/day/9
 fun main() {
 
+    println("--- Day 9: Encoding Error ---")
+    println()
+
     val training = readFileDirectlyAsText("/year2020/day9/training.txt")
     val data = readFileDirectlyAsText("/year2020/day9/data.txt")
 
