@@ -55,7 +55,7 @@ private fun partTwo(list: List<Int>) {
     for (adapter in adapters.sortedDescending()) {
         for (index in 1..3) {
             if ((adapter + index) in adapters) {
-                allPossiblePaths[adapter]?.plus(allPossiblePaths[adapter + index]!!)
+                allPossiblePaths[adapter] = allPossiblePaths[adapter]!! + allPossiblePaths[adapter + index]!!
             }
         }
     }
