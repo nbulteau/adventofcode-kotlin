@@ -1,9 +1,12 @@
 package me.nicolas.adventofcode.year2020
 
 import me.nicolas.adventofcode.readFileDirectlyAsText
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 // --- Day 10: Adapter Array ---
 // https://adventofcode.com/2020/day/10
+@ExperimentalTime
 fun main() {
 
     println("--- Day 10: Adapter Array ---")
@@ -18,33 +21,34 @@ fun main() {
     partOne(adapters)
 
     // Part Two
-    partTwo(adapters)
+    val duration = measureTime { partTwo(adapters) }
+    println("Part two duration : $duration")
 }
 
-private fun partOne(numbers: List<Int>) {
+private fun partOne(adapters: List<Int>) {
     val dif1 = mutableListOf<Int>()
     val dif3 = mutableListOf<Int>()
 
     var current = 0
     do {
-        if ((current + 1) in numbers) {
+        if ((current + 1) in adapters) {
             current += 1
             dif1.add(current)
         } else {
             current += 3
             dif3.add(current)
         }
-    } while (current <= numbers.maxOf { it })
+    } while (current <= adapters.maxOf { it })
 
     println("Part one (${dif1.size} * ${dif3.size}) = ${dif1.size * dif3.size}")
 }
 
-private fun partTwo(list: List<Int>) {
+private fun partTwo(adaptersList: List<Int>) {
 
     // init all adapters
-    val adapters = list.toMutableList().apply {
+    val adapters = adaptersList.toMutableList().apply {
         add(0) // 0
-        add(list.maxOf { it } + 3)
+        add(adaptersList.maxOf { it } + 3)
     }
 
     // init all possible paths map
