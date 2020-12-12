@@ -14,41 +14,55 @@ fun main() {
     val training = readFileDirectlyAsText("/year2020/day11/training.txt")
     val data = readFileDirectlyAsText("/year2020/day11/data.txt")
 
-    val layout: Layout = training.split("\n")
+    val layout: Layout = data.split("\n")
 
     // Part One
-    partOne(layout)
+    Day11().partOne(layout)
 
     // Part Two
-    partTwo(layout)
+    Day11().partTwo(layout)
 }
 
-private fun partOne(layout: Layout) {
+class Day11 {
 
-    var newLayout = layout
-    var previousLayout: List<String>
-    do {
-        previousLayout = newLayout
-        newLayout = previousLayout.processLayoutPartOne()
+    fun partOne(layout: Layout) {
 
-        // newLayout.displayLayout()
-    } while (newLayout != previousLayout)
+        var newLayout = layout
+        var previousLayout: List<String>
+        do {
+            previousLayout = newLayout
+            newLayout = previousLayout.processLayoutPartOne()
 
-    println("Part one = ${newLayout.count('#')}")
-}
+            // newLayout.displayLayout()
+        } while (newLayout != previousLayout)
 
-private fun partTwo(layout: Layout) {
+        println("Part one = ${newLayout.count('#')}")
+    }
 
-    var newLayout = layout
-    var previousLayout: List<String>
-    do {
-        previousLayout = newLayout
-        newLayout = previousLayout.processLayoutPartTwo()
+    fun partTwo(layout: Layout) {
 
-        //newLayout.displayLayout()
-    } while (newLayout != previousLayout)
+        var newLayout = layout
+        var previousLayout: List<String>
+        do {
+            previousLayout = newLayout
+            newLayout = previousLayout.processLayoutPartTwo()
 
-    println("Part two = ${newLayout.count('#')}")
+            //newLayout.displayLayout()
+        } while (newLayout != previousLayout)
+
+        println("Part two = ${newLayout.count('#')}")
+    }
+
+    enum class Direction(var dx: Int, var dy: Int) {
+        NORTH(0, -1),
+        NORTH_EAST(1, -1),
+        EAST(1, 0),
+        SOUTH_EAST(1, 1),
+        SOUTH(0, 1),
+        SOUTH_WEST(-1, 1),
+        WEST(-1, 0),
+        NORTH_WEST(-1, -1);
+    }
 }
 
 fun Layout.processLayoutPartOne(): Layout {
@@ -124,15 +138,15 @@ private fun Layout.count(charToCount: Char) =
     this.sumOf { string -> string.count { char -> char == charToCount } }
 
 fun Layout.lookAround(x: Int, y: Int) =
-    Direction.values().sumBy { direction -> this.lookAround(x, y, direction) }
+    Day11.Direction.values().sumBy { direction -> this.lookAround(x, y, direction) }
 
-fun Layout.lookAround(x: Int, y: Int, direction: Direction): Int {
+fun Layout.lookAround(x: Int, y: Int, direction: Day11.Direction): Int {
 
     val height = this.size - 1
     val width = this[0].length - 1
 
-    var nextX = x + direction.dx
-    var nextY = y + direction.dy
+    val nextX = x + direction.dx
+    val nextY = y + direction.dy
 
     if (nextX in 0..width && nextY in 0..height) {
         if (this[nextY][nextX] == '#') {
@@ -144,9 +158,9 @@ fun Layout.lookAround(x: Int, y: Int, direction: Direction): Int {
 }
 
 fun Layout.lookInDirection(x: Int, y: Int) =
-    Direction.values().sumBy { direction -> this.lookInDirection(x, y, direction) }
+    Day11.Direction.values().sumBy { direction -> this.lookInDirection(x, y, direction) }
 
-fun Layout.lookInDirection(x: Int, y: Int, direction: Direction): Int {
+fun Layout.lookInDirection(x: Int, y: Int, direction: Day11.Direction): Int {
 
     val height = this.size - 1
     val width = this[0].length - 1
@@ -169,13 +183,3 @@ fun Layout.lookInDirection(x: Int, y: Int, direction: Direction): Int {
     return 0
 }
 
-enum class Direction(var dx: Int, var dy: Int) {
-    NORTH(0, -1),
-    NORTH_EAST(1, -1),
-    EAST(1, 0),
-    SOUTH_EAST(1, 1),
-    SOUTH(0, 1),
-    SOUTH_WEST(-1, 1),
-    WEST(-1, 0),
-    NORTH_WEST(-1, -1);
-}

@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 
 internal class Day11KtTest {
 
-
     @Test
     fun lookAroundInDirection3() {
         val layout = """
@@ -20,7 +19,7 @@ internal class Day11KtTest {
             ...#.....
         """.trimIndent().split("\n")
 
-        var nbSeats = layout.lookInDirection(3, 4, Direction.EAST)
+        var nbSeats = layout.lookInDirection(3, 4, Day11.Direction.EAST)
         assertEquals(1, nbSeats)
 
         nbSeats = layout.lookInDirection(3, 4)
@@ -35,11 +34,11 @@ internal class Day11KtTest {
             .............
         """.trimIndent().split("\n")
 
-        var nbSeats = layout.lookInDirection(1, 1, Direction.EAST)
-        assertEquals(1, nbSeats)
+        var nbSeats = layout.lookInDirection(1, 1, Day11.Direction.EAST)
+        assertEquals(0, nbSeats)
 
         nbSeats = layout.lookInDirection(1, 1)
-        assertEquals(1, nbSeats)
+        assertEquals(0, nbSeats)
     }
 
     @Test
@@ -54,21 +53,21 @@ internal class Day11KtTest {
             .##.##.
         """.trimIndent().split("\n")
 
-        var nbSeats = layout.lookInDirection(3, 3, Direction.EAST)
+        var nbSeats = layout.lookInDirection(3, 3, Day11.Direction.EAST)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.NORTH)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.NORTH)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.WEST)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.WEST)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.SOUTH)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.SOUTH)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.SOUTH_EAST)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.SOUTH_EAST)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.SOUTH_WEST)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.SOUTH_WEST)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.NORTH_EAST)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.NORTH_EAST)
         assertEquals(0, nbSeats)
-        nbSeats = layout.lookInDirection(3, 3, Direction.NORTH_WEST)
+        nbSeats = layout.lookInDirection(3, 3, Day11.Direction.NORTH_WEST)
         assertEquals(0, nbSeats)
         nbSeats = layout.lookInDirection(3, 3)
         assertEquals(0, nbSeats)
@@ -134,6 +133,5 @@ internal class Day11KtTest {
         """.trimIndent().split("\n")
 
         assertEquals(expected3, result3)
-
     }
 }
