@@ -9,8 +9,8 @@ fun main() {
     println("--- Day 9: Encoding Error ---")
     println()
 
-    val training = readFileDirectlyAsText("/year2020/day9/training.txt")
-    val data = readFileDirectlyAsText("/year2020/day9/data.txt")
+    val training = readFileDirectlyAsText("/year2020/day09/training.txt")
+    val data = readFileDirectlyAsText("/year2020/day09/data.txt")
 
     val numbers = data.split("\n").map { str -> str.toLong() }
 

@@ -11,8 +11,8 @@ fun main(args: Array<String>) {
     println("--- Day 1: The Tyranny of the Rocket Equation ---")
     println()
 
-    val training = readFileDirectlyAsText("/year2019/day1/training.txt")
-    val data = readFileDirectlyAsText("/year2019/day1/data.txt")
+    val training = readFileDirectlyAsText("/year2019/day01/training.txt")
+    val data = readFileDirectlyAsText("/year2019/day01/data.txt")
 
     val masses = data.split("\n").map { string -> string.toInt() }
 

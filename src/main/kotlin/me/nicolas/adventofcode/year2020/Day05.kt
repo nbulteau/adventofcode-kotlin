@@ -7,8 +7,8 @@ import kotlin.math.round
 // https://adventofcode.com/2020/day/5
 fun main() {
 
-    val training = readFileDirectlyAsText("/year2020/day5/training.txt")
-    val data = readFileDirectlyAsText("/year2020/day5/data.txt")
+    val training = readFileDirectlyAsText("/year2020/day05/training.txt")
+    val data = readFileDirectlyAsText("/year2020/day05/data.txt")
 
     val seats = data.split("\n")
 

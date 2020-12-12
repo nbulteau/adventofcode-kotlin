@@ -7,8 +7,8 @@ import me.nicolas.adventofcode.readFileDirectlyAsText
 // https://adventofcode.com/2020/day/3
 fun main() {
 
-    val training = readFileDirectlyAsText("/year2020/day3/training.txt")
-    val data = readFileDirectlyAsText("/year2020/day3/data.txt")
+    val training = readFileDirectlyAsText("/year2020/day03/training.txt")
+    val data = readFileDirectlyAsText("/year2020/day03/data.txt")
 
     val pattern = data.split("\n")
 

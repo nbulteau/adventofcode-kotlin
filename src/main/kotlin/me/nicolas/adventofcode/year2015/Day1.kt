@@ -10,8 +10,8 @@ fun main(args: Array<String>) {
     println("--- Day 1: Not Quite Lisp ---")
     println()
 
-    val training = readFileDirectlyAsText("/year2015/day1/training.txt")
-    val data = readFileDirectlyAsText("/year2015/day1/data.txt")
+    val training = readFileDirectlyAsText("/year2015/day01/training.txt")
+    val data = readFileDirectlyAsText("/year2015/day01/data.txt")
 
     // Part One
     partOne(data)
