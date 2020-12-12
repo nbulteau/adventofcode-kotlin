@@ -7,7 +7,6 @@ import kotlin.math.abs
 // https://adventofcode.com/2020/day/12
 fun main() {
 
-
     println("--- Day 12: Rain Risk ---")
     println()
 
@@ -25,6 +24,23 @@ fun main() {
 }
 
 class Day12 {
+
+    fun partOne(instructions: List<Instruction>) {
+
+        val taxicabGeometry = TaxicabGeometry()
+        taxicabGeometry.move(instructions)
+
+        println("Part one = ${taxicabGeometry.path}")
+    }
+
+    fun partTwo(instructions: List<Instruction>) {
+
+        val taxicabGeometry = TaxicabGeometryWithWayPoint()
+        taxicabGeometry.move(instructions)
+
+        println("Part two = ${taxicabGeometry.path}")
+    }
+
     data class Instruction(val action: Char, val value: Int)
 
     class TaxicabGeometry(startDirection: Direction = Direction.EAST) {
@@ -40,8 +56,8 @@ class Day12 {
         fun move(instruction: Instruction) {
             when (instruction.action) {
                 'N', 'E', 'S', 'W' -> move(Direction.byLabel(instruction.action), instruction.value)
-                'L' -> currentDirection = currentDirection.getNextDirection(360 - instruction.value)
-                'R' -> currentDirection = currentDirection.getNextDirection(instruction.value)
+                'L' -> currentDirection = rotateLeft(instruction.value)
+                'R' -> currentDirection = rotateRight(instruction.value)
                 'F' -> move(currentDirection, instruction.value)
             }
         }
@@ -51,16 +67,14 @@ class Day12 {
             northSouth += value * direction.dy
         }
 
+        private fun rotateLeft(value: Int) =
+            currentDirection.getNextDirection(360 - value)
+
+        private fun rotateRight(value: Int) =
+            currentDirection.getNextDirection(value)
+
         val path: Int
             get() = abs(eastWest) + abs(northSouth)
-    }
-
-    fun partOne(instructions: List<Instruction>) {
-
-        val taxicabGeometry = TaxicabGeometry()
-        taxicabGeometry.move(instructions)
-
-        println("Part one = ${taxicabGeometry.path}")
     }
 
     class TaxicabGeometryWithWayPoint(startWaypointEastWest: Int = -10, startWaypointNorthSouth: Int = 1) {
@@ -77,46 +91,9 @@ class Day12 {
         fun move(instruction: Instruction) {
             when (instruction.action) {
                 'N', 'E', 'S', 'W' -> moveWaypoint(Direction.byLabel(instruction.action), instruction.value)
-                'L' -> {
-                    when (instruction.value) {
-                        90 -> {
-                            val previousWaypointEastWest = waypointEastWest
-                            waypointEastWest = waypointNorthSouth
-                            waypointNorthSouth = 0 - previousWaypointEastWest
-                        }
-                        180 -> {
-                            waypointEastWest = 0 - waypointEastWest
-                            waypointNorthSouth = 0 - waypointNorthSouth
-                        }
-                        270 -> {
-                            val previousWaypointEastWest = waypointEastWest
-                            waypointEastWest = 0 - waypointNorthSouth
-                            waypointNorthSouth = previousWaypointEastWest
-                        }
-                    }
-                }
-                'R' -> {
-                    when (instruction.value) {
-                        90 -> {
-                            val previousWaypointEastWest = waypointEastWest
-                            waypointEastWest = 0 - waypointNorthSouth
-                            waypointNorthSouth = previousWaypointEastWest
-                        }
-                        180 -> {
-                            waypointEastWest = 0 - waypointEastWest
-                            waypointNorthSouth = 0 - waypointNorthSouth
-                        }
-                        270 -> {
-                            val previousWaypointEastWest = waypointEastWest
-                            waypointEastWest = waypointNorthSouth
-                            waypointNorthSouth = 0 - previousWaypointEastWest
-                        }
-                    }
-                }
-                'F' -> {
-                    eastWest += waypointEastWest * instruction.value
-                    northSouth += waypointNorthSouth * instruction.value
-                }
+                'L' -> rotateWaypointLeft(instruction.value)
+                'R' -> rotateWaypointRight(instruction.value)
+                'F' -> moveForward(instruction.value)
             }
         }
 
@@ -125,21 +102,51 @@ class Day12 {
             waypointNorthSouth += value * direction.dy
         }
 
-        private fun rotateWaypoint(direction: Direction, value: Int) {
-            waypointEastWest += value * direction.dx
-            waypointNorthSouth += value * direction.dy
+        private fun rotateWaypointLeft(value: Int) = when (value) {
+            90 -> {
+                val previousWaypointEastWest = waypointEastWest
+                waypointEastWest = waypointNorthSouth
+                waypointNorthSouth = 0 - previousWaypointEastWest
+            }
+            180 -> {
+                waypointEastWest = 0 - waypointEastWest
+                waypointNorthSouth = 0 - waypointNorthSouth
+            }
+            270 -> {
+                val previousWaypointEastWest = waypointEastWest
+                waypointEastWest = 0 - waypointNorthSouth
+                waypointNorthSouth = previousWaypointEastWest
+            }
+            else -> {
+            }
+        }
+
+        private fun rotateWaypointRight(value: Int) = when (value) {
+            90 -> {
+                val previousWaypointEastWest = waypointEastWest
+                waypointEastWest = 0 - waypointNorthSouth
+                waypointNorthSouth = previousWaypointEastWest
+            }
+            180 -> {
+                waypointEastWest = 0 - waypointEastWest
+                waypointNorthSouth = 0 - waypointNorthSouth
+            }
+            270 -> {
+                val previousWaypointEastWest = waypointEastWest
+                waypointEastWest = waypointNorthSouth
+                waypointNorthSouth = 0 - previousWaypointEastWest
+            }
+            else -> {
+            }
+        }
+
+        private fun moveForward(value: Int) {
+            eastWest += waypointEastWest * value
+            northSouth += waypointNorthSouth * value
         }
 
         val path: Int
             get() = abs(eastWest) + abs(northSouth)
-    }
-
-    fun partTwo(instructions: List<Instruction>) {
-
-        val taxicabGeometry = TaxicabGeometryWithWayPoint()
-        taxicabGeometry.move(instructions)
-
-        println("Part two = ${taxicabGeometry.path}")
     }
 
     enum class Direction(val label: Char, val dx: Int, val dy: Int) {
@@ -152,8 +159,6 @@ class Day12 {
             fun byLabel(label: Char) = values().first { direction -> label == direction.label }
         }
 
-        fun getNextDirection(value: Int): Direction {
-            return values()[(ordinal + (value / 90)) % 4]
-        }
+        fun getNextDirection(value: Int): Direction = values()[(ordinal + (value / 90)) % 4]
     }
 }
