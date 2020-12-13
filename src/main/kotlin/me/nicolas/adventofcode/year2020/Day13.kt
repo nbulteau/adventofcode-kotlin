@@ -3,11 +3,11 @@ package me.nicolas.adventofcode.year2020
 import me.nicolas.adventofcode.readFileDirectlyAsText
 
 
-// --- Day 13:  ---
+// --- Day 13: Shuttle Search ---
 // https://adventofcode.com/2020/day/13
 fun main() {
 
-    println("--- Day 13:  ---")
+    println("--- Day 13: Shuttle Search ---")
     println()
 
     val training = readFileDirectlyAsText("/year2020/day13/training.txt")
@@ -22,6 +22,8 @@ fun main() {
 
     // Part Two
     Day13().partTwo(busIds)
+
+    Day13().chineseRemainder(busIds)
 }
 
 class Day13 {
@@ -53,7 +55,7 @@ class Day13 {
 
     /**
      * 7,13,x,x,59,x,31,19
-     *
+     * busId must be > 2
      * https://rosettacode.org/wiki/Chinese_remainder_theorem#Kotlin
      */
     fun partTwo(busList: List<String>) {
@@ -87,6 +89,7 @@ class Day13 {
      * https://www.apprendre-en-ligne.net/crypto/rabin/resteschinois.html
      *
      * x,x,11,x,7,x,x,x,x,x,13
+     * x,x,x,17,11,6 => 785
      *
      * x mod 7 = 5
      * x mod 11 = 3
@@ -103,7 +106,9 @@ class Day13 {
      *      x = 13 907 mod 1001
      *      x = 894
      */
-    fun partTwoNotWOrking(busList: List<String>) {
+    fun chineseRemainder(busList: List<String>) {
+
+        println()
 
         val buses = mutableMapOf<Int, Int>()
         for (index in busList.indices) {
@@ -123,21 +128,16 @@ class Day13 {
         val yi: Map<Int, Int> = buses.map { bus -> bus.key to modInverse(mi[bus.key]!!, bus.key) }.toMap()
         println("yi = $yi")
         // x = (a1 * M1 * y1 + ... + an * Mn * yn) mod M
-        val result = buses.map { bus ->
-            if (buses[bus.key]!! > 0) {
-                buses[bus.key]!!
-            } else {
-                1
-            } * mi[bus.key]!! * yi[bus.key]!!
-        }.sumOf { it } % m
-
+        val result = buses.map { bus -> buses[bus.key]!! * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it } % m
         println("x = ${buses.map { bus -> "(${buses[bus.key]!!} * ${mi[bus.key]!!} * ${yi[bus.key]!!})" }} mod $m")
         println("x = ${buses.map { bus -> buses[bus.key]!! * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it }} mod $m")
 
-        println("Part two = $result")
+        println("Using Chinese remainder x = $result")
     }
 
-    // https://www.apprendre-en-ligne.net/crypto/rabin/euclide.html
+    /**
+     * https://www.apprendre-en-ligne.net/crypto/rabin/euclide.html
+     */
     fun modInverse(a: Long, m: Int): Int {
         val mod = a % m
         for (x in 1..m) {
@@ -147,6 +147,4 @@ class Day13 {
         }
         return 0
     }
-
-
 }
