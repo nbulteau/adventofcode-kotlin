@@ -56,7 +56,6 @@ class Day13 {
     /**
      * 7,13,x,x,59,x,31,19
      * busId must be > 2
-     * https://rosettacode.org/wiki/Chinese_remainder_theorem#Kotlin
      */
     fun partTwo(busList: List<String>) {
 
@@ -85,7 +84,7 @@ class Day13 {
     }
 
     /**
-     *
+     * https://rosettacode.org/wiki/Chinese_remainder_theorem#Kotlin
      * https://www.apprendre-en-ligne.net/crypto/rabin/resteschinois.html
      *
      * x,x,11,x,7,x,x,x,x,x,13
