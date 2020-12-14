@@ -3,10 +3,13 @@ package me.nicolas.adventofcode.year2020
 import me.nicolas.adventofcode.readFileDirectlyAsText
 import java.math.BigDecimal
 import kotlin.math.pow
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 
 // --- Day 14: Docking Data ---
 // https://adventofcode.com/2020/day/14
+@ExperimentalTime
 fun main() {
 
     println("--- Day 14: Docking Data ---")
@@ -21,7 +24,8 @@ fun main() {
     Day14().partOne(program, Day14().computeBlockPartOne)
 
     // Part Two
-    Day14().partTwo(program, Day14().computeBlockPartTwo)
+    val duration = measureTime { Day14().partTwo(program, Day14().computeBlockPartTwo) }
+    println("Part two duration : $duration")
 
 }
 
