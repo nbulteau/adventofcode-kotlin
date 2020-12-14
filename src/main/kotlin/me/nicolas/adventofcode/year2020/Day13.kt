@@ -13,7 +13,7 @@ fun main() {
     val training = readFileDirectlyAsText("/year2020/day13/training.txt")
     val data = readFileDirectlyAsText("/year2020/day13/data.txt")
 
-    val (timestampStr, bus) = training.split("\n")
+    val (timestampStr, bus) = data.split("\n")
     val timestamp = timestampStr.toInt()
     val busIds = bus.split(",")
 
@@ -86,6 +86,7 @@ class Day13 {
     /**
      * https://rosettacode.org/wiki/Chinese_remainder_theorem#Kotlin
      * https://www.apprendre-en-ligne.net/crypto/rabin/resteschinois.html
+     * https://fr.wikipedia.org/wiki/Th%C3%A9or%C3%A8me_des_restes_chinois
      *
      * x,x,11,x,7,x,x,x,x,x,13
      * x,x,x,17,11,6 => 785
@@ -109,27 +110,34 @@ class Day13 {
 
         println()
 
-        val buses = mutableMapOf<Int, Int>()
+        val buses = mutableMapOf<Long, Long>()
         for (index in busList.indices) {
             if (busList[index] != "x") {
-                val value = busList[index].toInt()
-                buses[value] = index
+                val value = busList[index].toLong()
+                buses[value] = index.toLong()
             }
         }
 
         // M = m1 · ... · mn
-        var m: Long = buses.keys.reduce { M, bus -> M * bus }.toLong()
-        println("M = $m")
+        var product: Long = buses.keys.reduce { M: Long, bus -> M * bus }
+
+        println("M = $product")
         // Mi = M/mi
-        val mi: Map<Int, Long> = buses.map { bus -> bus.key to m / bus.key.toLong() }.toMap()
+        val mi: Map<Long, Long> = buses.map { bus -> bus.key to product / bus.key }.toMap()
         println("Mi = $mi")
-        // yi = Mi-1 mod mi
-        val yi: Map<Int, Int> = buses.map { bus -> bus.key to modInverse(mi[bus.key]!!, bus.key) }.toMap()
+        // yi = Mi-1 mod mi => mod inverse
+        val yi: Map<Long, Long> = buses.map { bus -> bus.key to modInverse(mi[bus.key]!!, bus.key) }.toMap()
         println("yi = $yi")
         // x = (a1 * M1 * y1 + ... + an * Mn * yn) mod M
-        val result = buses.map { bus -> buses[bus.key]!! * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it } % m
-        println("x = ${buses.map { bus -> "(${buses[bus.key]!!} * ${mi[bus.key]!!} * ${yi[bus.key]!!})" }} mod $m")
-        println("x = ${buses.map { bus -> buses[bus.key]!! * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it }} mod $m")
+        // congruence = busId - index
+        val result =
+            buses.map { bus -> (bus.key - buses[bus.key]!!) * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it } % product
+        println("x = ${buses.map { bus -> "(${buses[bus.key]!!} * ${mi[bus.key]!!} * ${yi[bus.key]!!})" }} mod $product")
+        println(
+            "x = ${
+                buses.map { bus -> (bus.key - buses[bus.key]!!) * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it }
+            } mod $product"
+        )
 
         println("Using Chinese remainder x = $result")
     }
@@ -137,13 +145,13 @@ class Day13 {
     /**
      * https://www.apprendre-en-ligne.net/crypto/rabin/euclide.html
      */
-    fun modInverse(a: Long, m: Int): Int {
+    fun modInverse(a: Long, m: Long): Long {
         val mod = a % m
         for (x in 1..m) {
             if ((mod * x) % m == 1L) {
                 return x
             }
         }
-        return 0
+        return 0L
     }
 }
