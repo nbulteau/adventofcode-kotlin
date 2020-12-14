@@ -65,7 +65,6 @@ class Day14 {
 
     val computeBlockPartOne = { mask: String, instructions: List<String>, memory: MutableMap<Long, String> ->
 
-        val index = 0
         instructions.forEach {
             val (address, value) = it.getInstruction()
             memory[address] = value.applyMaskPartOne(mask)
@@ -78,7 +77,7 @@ class Day14 {
             val (address, value) = it.getInstruction()
             val maskedAddress = address.applyMaskPartTwo(mask)
             val addressList = maskedAddress.expandResult()
-            addressList.forEach { address -> memory[address.toDecimal().toLong()] = value }
+            addressList.forEach { addressToSet -> memory[addressToSet.toDecimal().toLong()] = value }
         }
     }
 
