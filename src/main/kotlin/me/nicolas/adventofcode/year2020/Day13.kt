@@ -1,10 +1,13 @@
 package me.nicolas.adventofcode.year2020
 
 import me.nicolas.adventofcode.readFileDirectlyAsText
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 
 // --- Day 13: Shuttle Search ---
 // https://adventofcode.com/2020/day/13
+@ExperimentalTime
 fun main() {
 
     println("--- Day 13: Shuttle Search ---")
@@ -21,9 +24,12 @@ fun main() {
     Day13().partOne(timestamp, busIds)
 
     // Part Two
-    Day13().partTwo(busIds)
+    var duration = measureTime { Day13().partTwo(busIds) }
+    println("Part two duration : $duration")
 
-    Day13().chineseRemainder(busIds)
+    duration = measureTime { Day13().chineseRemainder(busIds) }
+    println("Part two with Chinese Remainder duration : $duration")
+
 }
 
 class Day13 {
@@ -66,8 +72,6 @@ class Day13 {
                 buses[value] = index
             }
         }
-
-        println(buses)
 
         var result: Long = 0
         var incrementer: Long = 1
@@ -120,24 +124,14 @@ class Day13 {
 
         // M = m1 · ... · mn
         var product: Long = buses.keys.reduce { M: Long, bus -> M * bus }
-
-        println("M = $product")
         // Mi = M/mi
         val mi: Map<Long, Long> = buses.map { bus -> bus.key to product / bus.key }.toMap()
-        println("Mi = $mi")
         // yi = Mi-1 mod mi => mod inverse
         val yi: Map<Long, Long> = buses.map { bus -> bus.key to modInverse(mi[bus.key]!!, bus.key) }.toMap()
-        println("yi = $yi")
         // x = (a1 * M1 * y1 + ... + an * Mn * yn) mod M
         // congruence = busId - index
         val result =
             buses.map { bus -> (bus.key - buses[bus.key]!!) * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it } % product
-        println("x = ${buses.map { bus -> "(${buses[bus.key]!!} * ${mi[bus.key]!!} * ${yi[bus.key]!!})" }} mod $product")
-        println(
-            "x = ${
-                buses.map { bus -> (bus.key - buses[bus.key]!!) * mi[bus.key]!! * yi[bus.key]!! }.sumOf { it }
-            } mod $product"
-        )
 
         println("Using Chinese remainder x = $result")
     }
