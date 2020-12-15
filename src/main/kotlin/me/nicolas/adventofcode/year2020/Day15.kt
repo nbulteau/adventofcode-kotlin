@@ -24,28 +24,27 @@ fun main() {
 
 class Day15 {
 
+    fun partOne(numbers: List<Int>, lastTurn: Int) {
 
-    fun partOne(numbers: List<Int>, number: Int) {
+        val last = process(numbers, lastTurn)
 
-        val spoken = process(numbers, number)
-
-        println("Part one = ${spoken.last()}")
+        println("Part one = $last")
     }
 
-    fun partTwo(numbers: List<Int>, number: Int) {
+    fun partTwo(numbers: List<Int>, lastTurn: Int) {
 
-        val spoken = process(numbers, number)
+        val last = process(numbers, lastTurn)
 
-        println("Part two = ${spoken.last()}")
+        println("Part two = $last")
     }
 
-    private fun process(numbers: List<Int>, number: Int): MutableList<Int> {
+    private fun process(numbers: List<Int>, lastTurn: Int): Int {
 
         val spoken = numbers.toMutableList()
         // List of Pair
         val memory = numbers.mapIndexed { index, it -> it to Pair<Int?, Int?>(index + 1, null) }.toMap().toMutableMap()
 
-        for (turn in numbers.size + 1..number) {
+        for (turn in numbers.size + 1..lastTurn) {
             val last = spoken.last()
 
             // get current
@@ -65,6 +64,6 @@ class Day15 {
 
             spoken.add(current)
         }
-        return spoken
+        return spoken.last()
     }
 }
