@@ -34,7 +34,7 @@ private class Day17PartOne {
         var pocket: MutableMap<CubeCoord, Char> = initPocket(layout)
 
         for (cycle in 1..6) {
-            //pocket.display(cycle)
+            //pocket.display()
 
             val nextPocket = pocket.buildListOfCoords().map { coord ->
                 val nbNeighborsActiveCube =
