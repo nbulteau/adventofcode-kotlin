@@ -1,6 +1,9 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.Grid
+import me.nicolas.adventofcode.flipHorizontal
 import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.rotateClockwise
 import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -26,6 +29,16 @@ fun main() {
     // Part Two
     val duration = measureTime { Day20().partTwo(tiles.toMutableList()) }
     println("Part two duration : $duration")
+}
+
+fun extractTiles(sections: List<String>): List<Tile> {
+
+    return sections.map { section ->
+        val parts = section.split("\n")
+        val tileId = parts[0].substringAfter("Tile ").substringBefore(":").toInt()
+        val tile = parts.drop(1)
+        Tile(tileId, tile)
+    }
 }
 
 data class Tile(val id: Int, var grid: List<String>) {
@@ -102,21 +115,7 @@ data class Tile(val id: Int, var grid: List<String>) {
     }
 }
 
-fun extractTiles(sections: List<String>): List<Tile> {
-
-    return sections.map { section ->
-        val parts = section.split("\n")
-        val tileId = parts[0].substringAfter("Tile ").substringBefore(":").toInt()
-        val tile = parts.drop(1)
-        Tile(tileId, tile)
-    }
-}
-
 class Day20 {
-
-    enum class Edges {
-        NORTH, EAST, SOUTH, WEST, REVERSED_NORTH, REVERSED_EAST, REVERSED_SOUTH, REVERSED_WEST
-    }
 
     // we only need to find ids of corners, no need to match anything else
     fun partOne(tiles: List<Tile>) {
@@ -144,6 +143,9 @@ class Day20 {
         println("Part two = $result")
     }
 
+    private enum class Edges {
+        NORTH, EAST, SOUTH, WEST, REVERSED_NORTH, REVERSED_EAST, REVERSED_SOUTH, REVERSED_WEST
+    }
 
     private fun solvePuzzle(puzzleSize: Int, tiles: MutableList<Tile>): Array<Array<Tile>> {
 
@@ -278,7 +280,17 @@ class Day20 {
      */
     private fun findCorrectOrientationForFirstCorner(tiles: List<Tile>, firstCorner: Tile) {
 
-        val edgeWithMatch = getEdgeWithMatch(tiles, firstCorner)
+        // look for edges without a match : N, E, S, W only
+        val edgeWithMatch = BooleanArray(4) { false }
+
+        for (tileToTest in tiles) {
+            if (firstCorner != tileToTest) {
+                // N, E, S, W
+                firstCorner.edges.take(4).forEachIndexed { index, edge ->
+                    edgeWithMatch[index] = edgeWithMatch[index] || tileToTest.edges.contains(edge)
+                }
+            }
+        }
 
         if (!edgeWithMatch[Edges.NORTH.ordinal] && edgeWithMatch[Edges.EAST.ordinal] && edgeWithMatch[Edges.SOUTH.ordinal] && !edgeWithMatch[Edges.WEST.ordinal]) {
             // nothing to do
@@ -292,23 +304,6 @@ class Day20 {
             firstCorner.rotateClockwise()
             firstCorner.rotateClockwise()
         }
-    }
-
-    private fun getEdgeWithMatch(tiles: List<Tile>, tile: Tile): BooleanArray {
-
-        // look for edges without a match : N, E, S, W only
-        val edgeHasAMatch = BooleanArray(4) { false }
-
-        for (tileToTest in tiles) {
-            if (tile != tileToTest) {
-                // N, E, S, W
-                tile.edges.take(4).forEachIndexed { index, edge ->
-                    edgeHasAMatch[index] = edgeHasAMatch[index] || tileToTest.edges.contains(edge)
-                }
-            }
-        }
-
-        return edgeHasAMatch
     }
 
     private fun findCorners(tiles: List<Tile>): List<Tile> {
@@ -357,29 +352,7 @@ class Day20 {
         return image
     }
 
-    fun rotateClockwise(grid: Array<CharArray>): Array<CharArray> {
-        val copy = Array(grid.size) { CharArray(grid[0].size) }
-
-        for (row in copy.indices) {
-            for (column in copy[0].indices) {
-                copy[row][column] = grid[grid.size - 1 - column][row]
-            }
-        }
-        return copy
-    }
-
-    fun flipHorizontal(grid: Array<CharArray>): Array<CharArray> {
-        val copy = Array(grid.size) { CharArray(grid[0].size) }
-
-        for (r in copy.indices) {
-            for (c in copy[0].indices) {
-                copy[r][c] = grid[r][grid[0].size - 1 - c]
-            }
-        }
-        return copy
-    }
-
-    private fun revealSeaMonsters(image: Array<CharArray>): Array<CharArray> {
+    private fun revealSeaMonsters(grid: Grid): Grid {
 
         val seaMonster = """
                               # 
@@ -396,17 +369,17 @@ class Day20 {
                 }
             }
 
-        var image1 = image
+        var image = grid
         for (i in 0..3) {
-            doRevealSeaMonsters(image1, seaMonster)
-            image1 = rotateClockwise(image1)
+            doRevealSeaMonsters(image, seaMonster)
+            image = image.rotateClockwise()
         }
-        image1 = flipHorizontal(image1)
+        image = image.flipHorizontal()
         for (i in 0..3) {
-            doRevealSeaMonsters(image1, seaMonster)
-            image1 = rotateClockwise(image1)
+            doRevealSeaMonsters(image, seaMonster)
+            image = image.rotateClockwise()
         }
-        return image1
+        return image
     }
 
     fun doRevealSeaMonsters(image: Array<CharArray>, seaMonster: List<Pair<Int, Int>>) {

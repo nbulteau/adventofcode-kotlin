@@ -144,33 +144,6 @@ internal class Day20Test {
         assertEquals(".#####..#.", tile.edges[3]) // West
     }
 
-    @Test
-    fun rotateClockwise() {
-
-        var bigPicture = Array(5) { CharArray(5) }
-        bigPicture[0][1] = '#'
-        bigPicture[0][2] = '#'
-        bigPicture[0][3] = '#'
-
-        bigPicture = Day20().rotateClockwise(bigPicture)
-        assertEquals('#', bigPicture[1][4]) // West
-        assertEquals('#', bigPicture[2][4]) // West
-        assertEquals('#', bigPicture[3][4]) // West
-    }
-
-    @Test
-    fun flipHorizontal() {
-
-        var bigPicture = Array(5) { CharArray(5) }
-        bigPicture[1][0] = '#'
-        bigPicture[2][0] = '#'
-        bigPicture[3][0] = '#'
-
-        bigPicture = Day20().flipHorizontal(bigPicture)
-        assertEquals('#', bigPicture[1][4]) // West
-        assertEquals('#', bigPicture[2][4]) // West
-        assertEquals('#', bigPicture[3][4]) // West
-    }
 
     @Test
     fun doRevealSeaMonsters() {
@@ -182,12 +155,7 @@ internal class Day20Test {
         """.trimIndent()
             .split("\n")
             .flatMapIndexed { row, str ->
-                str.mapIndexedNotNull { column, c ->
-                    if (c == '#') Pair(
-                        row,
-                        column
-                    ) else null
-                }
+                str.mapIndexedNotNull { column, c -> if (c == '#') Pair(row, column) else null }
             }
 
         var image = Array(50) { CharArray(50) }
@@ -202,24 +170,24 @@ internal class Day20Test {
         assertEquals(30, count) // West
     }
 
-    private fun addSeaMonster(bigPicture: Array<CharArray>, row: Int, column: Int): Array<CharArray> {
+    private fun addSeaMonster(picture: Array<CharArray>, row: Int, column: Int): Array<CharArray> {
 
-        bigPicture[row][column + 18] = '#'
-        bigPicture[row + 1][column] = '#'
-        bigPicture[row + 1][column + 5] = '#'
-        bigPicture[row + 1][column + 6] = '#'
-        bigPicture[row + 1][column + 11] = '#'
-        bigPicture[row + 1][column + 12] = '#'
-        bigPicture[row + 1][column + 17] = '#'
-        bigPicture[row + 1][column + 18] = '#'
-        bigPicture[row + 1][column + 19] = '#'
-        bigPicture[row + 2][column + 1] = '#'
-        bigPicture[row + 2][column + 4] = '#'
-        bigPicture[row + 2][column + 7] = '#'
-        bigPicture[row + 2][column + 10] = '#'
-        bigPicture[row + 2][column + 13] = '#'
-        bigPicture[row + 2][column + 16] = '#'
+        picture[row][column + 18] = '#'
+        picture[row + 1][column] = '#'
+        picture[row + 1][column + 5] = '#'
+        picture[row + 1][column + 6] = '#'
+        picture[row + 1][column + 11] = '#'
+        picture[row + 1][column + 12] = '#'
+        picture[row + 1][column + 17] = '#'
+        picture[row + 1][column + 18] = '#'
+        picture[row + 1][column + 19] = '#'
+        picture[row + 2][column + 1] = '#'
+        picture[row + 2][column + 4] = '#'
+        picture[row + 2][column + 7] = '#'
+        picture[row + 2][column + 10] = '#'
+        picture[row + 2][column + 13] = '#'
+        picture[row + 2][column + 16] = '#'
 
-        return bigPicture
+        return picture
     }
 }
