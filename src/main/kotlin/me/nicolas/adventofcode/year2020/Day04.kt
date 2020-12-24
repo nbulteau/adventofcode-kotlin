@@ -33,33 +33,33 @@ fun main() {
 
 private fun partOne(batch: List<String>) {
     val nbValidPassports = batch
-            .map { record ->
-                record.split(" ")
-                        .map { entry -> entry.substringBefore(":") to entry.substringAfter(":") }.toMap()
-            }
-            .count { map ->
-                map.size == 8
-                        || map.size == 7 && !map.containsKey("cid")
-            }
+        .map { record ->
+            record.split(" ")
+                .map { entry -> entry.substringBefore(":") to entry.substringAfter(":") }.toMap()
+        }
+        .count { map ->
+            map.size == 8
+                    || map.size == 7 && !map.containsKey("cid")
+        }
 
     println(nbValidPassports)
 }
 
 private fun partTwo(batch: List<String>) {
     val nbValidPassports = batch
-            .map { record ->
-                record.split(" ")
-                        .map { entry -> entry.substringBefore(":") to entry.substringAfter(":") }.toMap()
-            }
-            .count { map ->
-                map["byr"]?.toInt() in 1920..2002
-                        && map["iyr"]?.toInt() in 2010..2020
-                        && map["eyr"]?.toInt() in 2020..2030
-                        && map["hgt"].isValidHeight()
-                        && map["hcl"]?.matches("#[0-9a-f]{6}".toRegex()) == true
-                        && map["ecl"] in listOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
-                        && map["pid"]?.matches("\\d+(\\.\\d+)?".toRegex()) == true && map["pid"]?.length == 9
-            }
+        .map { record ->
+            record.split(" ")
+                .map { entry -> entry.substringBefore(":") to entry.substringAfter(":") }.toMap()
+        }
+        .count { map ->
+            map["byr"]?.toInt() in 1920..2002
+                    && map["iyr"]?.toInt() in 2010..2020
+                    && map["eyr"]?.toInt() in 2020..2030
+                    && map["hgt"].isValidHeight()
+                    && map["hcl"]?.matches("#[0-9a-f]{6}".toRegex()) == true
+                    && map["ecl"] in listOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
+                    && map["pid"]?.matches("\\d+(\\.\\d+)?".toRegex()) == true && map["pid"]?.length == 9
+        }
 
     println(nbValidPassports)
 }
