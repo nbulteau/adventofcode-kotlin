@@ -25,12 +25,12 @@ fun main() {
     //val duration = measureTime { Day24().partTwo(lines) }
     //println("Part two duration : $duration")
 
-    // Part Two optimized (149 s)
+    // Part Two optimized (234 ms)
     val durationOptimized = measureTime { Day24().partTwoOptimized(lines) }
     println("Part two duration : $durationOptimized")
 }
 
-
+// https://www.redblobgames.com/grids/hexagons/
 private class Day24 {
 
     private enum class Direction(val label: String, val dx: Int, val dy: Int) {
@@ -54,7 +54,6 @@ private class Day24 {
             this.y += direction.dy
         }
     }
-
 
     /**
      * @param color false = white true = black
@@ -194,10 +193,8 @@ private class Day24 {
     fun countBlackAdjacentTiles(blackTileCoords: Set<Coord>, coord: Coord): Int {
 
         return Direction.values()
-            .flatMap { direction ->
-                blackTileCoords.filter { c -> c == Coord(coord.x + direction.dx, coord.y + direction.dy) }
-            }
-            .count()
+            .map { direction -> blackTileCoords.contains(Coord(coord.x + direction.dx, coord.y + direction.dy)) }
+            .count { it }
     }
 
     fun dallyFlip(blackTileCoords: Set<Coord>): Set<Coord> {
