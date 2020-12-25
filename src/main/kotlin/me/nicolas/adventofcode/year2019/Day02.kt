@@ -6,7 +6,7 @@ typealias Program = MutableMap<Int, Int>
 
 // --- Day 2: 1202 Program Alarm ---
 // https://adventofcode.com/2019/day/2
-fun main(args: Array<String>) {
+fun main() {
 
     println("--- Day 2: 1202 Program Alarm ---")
     println()
