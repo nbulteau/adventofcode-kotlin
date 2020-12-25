@@ -34,7 +34,7 @@ fun main() {
 
 class Day13 {
 
-    private fun partOne(initialTimestamp: Int, busList: List<String>) {
+    fun partOne(initialTimestamp: Int, busList: List<String>) {
 
         val busIdsList = busList.filter { str -> str != "x" }.map { str -> str.toInt() }
         var timestamp = initialTimestamp.toDouble()
@@ -55,7 +55,7 @@ class Day13 {
         println("Part one = ${(timestamp - initialTimestamp) * busId}")
     }
 
-    private fun Double.isInteger(): Boolean {
+    fun Double.isInteger(): Boolean {
         return this - this.toInt() == 0.0
     }
 
@@ -63,7 +63,7 @@ class Day13 {
      * 7,13,x,x,59,x,31,19
      * busId must be > 2
      */
-    private fun partTwo(busList: List<String>) {
+    fun partTwo(busList: List<String>) {
 
         val buses = mutableMapOf<Int, Int>()
         for (index in busList.indices) {
@@ -110,7 +110,7 @@ class Day13 {
      *      x = 13 907 mod 1001
      *      x = 894
      */
-    private fun chineseRemainder(busList: List<String>) {
+    fun chineseRemainder(busList: List<String>) {
 
         println()
 
