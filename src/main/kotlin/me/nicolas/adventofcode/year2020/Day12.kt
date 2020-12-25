@@ -43,7 +43,7 @@ class Day12 {
 
     data class Instruction(val action: Char, val value: Int)
 
-    class TaxicabGeometry(startDirection: Direction = Direction.EAST) {
+    private class TaxicabGeometry(startDirection: Direction = Direction.EAST) {
 
         var currentDirection = startDirection
         private var eastWest = 0
@@ -77,7 +77,7 @@ class Day12 {
             get() = abs(eastWest) + abs(northSouth)
     }
 
-    class TaxicabGeometryWithWayPoint(startWaypointEastWest: Int = -10, startWaypointNorthSouth: Int = 1) {
+    private class TaxicabGeometryWithWayPoint(startWaypointEastWest: Int = -10, startWaypointNorthSouth: Int = 1) {
 
         var waypointEastWest = startWaypointEastWest
         var waypointNorthSouth = startWaypointNorthSouth
@@ -149,7 +149,7 @@ class Day12 {
             get() = abs(eastWest) + abs(northSouth)
     }
 
-    enum class Direction(val label: Char, val dx: Int, val dy: Int) {
+    private enum class Direction(val label: Char, val dx: Int, val dy: Int) {
         NORTH('N', 0, 1),
         EAST('E', -1, 0),
         SOUTH('S', 0, -1),
