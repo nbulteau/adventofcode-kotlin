@@ -7,7 +7,7 @@ internal class Day11KtTest {
 
     @Test
     fun lookAroundInDirection3() {
-        val layout = """
+        val layout: Layout = """
             .......#.
             ...#.....
             .#.......

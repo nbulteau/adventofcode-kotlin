@@ -52,7 +52,7 @@ class Day11 {
         println("Part two = ${newLayout.count('#')}")
     }
 
-    private enum class Direction(var dx: Int, var dy: Int) {
+    enum class Direction(var dx: Int, var dy: Int) {
         NORTH(0, -1),
         NORTH_EAST(1, -1),
         EAST(1, 0),
@@ -62,124 +62,125 @@ class Day11 {
         WEST(-1, 0),
         NORTH_WEST(-1, -1);
     }
-
-    private fun Layout.processLayoutPartOne(): Layout {
-        val height = this.size - 1
-        val width = this[0].length - 1
-        val newLayout = mutableListOf<String>()
-
-        for (y in 0..height) {
-            var newString = ""
-
-            for (x in 0..width) {
-                when (this[y][x]) {
-                    '.' -> newString += "."
-                    'L' -> {
-                        newString += if (this.lookAround(x, y) == 0) {
-                            "#"
-                        } else {
-                            "L"
-                        }
-                    }
-                    '#' -> {
-                        newString += if (this.lookAround(x, y) >= 4) {
-                            "L"
-                        } else {
-                            "#"
-                        }
-                    }
-                }
-            }
-            newLayout += newString
-        }
-        return newLayout
-    }
-
-    private fun Layout.processLayoutPartTwo(): Layout {
-        val height = this.size - 1
-        val width = this[0].length - 1
-        val newLayout = mutableListOf<String>()
-
-        for (y in 0..height) {
-            var newString = ""
-
-            for (x in 0..width) {
-                when (this[y][x]) {
-                    '.' -> newString += "."
-                    'L' -> {
-                        newString += if (this.lookInDirection(x, y) == 0) {
-                            "#"
-                        } else {
-                            "L"
-                        }
-                    }
-                    '#' -> {
-                        newString += if (this.lookInDirection(x, y) >= 5) {
-                            "L"
-                        } else {
-                            "#"
-                        }
-                    }
-                }
-            }
-            newLayout += newString
-        }
-        return newLayout
-    }
-
-    private fun Layout.displayLayout() {
-        println()
-        this.forEach { string -> println(string) }
-    }
-
-    private fun Layout.count(charToCount: Char) =
-        this.sumOf { string -> string.count { char -> char == charToCount } }
-
-    private fun Layout.lookAround(x: Int, y: Int) =
-        Direction.values().sumBy { direction -> this.lookAround(x, y, direction) }
-
-    private fun Layout.lookAround(x: Int, y: Int, direction: Direction): Int {
-
-        val height = this.size - 1
-        val width = this[0].length - 1
-
-        val nextX = x + direction.dx
-        val nextY = y + direction.dy
-
-        if (nextX in 0..width && nextY in 0..height) {
-            if (this[nextY][nextX] == '#') {
-                return 1
-            }
-        }
-
-        return 0
-    }
-
-    private fun Layout.lookInDirection(x: Int, y: Int) =
-        Direction.values().sumBy { direction -> this.lookInDirection(x, y, direction) }
-
-    private fun Layout.lookInDirection(x: Int, y: Int, direction: Direction): Int {
-
-        val height = this.size - 1
-        val width = this[0].length - 1
-
-        var nextX = x + direction.dx
-        var nextY = y + direction.dy
-
-        while (nextX in 0..width && nextY in 0..height) {
-            if (this[nextY][nextX] == 'L') {
-                return 0
-            }
-            if (this[nextY][nextX] == '#') {
-                return 1
-            }
-
-            nextX += direction.dx
-            nextY += direction.dy
-        }
-
-        return 0
-    }
 }
+
+private fun Layout.processLayoutPartOne(): Layout {
+    val height = this.size - 1
+    val width = this[0].length - 1
+    val newLayout = mutableListOf<String>()
+
+    for (y in 0..height) {
+        var newString = ""
+
+        for (x in 0..width) {
+            when (this[y][x]) {
+                '.' -> newString += "."
+                'L' -> {
+                    newString += if (this.lookAround(x, y) == 0) {
+                        "#"
+                    } else {
+                        "L"
+                    }
+                }
+                '#' -> {
+                    newString += if (this.lookAround(x, y) >= 4) {
+                        "L"
+                    } else {
+                        "#"
+                    }
+                }
+            }
+        }
+        newLayout += newString
+    }
+    return newLayout
+}
+
+fun Layout.processLayoutPartTwo(): Layout {
+    val height = this.size - 1
+    val width = this[0].length - 1
+    val newLayout = mutableListOf<String>()
+
+    for (y in 0..height) {
+        var newString = ""
+
+        for (x in 0..width) {
+            when (this[y][x]) {
+                '.' -> newString += "."
+                'L' -> {
+                    newString += if (this.lookInDirection(x, y) == 0) {
+                        "#"
+                    } else {
+                        "L"
+                    }
+                }
+                '#' -> {
+                    newString += if (this.lookInDirection(x, y) >= 5) {
+                        "L"
+                    } else {
+                        "#"
+                    }
+                }
+            }
+        }
+        newLayout += newString
+    }
+    return newLayout
+}
+
+private fun Layout.displayLayout() {
+    println()
+    this.forEach { string -> println(string) }
+}
+
+private fun Layout.count(charToCount: Char) =
+    this.sumOf { string -> string.count { char -> char == charToCount } }
+
+private fun Layout.lookAround(x: Int, y: Int) =
+    Day11.Direction.values().sumBy { direction -> this.lookAround(x, y, direction) }
+
+private fun Layout.lookAround(x: Int, y: Int, direction: Day11.Direction): Int {
+
+    val height = this.size - 1
+    val width = this[0].length - 1
+
+    val nextX = x + direction.dx
+    val nextY = y + direction.dy
+
+    if (nextX in 0..width && nextY in 0..height) {
+        if (this[nextY][nextX] == '#') {
+            return 1
+        }
+    }
+
+    return 0
+}
+
+fun Layout.lookInDirection(x: Int, y: Int) =
+    Day11.Direction.values().sumBy { direction -> this.lookInDirection(x, y, direction) }
+
+fun Layout.lookInDirection(x: Int, y: Int, direction: Day11.Direction): Int {
+
+    val height = this.size - 1
+    val width = this[0].length - 1
+
+    var nextX = x + direction.dx
+    var nextY = y + direction.dy
+
+    while (nextX in 0..width && nextY in 0..height) {
+        if (this[nextY][nextX] == 'L') {
+            return 0
+        }
+        if (this[nextY][nextX] == '#') {
+            return 1
+        }
+
+        nextX += direction.dx
+        nextY += direction.dy
+    }
+
+    return 0
+}
+
 
 
