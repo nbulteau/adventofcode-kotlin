@@ -3,7 +3,7 @@ package me.nicolas.adventofcode.year2020
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-internal class Day11KtTest {
+internal class Day11Test {
 
     @Test
     fun lookAroundInDirection3() {

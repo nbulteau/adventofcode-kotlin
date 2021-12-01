@@ -2,7 +2,7 @@ package me.nicolas.adventofcode.year2019
 
 
 // --- Day 4: Secure Container ---
-// https://adventofcode.com/2019/day/3
+// https://adventofcode.com/2019/day/4
 fun main() {
 
     println("--- Day 4: Secure Container ---")
