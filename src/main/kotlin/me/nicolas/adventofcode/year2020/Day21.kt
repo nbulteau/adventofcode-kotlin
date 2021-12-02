@@ -27,21 +27,21 @@ fun main() {
 }
 
 
-private class Day21 {
+ class Day21 {
 
-    private data class Food(val ingredients: MutableList<Ingredient>)
+     data class Food(val ingredients: MutableList<Ingredient>)
 
-    private data class Ingredient(val name: String) {
+     data class Ingredient(val name: String) {
 
-        var occurrence = 0
+         var occurrence = 0
 
-        // one ingredient = 1 or 0 allergen
-        var allergen: Allergen? = null
+         // one ingredient = 1 or 0 allergen
+         var allergen: Allergen? = null
 
-        fun incOccurrence() {
-            occurrence++
-        }
-    }
+         fun incOccurrence() {
+             occurrence++
+         }
+     }
 
     data class Allergen(val name: String) {
 

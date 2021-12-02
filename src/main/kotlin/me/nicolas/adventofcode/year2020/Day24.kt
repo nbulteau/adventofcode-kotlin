@@ -31,9 +31,9 @@ fun main() {
 }
 
 // https://www.redblobgames.com/grids/hexagons/
-private class Day24 {
+class Day24 {
 
-    private enum class Direction(val label: String, val dx: Int, val dy: Int) {
+    enum class Direction(val label: String, val dx: Int, val dy: Int) {
 
         EAST("e", 1, 0),
         SOUTH_EAST("se", 1, 1),
@@ -47,7 +47,7 @@ private class Day24 {
         }
     }
 
-    private data class Coord(var x: Int, var y: Int) {
+    data class Coord(var x: Int, var y: Int) {
 
         fun move(direction: Direction) {
             this.x += direction.dx
