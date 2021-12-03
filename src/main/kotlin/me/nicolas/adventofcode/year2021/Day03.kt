@@ -9,7 +9,7 @@ fun main() {
     val training = readFileDirectlyAsText("/year2021/day03/training.txt")
     val data = readFileDirectlyAsText("/year2021/day03/data.txt")
 
-    val lines = training.split("\n")
+    val lines = data.split("\n")
 
     // Part One
     Day03().partOne(lines)
@@ -31,7 +31,7 @@ private class Day03 {
             epsilon += if (zero < one) '0' else '1'
         }
 
-        val result = binaryToDecimal(gamma) * binaryToDecimal(epsilon)
+        val result = gamma.toInt(2) * epsilon.toInt(2)
 
         println("Part one answer = $result")
     }
@@ -40,10 +40,11 @@ private class Day03 {
 
         val oxygenGeneratorRating = oxygenGeneratorRating(lines)
         val co2ScrubberRating = co2ScrubberRating(lines)
-        val result = binaryToDecimal(oxygenGeneratorRating) * binaryToDecimal(co2ScrubberRating)
+        val result = oxygenGeneratorRating.toInt(2) * co2ScrubberRating.toInt(2)
 
         println("Part two answer = $result")
     }
+
 
     private fun oxygenGeneratorRating(lines: List<String>): String {
         var keep = lines.toMutableList()
