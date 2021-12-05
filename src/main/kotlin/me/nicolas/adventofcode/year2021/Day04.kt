@@ -10,7 +10,6 @@ fun main() {
 
     val input = data.split("\n")
 
-    // Part One
     Day04().solve(input)
 }
 
@@ -76,7 +75,7 @@ class Day04 {
         drawnNumbers.forEach { drawnNumber ->
             for (board in boards) {
                 board.markNumber(drawnNumber)
-                if (boards.all { board -> board.isWinningBoard() }) {
+                if (boards.all { it.isWinningBoard() }) {
                     return board.value * drawnNumber
                 }
             }
