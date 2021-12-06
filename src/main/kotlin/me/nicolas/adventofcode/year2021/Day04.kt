@@ -99,30 +99,5 @@ class Day04 {
 
         return boards
     }
-
-    fun markNumberOnBoard(board: MutableList<MutableList<Int>>, drawnNumber: Int) {
-        for (line in board.indices) {
-            for (row in board[line].indices) {
-                if (board[line][row] == drawnNumber) {
-                    board[line][row] = 0
-                    return
-                }
-            }
-        }
-    }
-
-    fun computeBoardScore(board: List<List<Int>>): Int {
-        for (row in board) {
-            if (row.sum() == 0) {
-                return board.sumOf { line -> line.sum() }
-            }
-        }
-        for (row in board[0].indices) {
-            if (board.sumOf { line -> line[row] } == 0) {
-                return board.sumOf { line -> line.sum() }
-            }
-        }
-        return 0
-    }
 }
 

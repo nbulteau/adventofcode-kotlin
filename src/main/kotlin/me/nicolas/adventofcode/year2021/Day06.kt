@@ -1,8 +1,12 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.displayResult
 import me.nicolas.adventofcode.readFileDirectlyAsText
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/6
+@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2021/day06/training.txt")
@@ -13,9 +17,8 @@ fun main() {
         input.count { it == index }.toLong()
     }
 
-    println("Part one answer = ${Day06().solve(lanternfishs, 80)}")
-
-    println("Part two answer = ${Day06().solve(lanternfishs, 256)}")
+    displayResult("Part one answer = ", measureTimedValue { Day06().solve(lanternfishs, 80) })
+    displayResult("Part two answer = ", measureTimedValue { Day06().solve(lanternfishs, 256) })
 }
 
 private class Day06 {
@@ -23,10 +26,10 @@ private class Day06 {
     fun solve(lanternfishs: Map<Int, Long>, nbDays: Int): Long {
 
         var lanternfishsStates = lanternfishs
-        println("Initial state: $lanternfishsStates")
+        //println("Initial state: $lanternfishsStates")
         for (day in 1..nbDays) {
             lanternfishsStates = nextDay(lanternfishsStates.toMutableMap())
-            println("Day $day: $lanternfishsStates")
+            //println("Day $day: $lanternfishsStates")
         }
 
         return lanternfishsStates.entries.sumOf { it.value }

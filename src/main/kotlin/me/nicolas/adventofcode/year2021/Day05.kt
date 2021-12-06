@@ -1,8 +1,11 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.displayResult
 import me.nicolas.adventofcode.readFileDirectlyAsText
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/5
 fun main() {
@@ -71,6 +74,7 @@ private class Day05 {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun solve(gridSize: Int, input: List<String>) {
 
         val lines = input.map { line ->
@@ -81,9 +85,9 @@ private class Day05 {
             Line(start, end)
         }
 
-        println("Part one answer = ${partOne(gridSize, lines)}")
+        displayResult("Part one answer = ", measureTimedValue { partOne(gridSize, lines) })
 
-        println("Part one answer = ${partTwo(gridSize, lines)}")
+        displayResult("Part one answer = ", measureTimedValue { partTwo(gridSize, lines) })
     }
 
 
@@ -92,6 +96,7 @@ private class Day05 {
         lines.forEach { line ->
             grid.addLine(line, includeDiagonalLines = false)
         }
+        //grid.display()
         return grid.getNumberOfPointsToAvoid()
     }
 
@@ -100,7 +105,7 @@ private class Day05 {
         lines.forEach { line ->
             grid.addLine(line, includeDiagonalLines = true)
         }
-        grid.display()
+        //grid.display()
         return grid.getNumberOfPointsToAvoid()
     }
 }

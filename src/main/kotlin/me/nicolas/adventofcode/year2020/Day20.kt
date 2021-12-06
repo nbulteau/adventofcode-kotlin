@@ -1,12 +1,11 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.Grid
-import me.nicolas.adventofcode.flipHorizontal
 import me.nicolas.adventofcode.readFileDirectlyAsText
-import me.nicolas.adventofcode.rotateClockwise
 import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
+
+private typealias Grid = Array<CharArray>
 
 
 // --- Day 20: Jurassic Jigsaw ---
@@ -20,102 +19,131 @@ fun main() {
     val training = readFileDirectlyAsText("/year2020/day20/training.txt")
     val data = readFileDirectlyAsText("/year2020/day20/data.txt")
 
-    val sections = data.split("\n\n")
-    val tiles = extractTiles(sections)
-
-    // Part One
-    Day20().partOne(tiles)
-
-    // Part Two
-    val duration = measureTime { Day20().partTwo(tiles.toMutableList()) }
-    println("Part two duration : $duration")
-}
-
-fun extractTiles(sections: List<String>): List<Tile> {
-
-    return sections.map { section ->
-        val parts = section.split("\n")
-        val tileId = parts[0].substringAfter("Tile ").substringBefore(":").toInt()
-        val tile = parts.drop(1)
-        Tile(tileId, tile)
-    }
-}
-
-data class Tile(val id: Int, var grid: List<String>) {
-
-    var isCorner: Boolean = false
-
-    // There are only eight. If you rotate twice, you get the same result as flipping in both directions.
-    // i.e : all rotations and flip x
-    // N, E, S, W, N reversed, E reversed, S reversed, W reversed
-    lateinit var edges: List<String>
-
-    init {
-        updateEdges()
-    }
-
-    private fun updateEdges() {
-
-        val height = grid.size
-        val width = grid[0].length
-
-        val north = StringBuilder()
-        val east = StringBuilder()
-        val south = StringBuilder()
-        val west = StringBuilder()
-
-        for (row in grid.indices) {
-            north.append(grid[0][row])
-            east.append(grid[row][width - 1])
-            south.append(grid[height - 1][row])
-            west.append(grid[row][0])
-        }
-
-        val list = mutableListOf<String>()
-
-        list.add(north.toString())
-        list.add(east.toString())
-        list.add(south.toString())
-        list.add(west.toString())
-        list.add(north.reverse().toString())
-        list.add(east.reverse().toString())
-        list.add(south.reverse().toString())
-        list.add(west.reverse().toString())
-
-        edges = list
-    }
-
-    fun flipHorizontal() {
-        grid = grid.map { str -> str.reversed() }
-        updateEdges()
-    }
-
-    fun rotateClockwise() {
-        val stringBuilders: MutableList<StringBuilder> = mutableListOf()
-
-        for (i in grid[0].indices) {
-            stringBuilders.add(StringBuilder())
-        }
-
-        for (i in grid.indices) {
-            val row = grid[grid.size - 1 - i]
-            for (j in stringBuilders.indices) {
-                stringBuilders[j].append(row[j])
-            }
-        }
-        grid = stringBuilders.map { sb: StringBuilder -> sb.toString() }
-        updateEdges()
-    }
-
-
-    fun display() {
-        println()
-        println(id)
-        grid.forEach { str -> println(str) }
-    }
+    Day20().solve(data)
 }
 
 class Day20 {
+
+    private fun Grid.rotateClockwise(): Grid {
+        val arrayOfCharArrays = Array(this.size) { CharArray(this[0].size) }
+
+        for (row in arrayOfCharArrays.indices) {
+            for (column in arrayOfCharArrays[0].indices) {
+                arrayOfCharArrays[row][column] = this[this.size - 1 - column][row]
+            }
+        }
+        return arrayOfCharArrays
+    }
+
+    private fun Grid.flipHorizontal(): Grid {
+        val arrayOfCharArrays = Array(this.size) { CharArray(this[0].size) }
+
+        for (row in arrayOfCharArrays.indices) {
+            for (column in arrayOfCharArrays[0].indices) {
+                arrayOfCharArrays[row][column] = this[row][this[0].size - 1 - column]
+            }
+        }
+        return arrayOfCharArrays
+    }
+
+    @OptIn(ExperimentalTime::class)
+    fun solve(input: String) {
+
+        val sections = input.split("\n\n")
+        val tiles = extractTiles(sections)
+
+        // Part One
+        Day20().partOne(tiles)
+
+        // Part Two
+        val duration = measureTime { Day20().partTwo(tiles.toMutableList()) }
+        println("Part two duration : $duration")
+    }
+
+
+    private fun extractTiles(sections: List<String>): List<Tile> {
+
+        return sections.map { section ->
+            val parts = section.split("\n")
+            val tileId = parts[0].substringAfter("Tile ").substringBefore(":").toInt()
+            val tile = parts.drop(1)
+            Tile(tileId, tile)
+        }
+    }
+
+    data class Tile(val id: Int, var grid: List<String>) {
+
+        var isCorner: Boolean = false
+
+        // There are only eight. If you rotate twice, you get the same result as flipping in both directions.
+        // i.e : all rotations and flip x
+        // N, E, S, W, N reversed, E reversed, S reversed, W reversed
+        lateinit var edges: List<String>
+
+        init {
+            updateEdges()
+        }
+
+        private fun updateEdges() {
+
+            val height = grid.size
+            val width = grid[0].length
+
+            val north = StringBuilder()
+            val east = StringBuilder()
+            val south = StringBuilder()
+            val west = StringBuilder()
+
+            for (row in grid.indices) {
+                north.append(grid[0][row])
+                east.append(grid[row][width - 1])
+                south.append(grid[height - 1][row])
+                west.append(grid[row][0])
+            }
+
+            val list = mutableListOf<String>()
+
+            list.add(north.toString())
+            list.add(east.toString())
+            list.add(south.toString())
+            list.add(west.toString())
+            list.add(north.reverse().toString())
+            list.add(east.reverse().toString())
+            list.add(south.reverse().toString())
+            list.add(west.reverse().toString())
+
+            edges = list
+        }
+
+        fun flipHorizontal() {
+            grid = grid.map { str -> str.reversed() }
+            updateEdges()
+        }
+
+        fun rotateClockwise() {
+            val stringBuilders: MutableList<StringBuilder> = mutableListOf()
+
+            for (i in grid[0].indices) {
+                stringBuilders.add(StringBuilder())
+            }
+
+            for (i in grid.indices) {
+                val row = grid[grid.size - 1 - i]
+                for (j in stringBuilders.indices) {
+                    stringBuilders[j].append(row[j])
+                }
+            }
+            grid = stringBuilders.map { sb: StringBuilder -> sb.toString() }
+            updateEdges()
+        }
+
+
+        fun display() {
+            println()
+            println(id)
+            grid.forEach { str -> println(str) }
+        }
+    }
 
     // we only need to find ids of corners, no need to match anything else
     fun partOne(tiles: List<Tile>) {
