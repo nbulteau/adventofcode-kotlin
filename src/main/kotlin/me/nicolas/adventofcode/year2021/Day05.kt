@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.displayResult
+import me.nicolas.adventofcode.prettyPrint
 import me.nicolas.adventofcode.readFileDirectlyAsText
 import kotlin.math.max
 import kotlin.math.min
@@ -85,11 +85,10 @@ private class Day05 {
             Line(start, end)
         }
 
-        displayResult("Part one answer = ", measureTimedValue { partOne(gridSize, lines) })
+        prettyPrint("Part one answer = ", measureTimedValue { partOne(gridSize, lines) })
 
-        displayResult("Part one answer = ", measureTimedValue { partTwo(gridSize, lines) })
+        prettyPrint("Part one answer = ", measureTimedValue { partTwo(gridSize, lines) })
     }
-
 
     private fun partOne(gridSize: Int, lines: List<Line>): Int {
         val grid = Grid(gridSize)

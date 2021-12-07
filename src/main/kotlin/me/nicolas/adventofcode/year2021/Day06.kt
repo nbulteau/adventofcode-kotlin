@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.displayResult
+import me.nicolas.adventofcode.prettyPrint
 import me.nicolas.adventofcode.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -17,8 +17,8 @@ fun main() {
         input.count { it == index }.toLong()
     }
 
-    displayResult("Part one answer = ", measureTimedValue { Day06().solve(lanternfishs, 80) })
-    displayResult("Part two answer = ", measureTimedValue { Day06().solve(lanternfishs, 256) })
+    prettyPrint("Part one answer = ", measureTimedValue { Day06().solve(lanternfishs, 80) })
+    prettyPrint("Part two answer = ", measureTimedValue { Day06().solve(lanternfishs, 256) })
 }
 
 private class Day06 {

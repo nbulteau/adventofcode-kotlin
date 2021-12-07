@@ -19,8 +19,8 @@ fun readFileDirectlyAsText(fileName: String): String {
 }
 
 @OptIn(ExperimentalTime::class)
-fun displayResult(msg: String, timedResponse: TimedValue<Any>) {
-    println("$msg: ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
+fun prettyPrint(message: String, timedResponse: TimedValue<Any>) {
+    println("$message: ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
 }
 
 
