@@ -45,13 +45,13 @@ private class Day08 {
         }
     }
 
-    private fun processMap(uniqueSignalPatterns: List<String>): MutableMap<SortedSet<Char>, String> {
-        val signalPatterns = mutableMapOf<SortedSet<Char>, String>()
+    private fun processMap(uniqueSignalPatterns: List<String>): Map<SortedSet<Char>, String> {
+        val signalPatterns: MutableMap<SortedSet<Char>, String> = LinkedHashMap(10)
         var one: SortedSet<Char> = sortedSetOf()
         // guess 1, 4, 7, 8
-        uniqueSignalPatterns.forEach {
-            val key = it.toSortedSet()
-            when (it.length) {
+        uniqueSignalPatterns.forEach { str ->
+            val key = str.toSortedSet()
+            when (str.length) {
                 2 -> {
                     signalPatterns[key] = "1"
                     one = key
@@ -66,8 +66,8 @@ private class Day08 {
         var six: SortedSet<Char> = sortedSetOf()
         uniqueSignalPatterns
             .filter { !signalPatterns.contains(it.toSortedSet()) }
-            .forEach {
-                val key = it.toSortedSet()
+            .forEach { str ->
+                val key = str.toSortedSet()
                 when {
                     (key.size == 5 && key.containsAll(one)) -> {
                         signalPatterns[key] = "3"
@@ -82,8 +82,8 @@ private class Day08 {
         // guess 0, 9
         uniqueSignalPatterns
             .filter { !signalPatterns.contains(it.toSortedSet()) }
-            .forEach {
-                val key = it.toSortedSet()
+            .forEach { str ->
+                val key = str.toSortedSet()
                 when (key.size) {
                     6 -> {
                         if (key.containsAll(three)) {
