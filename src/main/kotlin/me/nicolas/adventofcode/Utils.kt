@@ -20,7 +20,7 @@ fun readFileDirectlyAsText(fileName: String): String {
 
 @OptIn(ExperimentalTime::class)
 fun prettyPrint(message: String, timedResponse: TimedValue<Any>) {
-    println("$message: ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
+    println("$message : ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
 }
 
 

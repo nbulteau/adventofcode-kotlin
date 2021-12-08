@@ -15,12 +15,18 @@ fun main() {
     val positions = data.split(",").map { it.toInt() }
 
     prettyPrint(
-        message = "Part one answer = ",
+        message = "Part one answer",
         measureTimedValue { Day07().solve(positions) { position -> position } })
 
     prettyPrint(
-        message = "Part two answer = ",
+        message = "Part two answer",
         measureTimedValue { Day07().solve(positions) { position -> (1..position).sumOf { it } } })
+
+    prettyPrint(
+        message = "Part two bis answer",
+        measureTimedValue { Day07().solve(positions) { position -> (position * (position + 1) / 2) } })
+
+
 }
 
 private class Day07 {
