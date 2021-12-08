@@ -56,7 +56,7 @@ class Day04 {
 
         println("Part one answer = ${partOne(drawnNumbers, boards)}")
 
-        println("Part one answer = ${partTwo(drawnNumbers, boards)}")
+        println("Part two answer = ${partTwo(drawnNumbers, boards)}")
     }
 
     private fun partOne(drawnNumbers: List<Int>, boards: List<Board>): Int {
