@@ -31,11 +31,13 @@ fun main() {
 
 private class Day07 {
 
-    fun solve(positions: List<Int>, costFunction: (position: Int) -> Int): Int {
+    fun solve(positions: List<Int>, computeFuelConsumption: (position: Int) -> Int): Int {
 
         val max = positions.maxOf { it }
-        val moves = (0..max).associateWith { positions.sumOf { position -> costFunction(abs(position - it)) } }
-        return moves.values.minOf { it }
+        val fuelConsumptions = (0..max).associateWith { destination ->
+            positions.sumOf { position -> computeFuelConsumption(abs(position - destination)) }
+        }
+        return fuelConsumptions.values.minOf { it }
     }
 }
 
