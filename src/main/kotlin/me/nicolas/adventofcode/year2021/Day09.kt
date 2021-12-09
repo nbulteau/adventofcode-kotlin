@@ -26,9 +26,25 @@ fun main() {
 
 private class Day09 {
 
+    fun partOne(lines: List<List<Int>>): Int {
+
+        val grid = Grid(lines)
+        val lowPoints = grid.findLowPoints()
+
+        return lowPoints.map { grid.value(it.x, it.y) }.sumOf { it + 1 }
+    }
+
+    fun partTwo(lines: List<List<Int>>): Int {
+
+        val grid = Grid(lines)
+        val basins = grid.findBasins()
+
+        return basins.map { it.size }.sortedByDescending { it }.subList(0, 3).fold(1) { total, next -> total * next }
+    }
+
     data class Point(val x: Int, val y: Int)
 
-    data class Grid(val lines: List<List<Int>>) {
+    data class Grid(private val lines: List<List<Int>>) {
 
         private fun adjacentLocations(x: Int, y: Int): List<Point> {
             val adjacentLocations = mutableListOf<Point>()
@@ -67,18 +83,15 @@ private class Day09 {
         }
 
         fun findBasins(): List<Set<Point>> {
-            val basins = mutableListOf<Set<Point>>()
             val lowPoints = findLowPoints()
-            for (lowPoint in lowPoints) {
+            return lowPoints.map { lowPoint ->
                 val basin = mutableSetOf<Point>()
                 recurseFindBasins(mutableSetOf(lowPoint), basin)
-                basins.add(basin)
+                basin
             }
-
-            return basins
         }
 
-        fun recurseFindBasins(points: MutableSet<Point>, basin: MutableSet<Point>) {
+        private fun recurseFindBasins(points: MutableSet<Point>, basin: MutableSet<Point>) {
             if (points.isEmpty()) {
                 return
             } else {
@@ -96,21 +109,4 @@ private class Day09 {
 
         fun value(x: Int, y: Int) = lines[y][x]
     }
-
-    fun partOne(lines: List<List<Int>>): Int {
-
-        val grid = Grid(lines)
-        val lowPoints = grid.findLowPoints()
-
-        return lowPoints.map { grid.value(it.x, it.y) }.sumOf { it + 1 }
-    }
-
-    fun partTwo(lines: List<List<Int>>): Int {
-
-        val grid = Grid(lines)
-        val basins = grid.findBasins()
-
-        return basins.map { it.size }.sortedByDescending { it }.subList(0, 3).fold(1) { total, next -> total * next }
-    }
-
 }
