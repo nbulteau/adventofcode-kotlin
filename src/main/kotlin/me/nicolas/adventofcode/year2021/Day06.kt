@@ -17,25 +17,25 @@ fun main() {
         input.count { it == index }.toLong()
     }
 
-    prettyPrint("Part one answer = ", measureTimedValue { Day06().solve(lanternfishs, 80) })
-    prettyPrint("Part two answer = ", measureTimedValue { Day06().solve(lanternfishs, 256) })
+    prettyPrint("Part one answer", measureTimedValue { Day06().solve(lanternfishs, 80) })
+    prettyPrint("Part two answer", measureTimedValue { Day06().solve(lanternfishs, 256) })
 }
 
 private class Day06 {
 
     fun solve(lanternfishs: Map<Int, Long>, nbDays: Int): Long {
 
-        var lanternfishsStates = lanternfishs
+        var lanternfishsStates = lanternfishs.toMutableMap()
         //println("Initial state: $lanternfishsStates")
         for (day in 1..nbDays) {
-            lanternfishsStates = nextDay(lanternfishsStates.toMutableMap())
+            updateLanterfishStates(lanternfishsStates)
             //println("Day $day: $lanternfishsStates")
         }
 
         return lanternfishsStates.entries.sumOf { it.value }
     }
 
-    private fun nextDay(lanternfishs: MutableMap<Int, Long>): MutableMap<Int, Long> {
+    private fun updateLanterfishStates(lanternfishs: MutableMap<Int, Long>) {
 
         val nbNewLanternfish = lanternfishs[0] ?: 0L
 
@@ -44,7 +44,5 @@ private class Day06 {
         }
         lanternfishs[6] = (lanternfishs[6] ?: 0L) + nbNewLanternfish
         lanternfishs[8] = nbNewLanternfish
-
-        return lanternfishs
     }
 }

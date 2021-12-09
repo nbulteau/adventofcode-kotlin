@@ -1,9 +1,13 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.prettyPrint
 import me.nicolas.adventofcode.readFileDirectlyAsText
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 
 // https://adventofcode.com/2021/day/3
+@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2021/day03/training.txt")
@@ -11,15 +15,15 @@ fun main() {
 
     val lines = data.split("\n")
 
-    // Part One
-    Day03().partOne(lines)
 
-    // Part Two
-    Day03().partTwo(lines)
+    prettyPrint("Part one answer", measureTimedValue { Day03().partOne(lines) })
+
+    prettyPrint("Part one answer", measureTimedValue { Day03().partTwo(lines) })
 }
 
 private class Day03 {
-    fun partOne(lines: List<String>) {
+
+    fun partOne(lines: List<String>): Int {
         var gamma = ""
         var epsilon = ""
 
@@ -31,18 +35,15 @@ private class Day03 {
             epsilon += if (zero < one) '0' else '1'
         }
 
-        val result = gamma.toInt(2) * epsilon.toInt(2)
-
-        println("Part one answer = $result")
+        return gamma.toInt(2) * epsilon.toInt(2)
     }
 
-    fun partTwo(lines: List<String>) {
+    fun partTwo(lines: List<String>): Int {
 
         val oxygenGeneratorRating = oxygenGeneratorRating(lines)
         val co2ScrubberRating = co2ScrubberRating(lines)
-        val result = oxygenGeneratorRating.toInt(2) * co2ScrubberRating.toInt(2)
 
-        println("Part two answer = $result")
+        return oxygenGeneratorRating.toInt(2) * co2ScrubberRating.toInt(2)
     }
 
 

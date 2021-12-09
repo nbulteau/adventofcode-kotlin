@@ -85,9 +85,9 @@ private class Day05 {
             Line(start, end)
         }
 
-        prettyPrint("Part one answer = ", measureTimedValue { partOne(gridSize, lines) })
+        prettyPrint("Part one answer", measureTimedValue { partOne(gridSize, lines) })
 
-        prettyPrint("Part one answer = ", measureTimedValue { partTwo(gridSize, lines) })
+        prettyPrint("Part two answer", measureTimedValue { partTwo(gridSize, lines) })
     }
 
     private fun partOne(gridSize: Int, lines: List<Line>): Int {

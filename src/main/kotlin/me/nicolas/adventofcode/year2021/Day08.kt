@@ -27,7 +27,7 @@ private class Day08 {
 
     fun partOne(lines: List<String>): Int {
         return lines.sumOf { line ->
-            val fourDigitOutputValue = line.split("|")[1]
+            val fourDigitOutputValue = line.split(" | ")[1]
             fourDigitOutputValue.split(" ")
                 .filter { it.length in listOf(2, 3, 4, 7) }.size
         }
@@ -79,7 +79,7 @@ private class Day08 {
                     }
                 }
             }
-        // guess 0, 9
+        // guess 0, 9, 5, 2
         uniqueSignalPatterns
             .filter { !signalPatterns.contains(it.toSortedSet()) }
             .forEach { str ->

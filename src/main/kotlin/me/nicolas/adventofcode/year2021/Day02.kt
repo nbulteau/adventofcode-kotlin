@@ -1,9 +1,13 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.prettyPrint
 import me.nicolas.adventofcode.readFileDirectlyAsText
 import kotlin.math.abs
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/2
+@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2021/day02/training.txt")
@@ -11,16 +15,18 @@ fun main() {
 
     val lines = data.split("\n")
 
-    // Part One
-    Day02().partOne(lines)
+    prettyPrint(
+        message = "Part one answer",
+        measureTimedValue { Day02().partOne(lines) })
 
-    // Part Two
-    Day02().partTwo(lines)
+    prettyPrint(
+        message = "Part one answer",
+        measureTimedValue { Day02().partTwo(lines) })
 }
 
-private class Day02 {
+class Day02 {
 
-    fun partOne(lines: List<String>) {
+    fun partOne(lines: List<String>): Int {
         var horizontal = 0
         var depth = 0
 
@@ -32,12 +38,10 @@ private class Day02 {
                 "up" -> depth += instruction[1].toInt()
             }
         }
-        val result = abs(horizontal) * abs(depth)
-
-        println("Part one answer = $result")
+        return abs(horizontal) * abs(depth)
     }
 
-    fun partTwo(lines: List<String>) {
+    fun partTwo(lines: List<String>): Int {
 
         var horizontal = 0
         var depth = 0
@@ -54,9 +58,7 @@ private class Day02 {
                 "up" -> aim -= instruction[1].toInt()
             }
         }
-        val result = abs(horizontal) * abs(depth)
-
-        println("Part two answer = $result")
+        return abs(horizontal) * abs(depth)
     }
 }
 

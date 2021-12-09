@@ -1,6 +1,9 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.prettyPrint
 import me.nicolas.adventofcode.readFileDirectlyAsText
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/4
 fun main() {
@@ -49,14 +52,14 @@ class Day04 {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun solve(input: List<String>) {
 
         val drawnNumbers = input[0].split(",").map { str -> str.toInt() }
         val boards = buildBoards(input.subList(2, input.size))
 
-        println("Part one answer = ${partOne(drawnNumbers, boards)}")
-
-        println("Part two answer = ${partTwo(drawnNumbers, boards)}")
+        prettyPrint("Part one answer", measureTimedValue { partOne(drawnNumbers, boards) })
+        prettyPrint("Part Two answer", measureTimedValue { partTwo(drawnNumbers, boards) })
     }
 
     private fun partOne(drawnNumbers: List<Int>, boards: List<Board>): Int {

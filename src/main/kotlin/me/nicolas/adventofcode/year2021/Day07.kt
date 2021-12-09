@@ -25,8 +25,6 @@ fun main() {
     prettyPrint(
         message = "Part two bis answer",
         measureTimedValue { Day07().solve(positions) { position -> (position * (position + 1) / 2) } })
-
-
 }
 
 private class Day07 {
