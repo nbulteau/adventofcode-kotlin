@@ -31,7 +31,10 @@ private class Day09 {
         val grid = Grid(lines)
         val lowPoints = grid.findLowPoints()
 
-        return lowPoints.map { grid.value(it.x, it.y) }.sumOf { it + 1 }
+        // score
+        return lowPoints
+            .map { grid.value(it.x, it.y) }
+            .sumOf { it + 1 }
     }
 
     fun partTwo(lines: List<List<Int>>): Int {
@@ -39,7 +42,12 @@ private class Day09 {
         val grid = Grid(lines)
         val basins = grid.findBasins()
 
-        return basins.map { it.size }.sortedByDescending { it }.subList(0, 3).fold(1) { total, next -> total * next }
+        // score
+        return basins
+            .map { it.size }
+            .sorted()
+            .takeLast(3)
+            .fold(1) { total, next -> total * next }
     }
 
     data class Point(val x: Int, val y: Int)
