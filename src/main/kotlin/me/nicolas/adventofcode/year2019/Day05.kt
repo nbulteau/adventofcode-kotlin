@@ -25,6 +25,22 @@ fun main() {
 
 class Day05 {
 
+    fun partOne(inputs: String): Int {
+        val intCodeProgram = IntCodeProgram(inputs.split(",").map { it.toInt() }.toIntArray())
+
+        val output = intCodeProgram.execute(1)
+
+        return output.last()
+    }
+
+    fun partTwo(inputs: String): Int {
+        val intCodeProgram = IntCodeProgram(inputs.split(",").map { it.toInt() }.toIntArray())
+
+        val output = intCodeProgram.execute(5)
+
+        return output.last()
+    }
+
     class IntCodeProgram(private val intCodeProgram: IntArray) {
 
         fun execute(input: Int): List<Int> {
@@ -133,22 +149,6 @@ class Day05 {
                 1 -> intCodeProgram[index]
                 else -> throw IllegalArgumentException("Unknown mode: $mode")
             }
-    }
-
-    fun partOne(inputs: String): Int {
-        val intCodeProgram = IntCodeProgram(inputs.split(",").map { it.toInt() }.toIntArray())
-
-        val output = intCodeProgram.execute(1)
-
-        return output.last()
-    }
-
-    fun partTwo(inputs: String): Int {
-        val intCodeProgram = IntCodeProgram(inputs.split(",").map { it.toInt() }.toIntArray())
-
-        val output = intCodeProgram.execute(5)
-
-        return output.last()
     }
 }
 
