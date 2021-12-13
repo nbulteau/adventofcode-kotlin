@@ -94,7 +94,7 @@ private class Day13 {
     }
 
     private fun processInstruction(paper: Paper, instruction: String) {
-        val line = instruction.split("=").first().toInt()
+        val line = instruction.split("=").last().toInt()
         if (instruction.startsWith("fold along y")) {
             paper.foldY(line)
         } else {
