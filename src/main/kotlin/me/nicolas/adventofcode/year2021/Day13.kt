@@ -11,6 +11,8 @@ import kotlin.time.measureTimedValue
 fun main() {
 
     val training = readFileDirectlyAsText("/year2021/day13/training.txt")
+    val davidTraining = readFileDirectlyAsText("/year2021/day13/david-training.txt")
+
     val data = readFileDirectlyAsText("/year2021/day13/data.txt")
 
     val (dotsPart, foldInstructionsPart) = data.split("\n\n")
