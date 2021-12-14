@@ -13,7 +13,7 @@ fun main() {
     val training = readFileDirectlyAsText("/year2021/day14/training.txt")
     val data = readFileDirectlyAsText("/year2021/day14/data.txt")
 
-    val (template, list) = training.split("\n\n")
+    val (template, list) = data.split("\n\n")
     val insertions = list.split("\n").flatMap { it.split(" -> ") }.zipWithNext().toMap()
 
     prettyPrint(
@@ -53,38 +53,33 @@ private class Day14 {
         return processSteps(40, template, insertionsRules)
     }
 
-    private fun processSteps(
-        steps: Int,
-        template: String,
-        insertionsRules: Map<String, String>
-    ): Long {
-        var pairCount: Map<String, Long> = template
+    private fun processSteps(steps: Int, template: String, rules: Map<String, String>): Long {
+        var pairsCount: Map<String, Long> = template
             .windowed(2)
             .groupingBy { it }.eachCount()
             .mapValues { it.value.toLong() }
 
         repeat(steps) {
-            pairCount = pairCount
+            pairsCount = pairsCount
                 .flatMap { (pair, count) ->
-                    val stringToInsert = insertionsRules[pair]!!
-                    listOf("${pair.first()}$stringToInsert" to count, "$stringToInsert${pair.last()}" to count)
-                }.groupingBy { pair ->
-                    pair.first
-                }.fold(0L) { total, pair -> total + pair.second }
+                    val charToInsert = rules[pair]!!
+                    listOf("${pair.first()}$charToInsert" to count, "$charToInsert${pair.last()}" to count)
+                }
+                .groupingBy { pair -> pair.first }
+                .fold(0L) { total, pair -> total + pair.second }
         }
 
         // count chars
-        val charCount = pairCount
-            .flatMap { (pair, count) -> listOf(pair.first() to count, pair.last() to count) }
+        val charsCount = pairsCount
+            .map { (pair, count) -> pair.first() to count }
             .groupingBy { pair -> pair.first }
             .fold(0L) { total, pair -> total + pair.second }
             .toMutableMap()
 
-        // Add +1 to first and last
-        charCount[template.first()] = charCount[template.first()]!! + 1
-        charCount[template.last()] = charCount[template.last()]!! + 1
+        // Add +1 to last
+        charsCount[template.last()] = charsCount[template.last()]!! + 1
 
-        return charCount.values.maxOf { it } / 2 - charCount.values.minOf { it } / 2
+        return charsCount.values.maxOf { it } - charsCount.values.minOf { it }
     }
 
     private fun processStep(template: CharArray, insertions: Map<String, String>): CharArray {
@@ -100,4 +95,6 @@ private class Day14 {
 
         return result
     }
+
+
 }
