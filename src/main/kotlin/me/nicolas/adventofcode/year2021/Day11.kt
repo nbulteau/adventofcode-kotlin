@@ -32,7 +32,7 @@ class Day11 {
         private const val gridSize = 10
     }
 
-    class Octopus(initialEnergyLevel: Int) {
+    private class Octopus(initialEnergyLevel: Int) {
 
         var energyLevel: Int = initialEnergyLevel
             private set
@@ -65,7 +65,7 @@ class Day11 {
         override fun toString() = if (energyLevel == 0) blue(energyLevel) else green(energyLevel)
     }
 
-    class Grid(private val octopuses: List<Octopus>) {
+    private class Grid(private val octopuses: List<Octopus>) {
 
         var nbFlashes = 0
             private set
