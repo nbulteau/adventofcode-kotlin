@@ -1,10 +1,7 @@
 package me.nicolas.adventofcode.year2020
 
-import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-
 internal class Day20Test {
-
+/*
     @Test
     fun extractTiles() {
         val data = """
@@ -190,4 +187,5 @@ internal class Day20Test {
 
         return picture
     }
+ */
 }

@@ -1,9 +1,7 @@
 package me.nicolas.adventofcode
 
-import org.junit.jupiter.api.Test
-
 internal class UtilsKtTest {
-
+/*
     @Test
     fun rotateClockwise() {
 
@@ -31,4 +29,5 @@ internal class UtilsKtTest {
         kotlin.test.assertEquals('#', grid[2][4]) // West
         kotlin.test.assertEquals('#', grid[3][4]) // West
     }
+ */
 }
