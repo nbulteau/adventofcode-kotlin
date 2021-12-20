@@ -50,7 +50,7 @@ private class Day19Bis {
 
     private fun solve(reports: List<Report>): List<Scanner> {
         // scanner 0 is Point3D(0, 0, 0)
-        val scanner0 = Scanner(Point3D(0, 0, 0), reports.first().beacons(mode = 0))
+        val scanner0 = Scanner(Point3D(0, 0, 0), reports.first().beacons(face = 0, rotate = 0))
 
         val solvedScanners = mutableListOf(scanner0)
         val reportsToProcess = reports.drop(1).toMutableList()
@@ -76,18 +76,19 @@ private class Day19Bis {
     data class Scanner(val position: Point3D, val beacons: Set<Point3D>) {
 
         fun findMatchingReports(testedReport: Report): Scanner? {
-            // 8 * 8 = 48 distinct modes
-            for (mode in 0..47) {
-                val testedReportBeacons: Set<Point3D> = testedReport.beacons(mode)
-                for (reportPoint in testedReportBeacons) {
-                    for (scanner0Point in this.beacons) {
-                        val pointRelativeToScanner0: Point3D = scanner0Point - reportPoint
-                        val beacons: Set<Point3D> = testedReportBeacons.map { point ->
-                            point + pointRelativeToScanner0
-                        }.toSet()
-                        // count overlapping beacons
-                        if (beacons.count { point -> point in this.beacons } >= 12) {
-                            return Scanner(pointRelativeToScanner0, beacons)
+            for (face in 0..5) {
+                for (rotate in 0..3) {
+                    val testedReportBeacons: Set<Point3D> = testedReport.beacons(face, rotate)
+                    for (reportPoint in testedReportBeacons) {
+                        for (scanner0Point in this.beacons) {
+                            val pointRelativeToScanner0: Point3D = scanner0Point - reportPoint
+                            val beacons: Set<Point3D> = testedReportBeacons.map { point ->
+                                point + pointRelativeToScanner0
+                            }.toSet()
+                            // count overlapping beacons
+                            if (beacons.count { point -> point in this.beacons } >= 12) {
+                                return Scanner(pointRelativeToScanner0, beacons)
+                            }
                         }
                     }
                 }
@@ -107,31 +108,28 @@ private class Day19Bis {
 
     class Report(private var beacons: Set<Point3D>) {
 
-        fun beacons(mode: Int): Set<Point3D> {
-            return beacons.map { it.swapAxes(mode) }
-                .map {
-                    when (mode % 8) {
-                        0 -> Point3D(x = it.x, y = it.y, z = it.z)
-                        1 -> Point3D(x = it.x, y = it.y * -1, z = it.z)
-                        2 -> Point3D(x = it.x, y = it.y * -1, z = it.z * -1)
-                        3 -> Point3D(x = it.x, y = it.y, z = it.z * -1)
-                        4 -> Point3D(x = it.x * -1, y = it.y, z = it.z)
-                        5 -> Point3D(x = it.x * -1, y = it.y * -1, z = it.z)
-                        6 -> Point3D(x = it.x * -1, y = it.y * -1, z = it.z * -1)
-                        7 -> Point3D(x = it.x * -1, y = it.y, z = it.z * -1)
-                        else -> throw RuntimeException("Unknown mode $mode")
-                    }
-                }.toSet()
+        fun beacons(face: Int, rotate: Int): Set<Point3D> {
+            return beacons.map { it.face(face).rotate(rotate) }.toSet()
         }
 
-        private fun Point3D.swapAxes(mode: Int): Point3D {
-            return when (mode / 8) {
-                0 -> Point3D(x, y, z)
-                1 -> Point3D(x, z, y)
-                2 -> Point3D(y, x, z)
-                3 -> Point3D(y, z, x)
-                4 -> Point3D(z, x, y)
-                5 -> Point3D(z, y, x)
+        private fun Point3D.face(mode: Int): Point3D {
+            return when (mode) {
+                0 -> Point3D(x = x, y = y, z = z)
+                1 -> Point3D(x = x, y = -y, z = -z)
+                2 -> Point3D(x = x, y = -z, z = y)
+                3 -> Point3D(x = -y, y = -z, z = x)
+                4 -> Point3D(x = y, y = -z, z = -x)
+                5 -> Point3D(x = -x, y = -z, z = -y)
+                else -> throw RuntimeException("Unknown mode $mode")
+            }
+        }
+
+        private fun Point3D.rotate(mode: Int): Point3D {
+            return when (mode) {
+                0 -> Point3D(x = x, y = y, z = z)
+                1 -> Point3D(x = -y, y = x, z = z)
+                2 -> Point3D(x = -x, y = -y, z = z)
+                3 -> Point3D(x = y, y = -x, z = z)
                 else -> throw RuntimeException("Unknown mode $mode")
             }
         }
