@@ -27,30 +27,23 @@ fun main() {
 
 private class Day19Bis {
     fun partOne(inputs: List<String>): Int {
-
         val reports = parseReports(inputs)
+        val solvedScanners = solve(reports)
 
-        return solve(reports).flatMap { it.beacons }.toSet().size
+        return solvedScanners.flatMap { it.beacons }.toSet().size
     }
 
     fun partTwo(inputs: List<String>): Int {
         val reports = parseReports(inputs)
-        val positions = solve(reports).map { it.position }
+        val solvedScanners = solve(reports)
+        val positions = solvedScanners.map { it.position }
 
-        var second = positions.toList()
-        val result = positions.flatMap { pos1 ->
-            second = second.drop(1)
-            second.map { pos2 ->
-                pos1.manhattanDistance(pos2)
-            }
-        }.maxOf { it }
-
-        return result
+        return positions.flatMap { pos1 -> positions.map { pos2 -> pos1.manhattanDistance(pos2) } }.maxOf { it }
     }
 
     private fun solve(reports: List<Report>): List<Scanner> {
         // scanner 0 is Point3D(0, 0, 0)
-        val scanner0 = Scanner(Point3D(0, 0, 0), reports.first().beacons(face = 0, rotate = 0))
+        val scanner0 = Scanner(Point3D(0, 0, 0), reports.first().beacons(face = Face.Front, rotate = Rotate.R0))
 
         val solvedScanners = mutableListOf(scanner0)
         val reportsToProcess = reports.drop(1).toMutableList()
@@ -72,12 +65,11 @@ private class Day19Bis {
         return solvedScanners
     }
 
-
     data class Scanner(val position: Point3D, val beacons: Set<Point3D>) {
 
         fun findMatchingReports(testedReport: Report): Scanner? {
-            for (face in 0..5) {
-                for (rotate in 0..3) {
+            for (face in Face.values()) {
+                for (rotate in Rotate.values()) {
                     val testedReportBeacons: Set<Point3D> = testedReport.beacons(face, rotate)
                     for (reportPoint in testedReportBeacons) {
                         for (scanner0Point in this.beacons) {
@@ -106,31 +98,33 @@ private class Day19Bis {
         fun manhattanDistance(other: Point3D): Int = abs(x - other.x) + abs(y - other.y) + abs(z - other.z)
     }
 
+    enum class Face { Front, Bottom, Top, Right, Left, Back }
+
+    enum class Rotate { R0, R90, R180, R270 }
+
     class Report(private var beacons: Set<Point3D>) {
 
-        fun beacons(face: Int, rotate: Int): Set<Point3D> {
-            return beacons.map { it.face(face).rotate(rotate) }.toSet()
+        fun beacons(face: Face, rotate: Rotate): Set<Point3D> {
+            return beacons.map { it.facing(face).rotating(rotate) }.toSet()
         }
 
-        private fun Point3D.face(mode: Int): Point3D {
-            return when (mode) {
-                0 -> Point3D(x = x, y = y, z = z)
-                1 -> Point3D(x = x, y = -y, z = -z)
-                2 -> Point3D(x = x, y = -z, z = y)
-                3 -> Point3D(x = -y, y = -z, z = x)
-                4 -> Point3D(x = y, y = -z, z = -x)
-                5 -> Point3D(x = -x, y = -z, z = -y)
-                else -> throw RuntimeException("Unknown mode $mode")
+        private fun Point3D.facing(face: Face): Point3D {
+            return when (face) {
+                Face.Front -> Point3D(x = x, y = y, z = z)    // front
+                Face.Bottom -> Point3D(x = x, y = -y, z = -z) // bottom
+                Face.Top -> Point3D(x = x, y = -z, z = y)     // top
+                Face.Right -> Point3D(x = -y, y = -z, z = x)  // right
+                Face.Left -> Point3D(x = y, y = -z, z = -x)   // left
+                Face.Back -> Point3D(x = -x, y = -z, z = -y)  // back
             }
         }
 
-        private fun Point3D.rotate(mode: Int): Point3D {
-            return when (mode) {
-                0 -> Point3D(x = x, y = y, z = z)
-                1 -> Point3D(x = -y, y = x, z = z)
-                2 -> Point3D(x = -x, y = -y, z = z)
-                3 -> Point3D(x = y, y = -x, z = z)
-                else -> throw RuntimeException("Unknown mode $mode")
+        private fun Point3D.rotating(rotate: Rotate): Point3D {
+            return when (rotate) {
+                Rotate.R0 -> Point3D(x = x, y = y, z = z)     // rotate clockwise * 0
+                Rotate.R90 -> Point3D(x = -y, y = x, z = z)   // rotate clockwise * 1
+                Rotate.R180 -> Point3D(x = -x, y = -y, z = z) // rotate clockwise * 2
+                Rotate.R270 -> Point3D(x = y, y = -x, z = z)  // rotate clockwise * 3
             }
         }
     }
