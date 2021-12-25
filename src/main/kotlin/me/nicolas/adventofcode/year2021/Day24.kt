@@ -56,7 +56,6 @@ import kotlin.time.measureTimedValue
  * ---
  */
 
-
 // https://adventofcode.com/2021/day/24
 @ExperimentalTime
 fun main() {
@@ -103,14 +102,21 @@ private class Day24 {
          * z *= (25 * x + 1)
          * z += (w + {c}) * x
          */
-        fun processBlock(w: Int, oldZ: Long): Long {
-            val x = if ((oldZ % 26 + this.b) == w.toLong()) 0 else 1
-            var z = oldZ / this.a
-            z *= (25 * x + 1)
-            z += (w + this.c) * x
+        fun processBlock(w: Long, z: Long): Long {
+            val x = if ((z % 26 + this.b) == w) 0 else 1
+            var toReturn = z / this.a
+            toReturn *= (25 * x + 1)
+            toReturn += (w + this.c) * x
 
-            return z
+            return toReturn
         }
+
+        fun processBlockV2(w: Long, z: Long): Long =
+            if (z % 26 + this.b == w) {
+                z / this.a
+            } else {
+                ((z / this.a) * 26) + w + this.c
+            }
     }
 
     fun parseInput(input: List<String>): List<Block> {
@@ -130,13 +136,13 @@ private class Day24 {
 
         fun search(digits: IntProgression, index: Int = 0, z: Long = 0): Long {
             if (index == blocks.size) {
-                return if (z == 0L) 0 else -1
+                return if (z == 0L) 0L else -1L
             }
             if (cache[index].contains(z)) {
-                return -1
+                return -1L
             }
             for (w in digits) {
-                val newZ = blocks[index].processBlock(w, z)
+                val newZ = blocks[index].processBlockV2(w.toLong(), z)
                 val output = search(digits, index + 1, newZ)
                 if (output != -1L) {
                     return w * 10.toDouble().pow(nbDigits - index - 1).toLong() + output
