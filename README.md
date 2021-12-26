@@ -5,7 +5,7 @@ Kotlin programming language.
 
 Past years, also in Kotlin:
 
-* 2019 - [GitHub](https://github.com/nbulteau/adventofcode/blob/main/doc/adventofcode-2019.md)
-* 2020 - [GitHub](https://github.com/nbulteau/adventofcode/blob/main/doc/adventofcode-2020.md)
-* 2021 - [GitHub](https://github.com/nbulteau/adventofcode/blob/main/doc/adventofcode-2021.md)
+* [2019](https://github.com/nbulteau/adventofcode/blob/main/doc/adventofcode-2019.md)
+* [2020](https://github.com/nbulteau/adventofcode/blob/main/doc/adventofcode-2020.md)
+* [2021](https://github.com/nbulteau/adventofcode/blob/main/doc/adventofcode-2021.md)
 
