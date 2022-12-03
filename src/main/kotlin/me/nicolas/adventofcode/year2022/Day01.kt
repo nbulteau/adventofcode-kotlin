@@ -7,7 +7,7 @@ import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2022/day/1
 @OptIn(ExperimentalTime::class)
-fun main(args: Array<String>) {
+fun main() {
 
     val training = readFileDirectlyAsText("/year2022/day01/training.txt")
     val data = readFileDirectlyAsText("/year2022/day01/data.txt")
@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
         measureTimedValue { Day01().partOne(numbers) })
 
     prettyPrint(
-        message = "Part one answer",
+        message = "Part two answer",
         measureTimedValue { Day01().partTwo(numbers) })
 }
 

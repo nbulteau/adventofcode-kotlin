@@ -19,7 +19,7 @@ fun main() {
         measureTimedValue { Day02().partOne(lines) })
 
     prettyPrint(
-        message = "Part one answer",
+        message = "Part two answer",
         measureTimedValue { Day02().partTwo(lines) })
 }
 
