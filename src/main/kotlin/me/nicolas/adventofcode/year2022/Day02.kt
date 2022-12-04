@@ -1,12 +1,10 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.prettyPrint
+import me.nicolas.adventofcode.AdventOfCodeDay
+import me.nicolas.adventofcode.prettyPrintPartOne
+import me.nicolas.adventofcode.prettyPrintPartTwo
 import me.nicolas.adventofcode.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
-// https://adventofcode.com/2022/day/2
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2022/day02/training.txt")
@@ -14,16 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day02().partOne(lines) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day02().partTwo(lines) })
+    val day = Day02("--- Day 2: Rock Paper Scissors ---", "https://adventofcode.com/2022/day/2")
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day02 {
+class Day02(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
 
     private val shapeYouSelected = mapOf('X' to 1, 'Y' to 2, 'Z' to 3)
 

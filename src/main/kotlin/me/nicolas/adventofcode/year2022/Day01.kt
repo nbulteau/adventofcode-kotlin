@@ -1,29 +1,23 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.prettyPrint
+import me.nicolas.adventofcode.AdventOfCodeDay
+import me.nicolas.adventofcode.prettyPrintPartOne
+import me.nicolas.adventofcode.prettyPrintPartTwo
 import me.nicolas.adventofcode.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
-// https://adventofcode.com/2022/day/1
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2022/day01/training.txt")
     val data = readFileDirectlyAsText("/year2022/day01/data.txt")
 
-    val numbers = data.split("\n")
+    val lines = data.split("\n")
 
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day01().partOne(numbers) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day01().partTwo(numbers) })
+    val day = Day01("--- Day 1: Calorie Counting ---", "https://adventofcode.com/2022/day/1")
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day01 {
+class Day01(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
     fun partOne(numbers: List<String>): Int {
         return processCalories(numbers)
             .maxOf { it }

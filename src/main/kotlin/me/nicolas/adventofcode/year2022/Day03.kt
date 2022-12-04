@@ -1,13 +1,10 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.prettyPrint
+import me.nicolas.adventofcode.AdventOfCodeDay
+import me.nicolas.adventofcode.prettyPrintPartOne
+import me.nicolas.adventofcode.prettyPrintPartTwo
 import me.nicolas.adventofcode.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
-
-// https://adventofcode.com/2022/day/3
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2022/day03/training.txt")
@@ -15,13 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-
-    prettyPrint("Part one answer", measureTimedValue { Day03().partOne(lines) })
-
-    prettyPrint("Part two answer", measureTimedValue { Day03().partTwo(lines) })
+    val day = Day03("--- Day 3: Rucksack Reorganization ---", "https://adventofcode.com/2022/day/3")
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-private class Day03 {
+private class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
 
     fun partOne(lines: List<String>): Int {
         return lines.sumOf { rucksack ->

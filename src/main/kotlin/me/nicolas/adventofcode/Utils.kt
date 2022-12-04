@@ -5,6 +5,7 @@ import java.nio.file.Paths
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 const val ANSI_RESET = "\u001B[0m"
 
@@ -23,5 +24,13 @@ fun prettyPrint(message: String, timedResponse: TimedValue<Any>) {
     println("$message : ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
 }
 
+@OptIn(ExperimentalTime::class)
+fun prettyPrintPartOne(lambda: () -> Any) {
+    prettyPrint("Part one answer", measureTimedValue { lambda() })
+}
 
+@OptIn(ExperimentalTime::class)
+fun prettyPrintPartTwo(lambda: () -> Any) {
+    prettyPrint("Part two answer", measureTimedValue { lambda() })
+}
 
