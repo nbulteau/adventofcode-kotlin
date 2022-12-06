@@ -21,13 +21,13 @@ fun main() {
 private class Day05(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
 
     fun partOne(lines: List<String>): String {
-        val stacksOfCrates = getStacksOfCrates(lines)
+        val stacksOfCrates = buildStacksOfCrates(lines)
 
         val moves = lines.last().split("\n")
         for (move in moves) {
             // Get all integers
             val (quantity, from, to) = "(\\d+)".toRegex().findAll(move).map { it.value.toInt() }.toList()
-            (1..quantity).forEach { _ ->
+            repeat(quantity) {
                 stacksOfCrates[to - 1].push(stacksOfCrates[from - 1].pop())
             }
         }
@@ -36,20 +36,20 @@ private class Day05(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
     }
 
     fun partTwo(lines: List<String>): String {
-        val stacksOfCrates = getStacksOfCrates(lines)
+        val stacksOfCrates = buildStacksOfCrates(lines)
 
         val moves = lines.last().split("\n")
-        for (line in moves) {
+        for (move in moves) {
             // Get all integers
-            val (move, from, to) = "(\\d+)".toRegex().findAll(line).map { it.value.toInt() }.toList()
-            val toPush = (1..move).map { stacksOfCrates[from - 1].pop() }.reversed()
+            val (quantity, from, to) = "(\\d+)".toRegex().findAll(move).map { it.value.toInt() }.toList()
+            val toPush = (1..quantity).map { stacksOfCrates[from - 1].pop() }.reversed()
             stacksOfCrates[to - 1].addAll(toPush)
         }
 
         return stacksOfCrates.joinToString("") { it.peek() }.filter { it.isLetter() }
     }
 
-    private fun getStacksOfCrates(lines: List<String>): List<Stack<String>> {
+    private fun buildStacksOfCrates(lines: List<String>): List<Stack<String>> {
         val stacks = lines.first().split("\n")
             .reversed()
             .drop(1)
@@ -64,6 +64,7 @@ private class Day05(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                 }
             }
         }
+
         return stacksOfCrates
     }
 }
