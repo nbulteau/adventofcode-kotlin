@@ -54,6 +54,10 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
         RIGHT(1, 0),
     }
 
+    /**
+     * A tree is visible if all of the other trees between it and an edge of the grid are shorter than it.
+     * Only consider trees in the same row or column; that is, only look up, down, left, or right from any given tree.
+     */
     private fun List<List<Int>>.isVisible(x: Int, y: Int): Boolean {
         return this.isVisible(x, y, Direction.UP) ||
                 this.isVisible(x, y, Direction.DOWN) ||
@@ -61,10 +65,6 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                 this.isVisible(x, y, Direction.RIGHT)
     }
 
-    /**
-     * A tree is visible if all of the other trees between it and an edge of the grid are shorter than it.
-     * Only consider trees in the same row or column; that is, only look up, down, left, or right from any given tree.
-     */
     private fun List<List<Int>>.isVisible(x: Int, y: Int, direction: Direction): Boolean {
         val treeSize = this[y][x]
 
@@ -81,6 +81,10 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
         return true
     }
 
+    /**
+     * A tree's scenic score is found by multiplying together its viewing distance in each of the four directions.
+     * For this tree, this is 4 (found by multiplying 1 * 1 * 2 * 2).
+     */
     private fun List<List<Int>>.scenicScore(x: Int, y: Int): Int {
         return this.scenicScore(x, y, Direction.UP) *
                 this.scenicScore(x, y, Direction.DOWN) *
@@ -88,10 +92,6 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                 this.scenicScore(x, y, Direction.RIGHT)
     }
 
-    /**
-     * A tree's scenic score is found by multiplying together its viewing distance in each of the four directions.
-     * For this tree, this is 4 (found by multiplying 1 * 1 * 2 * 2).
-     */
     private fun List<List<Int>>.scenicScore(x: Int, y: Int, direction: Direction): Int {
         val treeSize = this[y][x]
 
