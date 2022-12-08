@@ -20,7 +20,7 @@ fun main() {
 private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
 
     fun partOne(lines: List<String>): Int {
-        val trees = lines.map { line -> line.toList().map { point -> point.toString().toInt() } }
+        val trees = lines.map { line -> line.map { high -> high.code } }
         var visible = 2 * trees.size + 2 * (trees.first().size - 2)
 
         for (x in 1 until trees.first().size - 1) {
@@ -35,7 +35,7 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
     }
 
     fun partTwo(lines: List<String>): Int {
-        val trees = lines.map { line -> line.toList().map { point -> point.toString().toInt() } }
+        val trees = lines.map { line -> line.map { point -> point.code } }
         var maxScenicScore = -1
 
         for (x in 1 until trees.first().size - 1) {
@@ -83,7 +83,6 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
 
     /**
      * A tree's scenic score is found by multiplying together its viewing distance in each of the four directions.
-     * For this tree, this is 4 (found by multiplying 1 * 1 * 2 * 2).
      */
     private fun List<List<Int>>.scenicScore(x: Int, y: Int): Int {
         return this.scenicScore(x, y, Direction.UP) *
