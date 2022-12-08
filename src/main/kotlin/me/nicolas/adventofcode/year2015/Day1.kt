@@ -5,7 +5,7 @@ import me.nicolas.adventofcode.readFileDirectlyAsText
 
 // --- Day 1: Not Quite Lisp ---
 // https://adventofcode.com/2015/day/1
-fun main(args: Array<String>) {
+fun main() {
 
     println("--- Day 1: Not Quite Lisp ---")
     println()

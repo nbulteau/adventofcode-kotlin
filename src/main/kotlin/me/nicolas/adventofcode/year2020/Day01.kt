@@ -4,7 +4,7 @@ import me.nicolas.adventofcode.readFileDirectlyAsText
 
 // --- Day 1: Report Repair ---
 // https://adventofcode.com/2020/day/1
-fun main(args: Array<String>) {
+fun main() {
 
     val training = readFileDirectlyAsText("/year2020/day01/training.txt")
     val data = readFileDirectlyAsText("/year2020/day01/data.txt")
