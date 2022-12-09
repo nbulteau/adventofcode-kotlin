@@ -1,9 +1,6 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.*
 import kotlin.math.abs
 
 fun main() {
@@ -36,6 +33,7 @@ private class Day09(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                 repeat(steps.toInt()) {
                     val motion = motions[direction]!!
                     rope[0] = Pair(rope.first().first + motion.first, rope.first().second + motion.second) // Head
+
                     (1 until nbKnots).forEach { index -> // Tail
                         val knot1 = rope[index - 1]
                         val knot2 = rope[index]
@@ -59,7 +57,23 @@ private class Day09(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                     visited.add(rope.last())
                 }
             }
-
+        // display(visited)
         return visited.size
+    }
+
+    private fun display(visited: Set<Pair<Int, Int>>) {
+        for (x in visited.minOf { it.first } - 2..visited.maxOf { it.first } + 2) {
+            for (y in visited.minOf { it.second } - 2..visited.maxOf { it.second } + 2) {
+                val pair = Pair(x, y)
+                if (pair == Pair(0, 0)) {
+                    print("s")
+                } else if (visited.contains(pair)) {
+                    print("#")
+                } else {
+                    print('.')
+                }
+            }
+            println()
+        }
     }
 }
