@@ -11,7 +11,7 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day10("--- Day 10: Cathode-Ray Tube ---", "https://adventofcode.com/2022/day/9")
+    val day = Day10("--- Day 10: Cathode-Ray Tube ---", "https://adventofcode.com/2022/day/10")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
     prettyPrintPartTwo { day.partTwoBis(lines) }
