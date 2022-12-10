@@ -10,7 +10,7 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day09("--- Day 9:  ---", "https://adventofcode.com/2022/day/9")
+    val day = Day09("--- Day 9: Rope Bridge ---", "https://adventofcode.com/2022/day/9")
     prettyPrintPartOne { day.solve(lines, 2) }
     prettyPrintPartTwo { day.solve(lines, 10) }
 }
