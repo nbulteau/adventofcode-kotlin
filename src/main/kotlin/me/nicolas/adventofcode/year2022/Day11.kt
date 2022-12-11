@@ -8,7 +8,7 @@ fun main() {
 
     val monkeys = data.split("\n\n")
 
-    val day = Day11("--- Day 11: Cathode-Ray Tube ---", "https://adventofcode.com/2022/day/11")
+    val day = Day11("--- Day 11: Monkey in the Middle ---", "https://adventofcode.com/2022/day/11")
     prettyPrintPartOne { day.partOne(monkeys) }
     prettyPrintPartTwo { day.partTwo(monkeys) }
 }
