@@ -7,13 +7,13 @@
 |  03  | Rucksack Reorganization | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day03.kt) [\[AoC\]](http://adventofcode.com/2022/day/3)  |
 |  04  | Camp Cleanup            | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day04.kt) [\[AoC\]](http://adventofcode.com/2022/day/4)  |
 |  05  | Supply Stacks           | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day05.kt) [\[AoC\]](http://adventofcode.com/2022/day/5)  |
-|  06  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day06.kt) [\[AoC\]](http://adventofcode.com/2022/day/6)  |
-|  07  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day07.kt) [\[AoC\]](http://adventofcode.com/2022/day/7)  |
-|  08  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day08.kt) [\[AoC\]](http://adventofcode.com/2022/day/8)  |
-|  09  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day09.kt) [\[AoC\]](http://adventofcode.com/2022/day/9)  |
-|  10  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day10.kt) [\[AoC\]](http://adventofcode.com/2022/day/10) |
-|  11  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day11.kt) [\[AoC\]](http://adventofcode.com/2022/day/11) |
-|  12  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day12.kt) [\[AoC\]](http://adventofcode.com/2022/day/12) |
+|  06  | Tuning Trouble          | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day06.kt) [\[AoC\]](http://adventofcode.com/2022/day/6)  |
+|  07  | No Space Left On Device | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day07.kt) [\[AoC\]](http://adventofcode.com/2022/day/7)  |
+|  08  | Treetop Tree House      | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day08.kt) [\[AoC\]](http://adventofcode.com/2022/day/8)  |
+|  09  | Rope Bridge             | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day09.kt) [\[AoC\]](http://adventofcode.com/2022/day/9)  |
+|  10  | Cathode-Ray Tube        | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day10.kt) [\[AoC\]](http://adventofcode.com/2022/day/10) |
+|  11  | Monkey in the Middle    | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day11.kt) [\[AoC\]](http://adventofcode.com/2022/day/11) |
+|  12  | Hill Climbing Algorithm | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day12.kt) [\[AoC\]](http://adventofcode.com/2022/day/12) |
 |  13  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day13.kt) [\[AoC\]](http://adventofcode.com/2022/day/13) |
 |  14  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day14.kt) [\[AoC\]](http://adventofcode.com/2022/day/14) |
 |  15  |                         | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day15.kt) [\[AoC\]](http://adventofcode.com/2022/day/15) |
