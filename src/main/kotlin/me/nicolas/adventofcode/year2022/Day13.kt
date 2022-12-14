@@ -89,7 +89,7 @@ private class Day13(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
             val list = buildList {
                 while (string[index] != ']') {
                     val (endIndex, value) = recursiveParser(string, index)
-                    add(value)
+                    this.add(value)
                     index = if (string[endIndex] == ',') {
                         endIndex + 1
                     } else {
