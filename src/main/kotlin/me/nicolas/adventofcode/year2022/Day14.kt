@@ -49,17 +49,17 @@ private class Day14(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
         // sand flows out the bottom, falling into the endless void ?
         while (fallingSand.second < yMax) {
             val south = fallingSand.south()
-            if (cave.getOrDefault(south, '.') == '.') {
+            if (!cave.containsKey(south)) {
                 fallingSand = south
                 continue
             }
             val southwest = fallingSand.southwest()
-            if (cave.getOrDefault(southwest, '.') == '.') {
+            if (!cave.containsKey(southwest)) {
                 fallingSand = southwest
                 continue
             }
             val southeast = fallingSand.southeast()
-            if (cave.getOrDefault(southeast, '.') == '.') {
+            if (!cave.containsKey(southeast)) {
                 fallingSand = southeast
                 continue
             }
@@ -82,17 +82,17 @@ private class Day14(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
         // the source of the sand becomes blocked ?
         while (cave[sourceOfTheSand] != 'o') {
             val south = fallingSand.south()
-            if (cave.getOrDefault(south, '.') == '.') {
+            if (!cave.containsKey(south)) {
                 fallingSand = south
                 continue
             }
             val southwest = fallingSand.southwest()
-            if (cave.getOrDefault(southwest, '.') == '.') {
+            if (!cave.containsKey(southwest)) {
                 fallingSand = southwest
                 continue
             }
             val southeast = fallingSand.southeast()
-            if (cave.getOrDefault(southeast, '.') == '.') {
+            if (!cave.containsKey(southeast)) {
                 fallingSand = southeast
                 continue
             }
