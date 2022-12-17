@@ -13,7 +13,7 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day15("--- Day 15:  ---", "https://adventofcode.com/2022/day/15")
+    val day = Day15("---- Day 15: Beacon Exclusion Zone ---", "https://adventofcode.com/2022/day/15")
     prettyPrintPartOne { day.partOne(inputs) }
     prettyPrintPartTwo { day.partTwo(inputs) }
 }
