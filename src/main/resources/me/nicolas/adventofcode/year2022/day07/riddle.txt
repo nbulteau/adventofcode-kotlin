@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 14*
-        //2022[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Smarty - Join our private leaderboard and solve our puzzles for BIG PRIZES!!! ----------------- Address Validation and Autocomplete, and more!
 --- Day 7: No Space Left On Device ---
 
 You can hear birds chirping and raindrops hitting leaves as the expedition proceeds. Occasionally, you can even hear much louder sounds in the distance; how big do the animals get out here, anyway?

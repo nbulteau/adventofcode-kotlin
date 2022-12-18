@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 12*
- {'year':2022}[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Glean - We're just an EdTech company that wants to hire you
 --- Day 6: Tuning Trouble ---
 
 The preparations are finally complete; you and the Elves leave camp on foot and begin to make your way toward the star fruit grove.

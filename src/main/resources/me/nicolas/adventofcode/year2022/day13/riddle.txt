@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 26*
-   <y>2022</y>[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Deepgram - AI transcription & understanding in a single API. Rust+Elm
 --- Day 13: Distress Signal ---
 
 You climb the hill and again try contacting the Elves. However, you instead receive a signal you weren't expecting: a distress signal.

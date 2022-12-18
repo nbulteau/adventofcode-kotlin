@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 20*
-      /*2022*/[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Best Buy - Our purpose is to enrich lives through technology. Join us!
 --- Day 10: Cathode-Ray Tube ---
 
 You avoid the ropes, plunge into the river, and swim to shore.

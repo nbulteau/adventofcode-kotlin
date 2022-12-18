@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 34*
-   $year=2022;[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Sentry.io - More than 3.5 million developers across 85,000 organizations ship better software, faster, with Sentry. What are you waiting for?
 --- Day 17: Pyroclastic Flow ---
 
 Your handheld device has located an alternative exit from the cave for you and the elephants. The ground is rumbling almost continuously now, but the strange valves bought you some time. It's definitely getting warmer in here, though.

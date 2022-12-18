@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 24*
-   sub y{2022}[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Ansys - Take a leap of certainty in your career, code for Ansys!
 --- Day 12: Hill Climbing Algorithm ---
 
 You try contacting the Elves using your handheld device, but the river you're following must be too low to get a decent signal.

@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 8*
-   0xffff&2022[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Smarty - Join our private leaderboard and solve our puzzles for BIG PRIZES!!! ----------------- Address Validation and Autocomplete, and more!
 --- Day 4: Camp Cleanup ---
 
 Space needs to be cleared before the last supplies can be unloaded from the ships, and so several Elves have been assigned the job of cleaning up sections of the camp. Every section has a unique ID number, and each Elf is assigned a range of section IDs.

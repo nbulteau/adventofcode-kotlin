@@ -1,7 +1,3 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]Nicolas BULTEAU (AoC++) 18*
-  {:year 2022}[Calendar][AoC++][Sponsors][Leaderboard][Stats]
-Our sponsors help make Advent of Code possible:
-Cerbos - Don’t get snowed under by your RBAC implementation
 --- Day 9: Rope Bridge ---
 
 This rope bridge creaks as you walk along it. You aren't sure how old it is, or whether it can even support your weight.
