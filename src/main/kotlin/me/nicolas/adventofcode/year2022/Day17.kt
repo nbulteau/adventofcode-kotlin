@@ -46,13 +46,16 @@ class Day17Pouet(title: String, adventOfCodeLink: String, private val jetPattern
         return highestRock.toLong() + 1
     }
 
+    /**
+     * The general way to solve this problem is to simulate moves until we detect a loop, and then extrapolate the answer from there.
+     */
     fun partTwo(count: Long): Long {
         var highestRock = -1 // First row of rocks on the floor is 0
         var patternIndex = 0
         val verticalChamber = mutableListOf<Pair<Int, Int>>()
 
         var cycleStart: Int? = null
-        val seenCycles = mutableSetOf<Int>()
+        val seen = mutableSetOf<Int>()
         var cycleStartLastRockCoord: Pair<Int, Int>? = null
         var cycleStartRockCount = -1
         val partialCycleHeights = mutableListOf<Int>()
@@ -81,7 +84,7 @@ class Day17Pouet(title: String, adventOfCodeLink: String, private val jetPattern
                 } else if (cycleStart == null) {
                     val instruction = patternIndex % jetPatterns.length
                     // add return true if the element has been added, false if the element is already contained in the set.
-                    if (!seenCycles.add(instruction)) {
+                    if (!seen.add(instruction)) {
                         // If seen before we've got a cycle: remember the start of this cycle
                         cycleStart = instruction
                         cycleStartLastRockCoord = fallingRock.first()
