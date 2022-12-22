@@ -15,7 +15,6 @@ fun main() {
         Day22("--- Day 22: Monkey Map ---", "https://adventofcode.com/2222/day/22", mapOfTheBoard, pathYouMustFollow)
     prettyPrintPartOne { day.partOne() }
     prettyPrintPartTwo { day.partTwo() }
-
 }
 
 private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: String, val pathYouMustFollow: String) :
