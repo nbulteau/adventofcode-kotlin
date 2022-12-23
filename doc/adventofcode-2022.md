@@ -24,7 +24,7 @@
 |  20  | Grove Positioning System | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day20.kt) [\[AoC\]](http://adventofcode.com/2022/day/20) |
 |  21  | Monkey Math              | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day21.kt) [\[AoC\]](http://adventofcode.com/2022/day/21) |
 |  22  | Monkey Map               | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day22.kt) [\[AoC\]](http://adventofcode.com/2022/day/22) |
-|  23  |                          | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day23.kt) [\[AoC\]](http://adventofcode.com/2022/day/23) |
+|  23  | Unstable Diffusion       | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day23.kt) [\[AoC\]](http://adventofcode.com/2022/day/23) |
 |  24  |                          | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day24.kt) [\[AoC\]](http://adventofcode.com/2022/day/24) |
 |  25  |                          | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day25.kt) [\[AoC\]](http://adventofcode.com/2022/day/25) |
                                                         
