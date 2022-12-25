@@ -26,6 +26,6 @@
 |  22  | Monkey Map               | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day22.kt) [\[AoC\]](http://adventofcode.com/2022/day/22) |
 |  23  | Unstable Diffusion       | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day23.kt) [\[AoC\]](http://adventofcode.com/2022/day/23) |
 |  24  | Blizzard Basin           | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day24.kt) [\[AoC\]](http://adventofcode.com/2022/day/24) |
-|  25  |                          | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day25.kt) [\[AoC\]](http://adventofcode.com/2022/day/25) |
+|  25  | Full of Hot Air          | [\[Code\]](https://github.com/nbulteau/adventofcode/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2022/Day25.kt) [\[AoC\]](http://adventofcode.com/2022/day/25) |
                                                         
 
