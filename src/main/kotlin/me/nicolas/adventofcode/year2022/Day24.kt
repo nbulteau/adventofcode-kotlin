@@ -11,155 +11,120 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day24("--- Day 24: Blizzard Basin ---", "https://adventofcode.com/2022/day/24")
-    prettyPrintPartOne { day.partOne(inputs) }
-    prettyPrintPartTwo { day.partTwo(inputs) }
+    val day = Day24("--- Day 24: Blizzard Basin ---", "https://adventofcode.com/2022/day/24", inputs)
+    prettyPrintPartOne { day.partOne() }
+    prettyPrintPartTwo { day.partTwo() }
 }
 
-private class Day24(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+/**
+ * Faster solution using Breadth-First Search.
+ */
+private class Day24(title: String, adventOfCodeLink: String, inputs: List<String>) :
+    AdventOfCodeDay(title, adventOfCodeLink) {
 
-    fun partOne(inputs: List<String>): Int {
-        var valley = buildValley(inputs)
+    private val valley: Valley = buildValley(inputs)
+    private val start: Pair<Int, Int> = Pair(inputs.first().indexOfFirst { it == '.' }, 0)
+    private val goal: Pair<Int, Int> = Pair(inputs.last().indexOfFirst { it == '.' }, inputs.lastIndex)
 
-        var steps = 0
-        while (!valley.isGoalReached) {
-            //valley.display()
-            steps++
-            valley = valley.processStep()
-        }
-
-        return steps
+    fun partOne(): Int {
+        return solve(this.start, this.goal, this.valley, 0).first
     }
 
-    fun partTwo(inputs: List<String>): Int {
-        var valley = buildValley(inputs)
-        val width = valley.width
-        val height = valley.height
-        val start = valley.positions.first()
-        val goal = valley.goal
 
-        var steps = 0
-        // first trip to the goal
-        while (!valley.isGoalReached) {
-            steps++
-            valley = valley.processStep()
-        }
-
-        // trip back to the start
-        valley = Valley(width, height, goal, start, valley.blizzards, setOf(goal))
-        while (!valley.isGoalReached) {
-            steps++
-            valley = valley.processStep()
-        }
-
-        // trip back to the goal again
-        valley = Valley(width, height, start, goal, valley.blizzards, setOf(start))
-        while (!valley.isGoalReached) {
-            steps++
-            valley = valley.processStep()
-        }
-
-        return steps
+    fun partTwo(): Int {
+        val toGoal = solve(this.start, this.goal, this.valley, 0)
+        val backToStart = solve(this.goal, this.start, toGoal.second, toGoal.first)
+        return solve(this.start, this.goal, backToStart.second, backToStart.first).first
     }
 
-    private enum class Direction(val vec: Pair<Int, Int>) {
-        UP(Pair(-1, 0)), RIGHT(Pair(0, 1)), DOWN(Pair(1, 0)), LEFT(Pair(0, -1));
+    private fun solve(
+        start: Pair<Int, Int>,
+        goal: Pair<Int, Int>,
+        startState: Valley,
+        minutes: Int
+    ): Pair<Int, Valley> {
+        val mapStates = mutableMapOf(Pair(minutes, startState))
+        val queue = mutableListOf(Path(minutes, start))
+        val seen = mutableSetOf<Path>()
 
-        fun step(position: Pair<Int, Int>): Pair<Int, Int> =
-            Pair(vec.first + position.first, vec.second + position.second)
+        while (queue.isNotEmpty()) {
+            val path = queue.removeFirst()
+            if (path !in seen) {
+                seen += path
+                val nextMapState = mapStates.computeIfAbsent(path.minutes + 1) { key ->
+                    mapStates.getValue(key - 1).nextState()
+                }
+                val neighbours = path.location.neighbours()
 
-        override fun toString(): String {
-            return when (this) {
-                UP -> "^"
-                RIGHT -> ">"
-                DOWN -> "v"
-                LEFT -> "<"
+                // Is goal reached?
+                if (goal in neighbours) {
+                    return Pair(path.minutes + 1, nextMapState)
+                }
+
+                // Add neighbours that will be open to move to on the next turn.
+                neighbours
+                    .filter { it == this.start || (nextMapState.inInBounds(it) && nextMapState.isOpen(it)) }
+                    .forEach { neighbour ->
+                        queue.add(path.next(neighbour))
+                    }
             }
         }
+        throw RuntimeException("No path to goal")
     }
 
-    private class Valley(
-        val width: Int, val height: Int,
-        val start: Pair<Int, Int>,
-        val goal: Pair<Int, Int>,
-        val blizzards: List<Pair<Pair<Int, Int>, Direction>>,
-        val positions: Set<Pair<Int, Int>>
-    ) {
-        val isGoalReached = positions.contains(goal)
+    private data class Valley(val height: Int, val width: Int, val blizzards: Set<Blizzard>) {
+        private val unsafeLocations = blizzards.map { it.location }.toSet()
 
-        fun processStep(): Valley {
-            val nextBlizzards = blizzards.map { (position, direction) ->
-                var (row, column) = direction.step(position)
-                if (row == 0) row = height - 2
-                if (column == 0) column = width - 2
-                if (row == height - 1) row = 1
-                if (column == width - 1) column = 1
-                Pair(Pair(row, column), direction)
+        fun isOpen(place: Pair<Int, Int>): Boolean =
+            place !in unsafeLocations
+
+        fun inInBounds(place: Pair<Int, Int>): Boolean =
+            place.first in 1..height && place.second in 1..width
+
+        fun nextState(): Valley =
+            Valley(height, width, blizzards.map { it.next(Pair(height, width)) }.toSet())
+    }
+
+    private data class Blizzard(val location: Pair<Int, Int>, val direction: Pair<Int, Int>) {
+
+        fun next(boundary: Pair<Int, Int>): Blizzard {
+            var nextLocation = Pair(location.first + direction.first, location.second + direction.second)
+            when {
+                nextLocation.first == 0 -> nextLocation = Pair(boundary.first, location.second)
+                nextLocation.first > boundary.first -> nextLocation = Pair(1, location.second)
+                nextLocation.second == 0 -> nextLocation = Pair(location.first, boundary.second)
+                nextLocation.second > boundary.second -> nextLocation = Pair(location.first, 1)
             }
-
-            val nextPositions = positions.flatMap { position ->
-                listOf(
-                    position,
-                    Direction.UP.step(position),
-                    Direction.RIGHT.step(position),
-                    Direction.DOWN.step(position),
-                    Direction.LEFT.step(position)
-                )
-            }.filter { (row, column) ->
-                val current = Pair(row, column)
-                current == start || current == goal ||
-                        row in 1 until height - 1 && column in 1 until width - 1 &&
-                        current !in nextBlizzards.map { it.first }
-            }.toSet()
-
-            return Valley(width, height, start, goal, nextBlizzards, nextPositions)
+            return Blizzard(nextLocation, direction)
         }
+    }
 
-        fun display() {
-            val blizzardsGroupByPositions = blizzards.groupBy { it.first }
+    private data class Path(val minutes: Int, val location: Pair<Int, Int>) {
+        fun next(place: Pair<Int, Int>): Path =
+            Path(minutes + 1, place)
+    }
 
-            (0 until height).forEach { row ->
-                (0 until width).forEach { column ->
-                    val current = Pair(row, column)
-                    if (current in blizzardsGroupByPositions) {
-                        if (blizzardsGroupByPositions[current]!!.size > 1) {
-                            print(blizzardsGroupByPositions[current]!!.size)
-                        } else {
-                            print(blizzardsGroupByPositions[current]!!.first().second)
-                        }
-                    } else if (current == start || current == goal) {
-                        print('.')
-                    } else if (row == 0 || row == height - 1 || column == 0 || column == width - 1) {
-                        print('#')
-                    } else {
-                        print('.')
+    private fun Pair<Int, Int>.neighbours() = setOf(
+        Pair(first, second),
+        Pair(first - 1, second),
+        Pair(first + 1, second),
+        Pair(first, second - 1),
+        Pair(first, second + 1)
+    )
+
+    private fun buildValley(inputs: List<String>): Valley =
+        Valley(
+            inputs.first().lastIndex - 1, inputs.lastIndex - 1,
+            inputs.flatMapIndexed { y, row ->
+                row.mapIndexedNotNull { x, char ->
+                    when (char) {
+                        '>' -> Blizzard(Pair(x, y), Pair(1, 0))
+                        '<' -> Blizzard(Pair(x, y), Pair(-1, 0))
+                        'v' -> Blizzard(Pair(x, y), Pair(0, 1))
+                        '^' -> Blizzard(Pair(x, y), Pair(0, -1))
+                        else -> null
                     }
                 }
-                println()
-            }
-            println()
-        }
-    }
-
-    private fun buildValley(inputs: List<String>): Valley {
-        val width = inputs.first().length
-        val height = inputs.size
-        val start = Pair(0, inputs.first().indexOfFirst { char -> char == '.' })
-        val goal = Pair(height - 1, inputs.last().indexOfFirst { char -> char == '.' })
-
-        val blizzards = inputs.flatMapIndexed { row, line ->
-            line.mapIndexedNotNull() { column, char ->
-                when (char) {
-                    '^' -> Pair(row, column) to Direction.UP
-                    '>' -> Pair(row, column) to Direction.RIGHT
-                    'v' -> Pair(row, column) to Direction.DOWN
-                    '<' -> Pair(row, column) to Direction.LEFT
-                    else -> null
-                }
-            }
-        }
-
-        return Valley(width, height, start, goal, blizzards, setOf(start))
-    }
+            }.toSet()
+        )
 }
- 
