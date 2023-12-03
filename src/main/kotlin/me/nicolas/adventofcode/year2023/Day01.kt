@@ -6,15 +6,11 @@ import me.nicolas.adventofcode.prettyPrintPartTwo
 import me.nicolas.adventofcode.readFileDirectlyAsText
 
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2023/day01/training.txt")
-    val training2 = readFileDirectlyAsText("/year2023/day01/training2.txt")
-
     val data = readFileDirectlyAsText("/year2023/day01/data.txt")
-
+    val lines = data.split("\n")
     val day = Day01("--- Day 1: Trebuchet?! ---", "https://adventofcode.com/2023/day/1")
-    prettyPrintPartOne { day.partOne(data.split("\n")) }
-    prettyPrintPartTwo { day.partTwo(data.split("\n")) }
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
 class Day01(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
