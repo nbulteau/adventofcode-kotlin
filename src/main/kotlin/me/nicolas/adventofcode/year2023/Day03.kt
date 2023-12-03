@@ -20,13 +20,13 @@ class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
     private val numberRegex = """\d+""".toRegex()
 
     fun partOne(lines: List<String>): Int {
-        val map = buildMap(lines)
+        val map: Map<Triple<Int, Int, Char>, List<Int>> = buildMap(lines)
 
         return map.values.flatten().sum()
     }
 
     fun partTwo(lines: List<String>): Int {
-        val map = buildMap(lines)
+        val map: Map<Triple<Int, Int, Char>, List<Int>> = buildMap(lines)
 
         // A gear is any * symbol that is adjacent to exactly two part numbers.
         return map.filter { (key, _) -> key.third == '*' }
