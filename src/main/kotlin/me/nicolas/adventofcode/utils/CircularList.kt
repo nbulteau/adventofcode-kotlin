@@ -1,4 +1,4 @@
-package me.nicolas.adventofcode
+package me.nicolas.adventofcode.utils
 
 class CircularList<out T>(private val list: List<T>) : List<T> by list {
 

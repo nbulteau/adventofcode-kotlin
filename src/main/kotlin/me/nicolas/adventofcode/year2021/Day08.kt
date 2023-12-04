@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.util.*
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -56,6 +56,7 @@ private class Day08 {
                     signalPatterns[key] = "1"
                     one = key
                 }
+
                 3 -> signalPatterns[key] = "7"
                 4 -> signalPatterns[key] = "4"
                 7 -> signalPatterns[key] = "8"
@@ -73,6 +74,7 @@ private class Day08 {
                         signalPatterns[key] = "3"
                         three = key
                     }
+
                     (key.size == 6 && !key.containsAll(one)) -> {
                         signalPatterns[key] = "6"
                         six = key
@@ -92,6 +94,7 @@ private class Day08 {
                             signalPatterns[key] = "0"
                         }
                     }
+
                     5 -> {
                         if (six.containsAll(key)) {
                             signalPatterns[key] = "5"

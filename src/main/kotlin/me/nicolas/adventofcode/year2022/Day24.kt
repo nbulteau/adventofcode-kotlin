@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val training = readFileDirectlyAsText("/year2022/day24/training.txt")
@@ -41,7 +41,7 @@ private class Day24(title: String, adventOfCodeLink: String, inputs: List<String
         start: Pair<Int, Int>,
         goal: Pair<Int, Int>,
         startState: Valley,
-        minutes: Int
+        minutes: Int,
     ): Pair<Int, Valley> {
         val mapStates = mutableMapOf(Pair(minutes, startState))
         val queue = mutableListOf(Path(minutes, start))

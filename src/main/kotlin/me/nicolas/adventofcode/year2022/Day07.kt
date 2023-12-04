@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
 
@@ -51,6 +51,7 @@ private class Day07(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                     }
                     index++
                 }
+
                 currentLine == "$ ls" -> {
                     index++
                     while (index < lines.size) {
@@ -62,6 +63,7 @@ private class Day07(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                             currentLine.startsWith("dir") -> {
                                 currentNode.add(TreeNode(currentLine.substringAfter("dir "), currentNode))
                             }
+
                             else -> {
                                 val file = currentLine.split(" ")
                                 currentNode.add(TreeNode(file.last(), currentNode, file.first().toInt()))

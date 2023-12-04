@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.min
 
 fun main() {
@@ -29,7 +29,7 @@ private class Day19(title: String, adventOfCodeLink: String, inputs: List<String
         val obsidianRobotOreCosts: Int,
         val obsidianRobotClayCosts: Int,
         val geodeRobotOreCosts: Int,
-        val geodeRobotObsidianCosts: Int
+        val geodeRobotObsidianCosts: Int,
     )
 
     private val blueprints = buildBlueprint(inputs)
@@ -90,7 +90,7 @@ private class Day19(title: String, adventOfCodeLink: String, inputs: List<String
         obsidianRobotClayCosts: Int,
         geodeRobotOreCosts: Int,
         geodeRobotObsidianCosts: Int,
-        minutes: Int
+        minutes: Int,
     ): Int {
         var best = 0
         val queue = ArrayDeque<State>().apply {
@@ -126,7 +126,7 @@ private class Day19(title: String, adventOfCodeLink: String, inputs: List<String
             obsidianRobot = min(obsidianRobot, maxObsidianCosts)
 
             // Resources
-            ore = min(ore, maxOreCosts* time - oreRobot * (time - 1))
+            ore = min(ore, maxOreCosts * time - oreRobot * (time - 1))
             clay = min(clay, maxClayCosts * time - clayRobot * (time - 1))
             obsidian = min(obsidian, maxObsidianCosts * time - obsidianRobot * (time - 1))
 

@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
@@ -128,6 +128,7 @@ class Day24 {
                 's', 'n' -> {
                     Direction.byLabel((char.toString() + line[++index]))
                 }
+
                 else -> throw RuntimeException()
             }
             index++

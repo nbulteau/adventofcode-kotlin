@@ -1,4 +1,4 @@
-package me.nicolas.adventofcode
+package me.nicolas.adventofcode.utils
 
 import java.io.File
 import java.nio.file.Paths

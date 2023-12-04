@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
 
 // --- Day 12: Rain Risk ---
@@ -108,15 +108,18 @@ class Day12 {
                 waypointEastWest = waypointNorthSouth
                 waypointNorthSouth = 0 - previousWaypointEastWest
             }
+
             180 -> {
                 waypointEastWest = 0 - waypointEastWest
                 waypointNorthSouth = 0 - waypointNorthSouth
             }
+
             270 -> {
                 val previousWaypointEastWest = waypointEastWest
                 waypointEastWest = 0 - waypointNorthSouth
                 waypointNorthSouth = previousWaypointEastWest
             }
+
             else -> {
             }
         }
@@ -127,15 +130,18 @@ class Day12 {
                 waypointEastWest = 0 - waypointNorthSouth
                 waypointNorthSouth = previousWaypointEastWest
             }
+
             180 -> {
                 waypointEastWest = 0 - waypointEastWest
                 waypointNorthSouth = 0 - waypointNorthSouth
             }
+
             270 -> {
                 val previousWaypointEastWest = waypointEastWest
                 waypointEastWest = waypointNorthSouth
                 waypointNorthSouth = 0 - previousWaypointEastWest
             }
+
             else -> {
             }
         }

@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val training = readFileDirectlyAsText("/year2022/day23/training.txt")
@@ -44,16 +44,19 @@ private class Day23(title: String, adventOfCodeLink: String, inputs: List<String
                         Pair(this.first, this.second - 1) in actual ||
                         Pair(this.first + 1, this.second - 1) in actual)
             }
+
             Direction.SOUTH -> {
                 !(Pair(this.first - 1, this.second + 1) in actual ||
                         Pair(this.first, this.second + 1) in actual ||
                         Pair(this.first + 1, this.second + 1) in actual)
             }
+
             Direction.WEST -> {
                 !(Pair(this.first - 1, this.second - 1) in actual ||
                         Pair(this.first - 1, this.second) in actual ||
                         Pair(this.first - 1, this.second + 1) in actual)
             }
+
             Direction.EAST -> {
                 !(Pair(this.first + 1, this.second - 1) in actual ||
                         Pair(this.first + 1, this.second) in actual ||

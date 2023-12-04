@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2018
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 // https://adventofcode.com/2018/day/5
 fun main() {

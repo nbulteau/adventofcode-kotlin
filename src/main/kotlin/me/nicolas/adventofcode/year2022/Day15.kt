@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
 import kotlin.math.max
 

@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -38,7 +38,7 @@ private class Day12 {
     fun partOne(
         graph: Map<String, Set<String>>,
         caveAllowedVisits: Map<String, Int>,
-        distinctPaths: MutableSet<List<String>>
+        distinctPaths: MutableSet<List<String>>,
     ): Int {
         recurseFindPaths("start", graph, mutableListOf(), distinctPaths, caveAllowedVisits)
 
@@ -48,7 +48,7 @@ private class Day12 {
     fun partTwo(
         graph: Map<String, Set<String>>,
         caveAllowedVisits: Map<String, Int>,
-        distinctPaths: MutableSet<List<String>>
+        distinctPaths: MutableSet<List<String>>,
     ): Int {
         caveAllowedVisits
             .filter { node ->
@@ -91,7 +91,7 @@ private class Day12 {
         graph: Map<String, Set<String>>,
         path: List<String>,
         paths: MutableSet<List<String>>,
-        allowedVisits: Map<String, Int>
+        allowedVisits: Map<String, Int>,
     ) {
         val currentPath = path.toMutableList()
         currentPath.add(cave)

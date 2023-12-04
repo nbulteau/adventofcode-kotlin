@@ -1,6 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.*
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val training = readFileDirectlyAsText("/year2022/day11/training.txt")
@@ -76,7 +79,7 @@ private class Day11(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
         var items: MutableList<Long>,
         val operation: Pair<String, String>,
         val divisibleBy: Long,
-        val action: Pair<String, String>
+        val action: Pair<String, String>,
     ) {
         var inspected = 0
 

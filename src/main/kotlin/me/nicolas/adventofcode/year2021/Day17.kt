@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.prettyPrint
+import me.nicolas.adventofcode.utils.prettyPrint
 import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.time.ExperimentalTime

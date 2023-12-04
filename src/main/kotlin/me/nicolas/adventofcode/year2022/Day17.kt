@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
 
@@ -105,7 +105,7 @@ class Day17Pouet(title: String, adventOfCodeLink: String, private val jetPattern
     private fun processFallingRock(
         verticalChamber: MutableList<Pair<Int, Int>>,
         fallingRock: List<Pair<Int, Int>>,
-        patternIndex: Int
+        patternIndex: Int,
     ): Pair<List<Pair<Int, Int>>, Int> {
         var newFallingRock = fallingRock
         var patternIndex1 = patternIndex

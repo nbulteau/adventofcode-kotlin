@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.math.BigInteger
 import java.util.*
 import kotlin.time.ExperimentalTime

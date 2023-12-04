@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val training = readFileDirectlyAsText("/year2022/day13/training.txt")
@@ -72,7 +72,7 @@ private class Day13(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
                         // If the left list runs out of items first, the inputs are in the right order. If the right list runs out of items first, the inputs are not in the right order.
                         if (iterator1.hasNext() && !iterator2.hasNext()) {
                             1
-                        } else  if (!iterator1.hasNext() && !iterator2.hasNext()){
+                        } else if (!iterator1.hasNext() && !iterator2.hasNext()) {
                             0
                         } else { // (!iterator1.hasNext() && iterator2.hasNext())
                             -1

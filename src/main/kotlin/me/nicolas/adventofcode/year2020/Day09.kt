@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 // --- Day 9: Encoding Error ---
 // https://adventofcode.com/2020/day/9

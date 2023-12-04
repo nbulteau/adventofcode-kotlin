@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
@@ -53,9 +53,11 @@ private fun extractRules(sections: List<String>): Map<Int, Rule> {
                             RuleExpr(parts[1].split(" ").map { it.toInt() })
                         )
                     }
+
                     line.contains("\"") -> {
                         RuleMatch(this.replace("\"", ""))
                     }
+
                     else -> {
                         RuleExpr(this.split(" ").map { it.toInt() })
                     }
@@ -79,6 +81,7 @@ private class Day19 {
 
                 "(?:${left}|${right})"
             }
+
             else -> throw RuntimeException()
         }
     }
@@ -98,9 +101,11 @@ private class Day19 {
             } else {
                 false
             }
+
             is RuleExpr -> matchesRules(rules, message, rule.expr + rulesToVisit.drop(1))
             is RuleOr -> matchesRules(rules, message, rule.left.expr + rulesToVisit.drop(1))
                     || matchesRules(rules, message, rule.right.expr + rulesToVisit.drop(1))
+
             else -> throw RuntimeException()
         }
     }

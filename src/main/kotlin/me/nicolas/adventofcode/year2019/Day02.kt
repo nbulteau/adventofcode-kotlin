@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2019
 
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -62,6 +62,7 @@ private class Day02 {
                 1 -> {
                     this[this[index + 3]] = this[this[index + 1]] + this[this[index + 2]]
                 }
+
                 2 -> {
                     this[this[index + 3]] = this[this[index + 1]] * this[this[index + 2]]
                 }

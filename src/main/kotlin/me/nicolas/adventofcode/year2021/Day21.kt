@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -74,7 +74,7 @@ private class Day21 {
         val posPlayer2: Int,
         val scorePlayer1: Int = 0,
         val scorePlayer2: Int = 0,
-        val turn: Int = 0
+        val turn: Int = 0,
     )
 
     private fun processGames(state: State): Pair<ULong, ULong> {

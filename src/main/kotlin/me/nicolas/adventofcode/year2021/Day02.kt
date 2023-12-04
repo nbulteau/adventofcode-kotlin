@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -54,6 +54,7 @@ class Day02 {
                     horizontal += instruction[1].toInt()
                     depth += (aim * instruction[1].toInt())
                 }
+
                 "down" -> aim += instruction[1].toInt()
                 "up" -> aim -= instruction[1].toInt()
             }

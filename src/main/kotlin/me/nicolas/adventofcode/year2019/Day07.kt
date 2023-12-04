@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2019
 
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -24,15 +24,9 @@ fun main() {
 
 private class Day07 {
 
-    fun partOne(inputs: IntArray): Int {
-        (0..99999).forEach { int ->
 
-        }
-        return compute(inputs)
-    }
-
-    private fun compute(program: IntArray): Int {
-        val permutations = generatePermutationsIterative(5)
+    fun partOne(program: IntArray): Int {
+        val permutations = listOf(0, 1, 2, 3, 4).permutations()
 
         val all = permutations.map { runPhase(program, it) }
 
@@ -40,44 +34,39 @@ private class Day07 {
     }
 
     fun partTwo(program: IntArray): Int {
+        val permutations = listOf(5, 6, 7, 8, 9).permutations()
 
+        var inputValue = 0
+        permutations.map {
+            inputValue = runAmplified(program, it, inputValue)
+            inputValue
+        }
+        val all = permutations.map { runPhase(program, it) }
 
-        return 0
+        return all.maxOf { it }
     }
 
-    private fun runPhase(program: IntArray, settings: IntArray): Int =
+    private fun runPhase(program: IntArray, settings: List<Int>): Int =
         (0..4).fold(0) { previous, id ->
             IntCodeProgram(program.clone()).execute(mutableListOf(settings[id], previous)).first()
         }
 
-    private fun generatePermutationsIterative(size: Int): Set<IntArray> {
-
-        val permutations = mutableSetOf<IntArray>()
-
-        val figures = (0..size).toList().toIntArray()
-        val factorials = IntArray(size + 1)
-        factorials[0] = 1
-        for (i in 1..size) {
-            factorials[i] = factorials[i - 1] * i
+    private fun runAmplified(program: IntArray, settings: List<Int>, firstInputValue: Int): Int =
+        (0..4).fold(firstInputValue) { previous, id ->
+            IntCodeProgram(program.clone()).execute(mutableListOf(settings[id], previous)).first()
         }
-        for (i in 0 until factorials[size]) {
-            var onePermutation = IntArray(0)
-            var temp = figures
-            var positionCode = i
-            for (position in size downTo 1) {
-                val selected = positionCode / factorials[position - 1]
-                onePermutation += temp[selected]
-                positionCode %= factorials[position - 1]
-                temp = temp.sliceArray(0 until selected) + temp.sliceArray(selected + 1 until temp.size)
+
+    private fun List<Int>.permutations(): List<List<Int>> =
+        if (this.size <= 1) {
+            listOf(this)
+        } else {
+            val elementToInsert = first()
+            drop(1).permutations().flatMap { permutation ->
+                (0..permutation.size).map { i ->
+                    permutation.toMutableList().apply { add(i, elementToInsert) }
+                }
             }
-
-            permutations.add(onePermutation)
         }
-
-        return permutations
-    }
-
-
 }
 
 

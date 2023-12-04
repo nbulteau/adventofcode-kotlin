@@ -1,4 +1,4 @@
-package me.nicolas.adventofcode
+package me.nicolas.adventofcode.utils
 
 abstract class AdventOfCodeDay(title: String, adventOfCodeLink: String) {
 

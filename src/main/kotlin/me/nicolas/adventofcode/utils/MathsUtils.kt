@@ -1,4 +1,4 @@
-package me.nicolas.adventofcode
+package me.nicolas.adventofcode.utils
 
 /**
  * GCD (Greatest Common Divisor) or HCF (Highest Common Factor)
@@ -23,3 +23,4 @@ private fun lcm(a: Long, b: Long) = a * (b / gcd(a, b))
 fun List<Long>.lcm(): Long {
     return this.reduce { acc, i -> (acc * i) / gcd(acc, i) }.toLong()
 }
+

@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 // --- Day 8: Handheld Halting ---
 // https://adventofcode.com/2020/day/8
@@ -63,6 +63,7 @@ private fun instructionsEngine(instructions: List<String>): Pair<Int, Boolean> {
                 accumulator += instruction.substringAfter(" ").toInt()
                 index++
             }
+
             instruction.startsWith("jmp") -> {
                 index += instruction.substringAfter(" ").toInt()
             }

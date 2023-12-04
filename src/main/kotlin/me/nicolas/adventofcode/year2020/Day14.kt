@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.math.BigDecimal
 import kotlin.math.pow
 import kotlin.time.ExperimentalTime
@@ -49,7 +49,7 @@ class Day14 {
 
     private fun process(
         program: List<String>,
-        function: (String, List<String>, MutableMap<Long, String>) -> Unit
+        function: (String, List<String>, MutableMap<Long, String>) -> Unit,
     ): MutableMap<Long, String> {
         val memory = mutableMapOf<Long, String>()
 

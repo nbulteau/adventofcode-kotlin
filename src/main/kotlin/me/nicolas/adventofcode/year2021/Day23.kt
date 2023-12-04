@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.util.*
 import kotlin.math.abs
 
@@ -122,7 +122,7 @@ class Day23(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
         val size: Int,
         val energy: Int,
         val rooms: List<Room>,
-        val hallway: Hallway = List(11) { null }
+        val hallway: Hallway = List(11) { null },
     ) : Comparable<Situation> {
         override fun compareTo(other: Situation) = energy.compareTo(other.energy)
         fun currentState() = Pair(rooms, hallway)

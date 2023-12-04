@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val training = readFileDirectlyAsText("/year2022/day22/training.txt")
@@ -35,7 +35,7 @@ private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: Stri
         fun turn(char: Char): Direction {
             val turn = ordinal + if (char == 'R') 1 else -1
             val newDirection = turn % Direction.values().size
-            val index = if (newDirection < 0) Direction.values().size -1 else newDirection
+            val index = if (newDirection < 0) Direction.values().size - 1 else newDirection
             return Direction.values()[index]
         }
 
@@ -154,6 +154,7 @@ private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: Stri
                     wrapDirection = Direction.UP
                 }
             }
+
             Direction.DOWN -> {
                 if (positionX in 0..49 && positionY == 199) {
                     wrapPosition = Pair(100 + positionX, 0)
@@ -166,6 +167,7 @@ private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: Stri
                     wrapDirection = Direction.LEFT
                 }
             }
+
             Direction.LEFT -> {
                 if (positionX == 50 && positionY in 0..49) {
                     wrapPosition = Pair(0, 100 + (49 - positionY))
@@ -181,6 +183,7 @@ private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: Stri
                     wrapDirection = Direction.DOWN
                 }
             }
+
             Direction.UP -> {
                 if (positionX in 0..49 && positionY == 100) {
                     wrapPosition = Pair(50, 50 + positionX)

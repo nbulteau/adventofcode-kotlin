@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val training = readFileDirectlyAsText("/year2022/day20/training.txt")
@@ -50,7 +50,7 @@ private class Day20(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
 
     private fun mix(
         initial: List<Pair<Int, Long>>,
-        mixed: MutableList<Pair<Int, Long>>
+        mixed: MutableList<Pair<Int, Long>>,
     ) {
         initial.forEach { pair ->
             val index = mixed.indexOf(pair)

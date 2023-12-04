@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -216,31 +216,38 @@ class Day20 {
                     Edges.NORTH.ordinal -> {
                         // Nothing to do
                     }
+
                     Edges.EAST.ordinal -> {
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                     }
+
                     Edges.SOUTH.ordinal -> {
                         tile.flipHorizontal()
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                     }
+
                     Edges.WEST.ordinal -> {
                         tile.rotateClockwise()
                         tile.flipHorizontal()
                     }
+
                     Edges.REVERSED_NORTH.ordinal -> {
                         tile.flipHorizontal()
                     }
+
                     Edges.REVERSED_EAST.ordinal -> {
                         tile.flipHorizontal()
                         tile.rotateClockwise()
                     }
+
                     Edges.REVERSED_SOUTH.ordinal -> {
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                     }
+
                     Edges.REVERSED_WEST.ordinal -> {
                         tile.rotateClockwise()
                     }
@@ -267,28 +274,35 @@ class Day20 {
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                     }
+
                     Edges.EAST.ordinal -> {
                         tile.flipHorizontal()
                     }
+
                     Edges.SOUTH.ordinal -> {
                         tile.rotateClockwise()
                     }
+
                     Edges.WEST.ordinal -> {
                         // Nothing to do
                     }
+
                     Edges.REVERSED_NORTH.ordinal -> {
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                     }
+
                     Edges.REVERSED_EAST.ordinal -> {
                         tile.rotateClockwise()
                         tile.rotateClockwise()
                     }
+
                     Edges.REVERSED_SOUTH.ordinal -> {
                         tile.flipHorizontal()
                         tile.rotateClockwise()
                     }
+
                     Edges.REVERSED_WEST.ordinal -> {
                         tile.flipHorizontal()
                         tile.rotateClockwise()

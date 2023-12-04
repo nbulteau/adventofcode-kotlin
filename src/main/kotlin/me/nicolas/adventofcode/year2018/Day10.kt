@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2018
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 
 // https://adventofcode.com/2018/day/10

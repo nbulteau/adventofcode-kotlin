@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 typealias Layout = List<String>
 
@@ -82,6 +82,7 @@ private fun Layout.processLayoutPartOne(): Layout {
                         "L"
                     }
                 }
+
                 '#' -> {
                     newString += if (this.lookAround(x, y) >= 4) {
                         "L"
@@ -114,6 +115,7 @@ fun Layout.processLayoutPartTwo(): Layout {
                         "L"
                     }
                 }
+
                 '#' -> {
                     newString += if (this.lookInDirection(x, y) >= 5) {
                         "L"

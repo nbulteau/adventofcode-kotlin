@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.blue
-import me.nicolas.adventofcode.green
-import me.nicolas.adventofcode.prettyPrint
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.blue
+import me.nicolas.adventofcode.utils.green
+import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 

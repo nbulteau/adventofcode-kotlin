@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2015
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 
 // --- Day 1: Not Quite Lisp ---

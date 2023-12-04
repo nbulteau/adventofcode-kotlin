@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
@@ -123,7 +123,7 @@ class Day16 {
 
     private fun getAllPossibleIndexForARule(
         rule: Map.Entry<String, List<IntRange>>,
-        tickets: List<List<Int>>
+        tickets: List<List<Int>>,
     ): List<Boolean> {
 
         // row, column -> column, row

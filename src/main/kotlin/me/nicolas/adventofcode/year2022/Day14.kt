@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2022
 
-import me.nicolas.adventofcode.AdventOfCodeDay
-import me.nicolas.adventofcode.prettyPrintPartOne
-import me.nicolas.adventofcode.prettyPrintPartTwo
-import me.nicolas.adventofcode.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
+import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.max
 import kotlin.math.min
 
@@ -40,7 +40,7 @@ private class Day14(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
 
     private fun simulateTheFallingSandPartOne(
         cave: MutableMap<Pair<Int, Int>, Char>,
-        sourceOfTheSand: Pair<Int, Int>
+        sourceOfTheSand: Pair<Int, Int>,
     ): Int {
         val yMax = cave.keys.maxBy { it.second }.second
         var fallingSand = sourceOfTheSand
@@ -74,7 +74,7 @@ private class Day14(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
 
     private fun simulateTheFallingSandPartTwo(
         cave: MutableMap<Pair<Int, Int>, Char>,
-        sourceOfTheSand: Pair<Int, Int>
+        sourceOfTheSand: Pair<Int, Int>,
     ): Int {
         var fallingSand = sourceOfTheSand
 

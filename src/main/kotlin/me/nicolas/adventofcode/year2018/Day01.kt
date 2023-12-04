@@ -1,6 +1,6 @@
 package me.nicolas.adventofcode.year2018
 
-import me.nicolas.adventofcode.*
+import me.nicolas.adventofcode.utils.*
 
 // https://adventofcode.com/2018/day/1
 fun main() {
