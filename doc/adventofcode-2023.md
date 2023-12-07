@@ -5,10 +5,10 @@
 |  01  | Trebuchet?! | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day01.kt) [\[AoC\]](http://adventofcode.com/2023/day/1)  |
 |  02  | Cube Conundrum | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day02.kt) [\[AoC\]](http://adventofcode.com/2023/day/2)  |
 |  03  | Gear Ratios | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day03.kt) [\[AoC\]](http://adventofcode.com/2023/day/3)  |
-|  04  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day04.kt) [\[AoC\]](http://adventofcode.com/2023/day/4)  |
-|  05  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day05.kt) [\[AoC\]](http://adventofcode.com/2023/day/5)  |
-|  06  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day06.kt) [\[AoC\]](http://adventofcode.com/2023/day/6)  |
-|  07  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day07.kt) [\[AoC\]](http://adventofcode.com/2023/day/7)  |
+|  04  | Scratchcards | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day04.kt) [\[AoC\]](http://adventofcode.com/2023/day/4)  |
+|  05  | If You Give A Seed A Fertilizer | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day05.kt) [\[AoC\]](http://adventofcode.com/2023/day/5)  |
+|  06  | Wait For It | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day06.kt) [\[AoC\]](http://adventofcode.com/2023/day/6)  |
+|  07  | Camel Cards | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day07.kt) [\[AoC\]](http://adventofcode.com/2023/day/7)  |
 |  08  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day08.kt) [\[AoC\]](http://adventofcode.com/2023/day/8)  |
 |  09  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day09.kt) [\[AoC\]](http://adventofcode.com/2023/day/9)  |
 |  10  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day10.kt) [\[AoC\]](http://adventofcode.com/2023/day/10) |

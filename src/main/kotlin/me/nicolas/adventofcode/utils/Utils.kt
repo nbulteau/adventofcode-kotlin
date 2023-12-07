@@ -3,7 +3,6 @@ package me.nicolas.adventofcode.utils
 import java.io.File
 import java.nio.file.Paths
 import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
 
@@ -19,18 +18,15 @@ fun readFileDirectlyAsText(fileName: String): String {
     return File("$path/$fileName").readText(Charsets.UTF_8)
 }
 
-@OptIn(ExperimentalTime::class)
 fun prettyPrint(message: String, timedResponse: TimedValue<Any>) {
-    println("$message : ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
+    println("$message ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")
 }
 
-@OptIn(ExperimentalTime::class)
-fun prettyPrintPartOne(lambda: () -> Any) {
-    prettyPrint("Part one answer", measureTimedValue { lambda() })
+fun prettyPrintPartOne(message: String? = null,lambda: () -> Any) {
+    prettyPrint("Part one answer ${message ?: ""} :", measureTimedValue { lambda() })
 }
 
-@OptIn(ExperimentalTime::class)
-fun prettyPrintPartTwo(lambda: () -> Any) {
-    prettyPrint("Part two answer", measureTimedValue { lambda() })
+fun prettyPrintPartTwo(message: String? = null,lambda: () -> Any) {
+    prettyPrint("Part two answer ${message ?: ""} :", measureTimedValue { lambda() })
 }
 

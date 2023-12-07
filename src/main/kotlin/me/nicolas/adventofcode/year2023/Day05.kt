@@ -12,6 +12,7 @@ fun main() {
     val day = Day05("--- Day 5: If You Give A Seed A Fertilizer ---", "https://adventofcode.com/2023/day/5")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
+    prettyPrintPartTwo("(Brut force)") { day.partTwoBrutForce(data) }
 }
 
 class Day05(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
@@ -133,14 +134,15 @@ class Day05(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
         return seeds.minOf { seed -> getLocationForSeed(seed, mappings) }
     }
 
+    // Brut force solution for part two (very slow) :( (takes more than 5 minutes)
     fun partTwoBrutForce(data: String): Long {
         val almanac = data.split("\n\n")
         val seeds = extractSeedsFromRanges(almanac)
         val mappings = extractAlmanac(almanac)
 
-        return seeds.minOf { range ->
+        return seeds.map { range ->
             range.toList().minOf { seed -> getLocationForSeed(seed, mappings) }
-        }
+        }.toList().min()
     }
 
     fun partTwo(data: String): Long {
