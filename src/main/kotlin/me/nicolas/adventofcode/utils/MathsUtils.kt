@@ -4,23 +4,18 @@ package me.nicolas.adventofcode.utils
  * GCD (Greatest Common Divisor) or HCF (Highest Common Factor)
  * of two numbers is the largest number that divides both of them.
  */
-private fun gcd(a: Long, b: Long): Long {
-    var x = a
-    var y = b
-    while (y > 0) {
-        val temp = y
-        y = x % y // % is remainder
-        x = temp
-    }
-    return x
-}
+tailrec fun Long.gcd(other: Long): Long =
+    if(other == 0L) this
+    else other.gcd(this % other)
 
 /**
  * LCM (Least Common Multiple) of two numbers is the smallest number that is divisible by both.
+ * The formula to find the LCM of some numbers a and b is (a*b) / gcd(a, b) where GCD is the Greatest Common Divisor.
  */
-fun lcm(a: Long, b: Long) = a * (b / gcd(a, b))
+fun Long.lcm(other: Long): Long =
+    (this * other) / this.gcd(other)
 
 fun List<Long>.lcm(): Long {
-    return this.reduce { acc, i -> (acc * i) / gcd(acc, i) }.toLong()
+    return this.reduce { acc, i -> (acc * i) / acc.gcd(i) }.toLong()
 }
 

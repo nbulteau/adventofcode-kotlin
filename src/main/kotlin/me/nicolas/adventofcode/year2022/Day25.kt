@@ -5,16 +5,12 @@ import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
-    val training = readFileDirectlyAsText("/year2022/day25/training.txt")
     val data = readFileDirectlyAsText("/year2022/day25/data.txt")
-
-    val inputs = data.split("\n")
-
     val day = Day25(2022, 25, "Full of Hot Air")
-    prettyPrintPartOne { day.partOne(inputs) }
+    prettyPrintPartOne { day.partOne(data) }
 }
 
-private class Day25(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
+class Day25(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private val snafuValues = arrayOf(0, 1, 2, -2, -1)
     private val snafuDigits = "012=-".toCharArray()
@@ -27,7 +23,7 @@ private class Day25(year: Int, day: Int, title: String) : AdventOfCodeDay(year, 
 
     private fun String.snafuToDecimal() = this.indices.fold(0L) { acc, i -> acc * 5 + this[i].snafuToDigit() }
 
-    fun Long.decimalToSNAFU(): String {
+    private fun Long.decimalToSNAFU(): String {
         var decimal = this
         var result = ""
         while (decimal > 0) {
@@ -38,10 +34,12 @@ private class Day25(year: Int, day: Int, title: String) : AdventOfCodeDay(year, 
         return result.reversed()
     }
 
-    fun partOne(inputs: List<String>): String {
-        val numbers = inputs.sumOf { number ->
-            number.snafuToDecimal()
-        }
+    fun partOne(data: String): String {
+        val numbers = data.split("\n")
+            .sumOf { number ->
+                number.trim().snafuToDecimal()
+            }
+
         return numbers.decimalToSNAFU()
     }
 }

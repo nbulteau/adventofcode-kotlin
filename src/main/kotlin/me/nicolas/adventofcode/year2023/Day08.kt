@@ -10,8 +10,9 @@ fun main() {
 }
 
 class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
-    fun partOne(data: String): Int {
+    fun partOne(data: String): Long {
         val (instructions, network) = extractData(data)
+
         return countSteps("AAA", network, instructions) { it != "ZZZ" }
     }
 
@@ -21,7 +22,9 @@ class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val endPositions = startPositions.map { start ->
             countSteps(start, network, instructions) { !it.endsWith('Z') }
         }
-        return endPositions.map { it.toLong() }.lcm()
+
+
+        return endPositions.map { it }.lcm()
     }
 
     // The condition is used to stop the loop when we reach the end of the network
@@ -30,7 +33,7 @@ class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         network: Map<String, Pair<String, String>>,
         instructions: CircularList<Char>,
         condition: (String) -> Boolean
-    ): Int {
+    ): Long {
         var current = start
         var steps = 0
         do {
@@ -44,7 +47,8 @@ class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             }
             steps++
         } while (condition(current))
-        return steps
+
+        return steps.toLong()
     }
 
     // The key is the current route (AAA in the example).
