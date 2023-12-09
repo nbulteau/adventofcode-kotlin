@@ -162,9 +162,9 @@ class Day12 {
         WEST('W', 1, 0);
 
         companion object {
-            fun byLabel(label: Char) = values().first { direction -> label == direction.label }
+            fun byLabel(label: Char) = entries.first { direction -> label == direction.label }
         }
 
-        fun getNextDirection(value: Int): Direction = values()[(ordinal + (value / 90)) % 4]
+        fun getNextDirection(value: Int): Direction = entries[(ordinal + (value / 90)) % 4]
     }
 }

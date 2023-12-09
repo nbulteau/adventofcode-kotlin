@@ -15,19 +15,19 @@ fun main() {
     val dataPart1 = readFileDirectlyAsText("/year2021/day23/data-part1.txt")
     val dataPart2 = readFileDirectlyAsText("/year2021/day23/data-part2.txt")
 
-    val day = Day23("--- Day 23: Amphipod ---", "https://adventofcode.com/2021/day/23")
-    prettyPrintPartOne { day.partOne(dataPart1.lines()) }
-    prettyPrintPartTwo { day.partTwo(dataPart2.lines()) }
+    val day = Day23(2023, 23, "Amphipod")
+    prettyPrintPartOne { day.partOne(dataPart1) }
+    prettyPrintPartTwo { day.partTwo(dataPart2) }
 }
 
 private typealias Room = List<Int>
 private typealias Hallway = List<Int?>
 
-class Day23(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day23(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(inputs: List<String>) = organizeAmphipods(loadList(inputs), 2)
+    fun partOne(data: String) = organizeAmphipods(loadList(data.lines()), 2)
 
-    fun partTwo(inputs: List<String>) = organizeAmphipods(loadList(inputs), 4)
+    fun partTwo(data: String) = organizeAmphipods(loadList(data.lines()), 4)
 
     private enum class Amphipod { A, B, C, D }
 
@@ -56,8 +56,8 @@ class Day23(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
                 if (currentRoom.isNotEmpty() && !currentRoom.all { it == roomNumber }) {
                     // move last amphipod from room to hallway
                     val amphipod = currentRoom.last()
-                    val left = (roomExits[roomNumber] downTo 0) - roomExits
-                    val right = (roomExits[roomNumber]..10) - roomExits
+                    val left = (roomExits[roomNumber] downTo 0) - roomExits.toSet()
+                    val right = (roomExits[roomNumber]..10) - roomExits.toSet()
                     for (direction in listOf(left, right)) {
                         for (position in direction) {
                             if (situation.hallwayIsOccupied(position)) {

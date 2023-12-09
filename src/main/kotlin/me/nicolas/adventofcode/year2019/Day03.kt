@@ -33,7 +33,7 @@ private class Day03 {
         DOWN('D', 0, -1);
 
         companion object {
-            fun byLabel(label: Char) = values().first { direction -> label == direction.label }
+            fun byLabel(label: Char) = entries.first { direction -> label == direction.label }
         }
     }
 

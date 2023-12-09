@@ -74,7 +74,6 @@ private class Day05 {
         }
     }
 
-    @OptIn(ExperimentalTime::class)
     fun solve(gridSize: Int, input: List<String>) {
 
         val lines = input.map { line ->

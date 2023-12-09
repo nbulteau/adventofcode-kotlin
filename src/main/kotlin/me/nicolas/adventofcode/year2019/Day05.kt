@@ -8,7 +8,6 @@ import kotlin.time.measureTimedValue
 
 // --- Day 5: Sunny with a Chance of Asteroids ---
 // https://adventofcode.com/2019/day/5
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2019/day05/training.txt")

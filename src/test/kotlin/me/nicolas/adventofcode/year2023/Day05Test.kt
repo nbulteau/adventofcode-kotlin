@@ -1,12 +1,11 @@
 package me.nicolas.adventofcode.year2023
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class Day05Test {
 
-    private val day = Day05("--- Day 5: If You Give A Seed A Fertilizer ---", "https://adventofcode.com/2023/day/5")
+    private val day = Day05(2023, 5, "Day 5: If You Give A Seed A Fertilizer")
     private val data = """
         seeds: 79 14 55 13
 
@@ -42,18 +41,19 @@ class Day05Test {
         60 56 37
         56 93 4
     """.trimIndent()
+
     @Test
     fun `part one training`() {
-        assertEquals( 35, day.partOne(data))
+        assertEquals(35, day.partOne(data))
     }
 
     @Test
     fun `part two training`() {
-        assertEquals( 46, day.partTwo(data))
+        assertEquals(46, day.partTwo(data))
     }
 
     @Test
     fun `part two brut force training`() {
-        assertEquals( 46, day.partTwoBrutForce(data))
+        assertEquals(46, day.partTwoBrutForce(data))
     }
 }

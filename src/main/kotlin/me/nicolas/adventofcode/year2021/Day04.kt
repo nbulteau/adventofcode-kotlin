@@ -52,7 +52,6 @@ class Day04 {
         }
     }
 
-    @OptIn(ExperimentalTime::class)
     fun solve(input: List<String>) {
 
         val drawnNumbers = input[0].split(",").map { str -> str.toInt() }

@@ -12,12 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day08("--- Day 8: Treetop Tree House ---", "https://adventofcode.com/2022/day/8")
+    val day = Day08(2022, 8, "Treetop Tree House")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(lines: List<String>): Int {
         val trees = lines.map { line -> line.map { high -> high.code } }
@@ -70,7 +70,7 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
 
         var dx = x + direction.deltaX
         var dy = y + direction.deltaY
-        while (dx in 0 until this.size && dy in 0 until this.first().size) {
+        while (dx in indices && dy in 0 until this.first().size) {
             if (this[dy][dx] >= treeSize) {
                 return false
             }
@@ -97,7 +97,7 @@ private class Day08(title: String, adventOfCodeLink: String) : AdventOfCodeDay(t
         var dx = x + direction.deltaX
         var dy = y + direction.deltaY
         var score = 0
-        while (dx in 0 until this.size && dy in 0 until this.first().size) {
+        while (dx in indices && dy in 0 until this.first().size) {
             if (this[dy][dx] >= treeSize) {
                 score++
                 break

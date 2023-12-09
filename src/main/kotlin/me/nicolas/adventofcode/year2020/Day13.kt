@@ -55,7 +55,7 @@ class Day13 {
         println("Part one = ${(timestamp - initialTimestamp) * busId}")
     }
 
-    fun Double.isInteger(): Boolean {
+    private fun Double.isInteger(): Boolean {
         return this - this.toInt() == 0.0
     }
 
@@ -123,7 +123,7 @@ class Day13 {
         }
 
         // M = m1 · ... · mn
-        var product: Long = buses.keys.reduce { M: Long, bus -> M * bus }
+        val product: Long = buses.keys.reduce { m: Long, bus -> m * bus }
         // Mi = M/mi
         val mi: Map<Long, Long> = buses.map { bus -> bus.key to product / bus.key }.toMap()
         // yi = Mi-1 mod mi => mod inverse

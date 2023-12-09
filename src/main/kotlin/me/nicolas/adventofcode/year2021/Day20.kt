@@ -69,7 +69,7 @@ private class Day20 {
         var number = ""
         for (indexX in x - 1..x + 1) {
             for (indexY in y - 1..y + 1) {
-                number += if ((indexY !in 0 until size) || (indexX !in 0 until first().size)) {
+                number += if ((indexY !in indices) || (indexX !in 0 until first().size)) {
                     this[0][0] // the tricky part
                 } else {
                     this[indexX][indexY]

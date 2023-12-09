@@ -10,11 +10,11 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day25("--- Day 25: Full of Hot Air ---", "https://adventofcode.com/2022/day/25")
+    val day = Day25(2022, 25, "Full of Hot Air")
     prettyPrintPartOne { day.partOne(inputs) }
 }
 
-private class Day25(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day25(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private val snafuValues = arrayOf(0, 1, 2, -2, -1)
     private val snafuDigits = "012=-".toCharArray()

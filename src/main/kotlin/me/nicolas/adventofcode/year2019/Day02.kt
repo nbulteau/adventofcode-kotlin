@@ -7,7 +7,6 @@ import kotlin.time.measureTimedValue
 
 // --- Day 2: 1202 Program Alarm ---
 // https://adventofcode.com/2019/day/2
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     println("--- Day 2: 1202 Program Alarm ---")

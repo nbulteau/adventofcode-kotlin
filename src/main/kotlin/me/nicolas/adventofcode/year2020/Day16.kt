@@ -49,15 +49,14 @@ private fun extractTicket(sections: List<String>): List<Int> {
 
 private fun extractRules(sections: List<String>): Map<String, List<IntRange>> {
     return sections[0]
-        .split("\n")
-        .map { line ->
+        .split("\n").associate { line ->
             line.substringBefore(":") to line.substringAfter(":").split(" or ").map { str ->
                 IntRange(
                     str.substringBefore("-").trim().toInt(),
                     str.substringAfter("-").trim().toInt()
                 )
             }
-        }.toMap()
+        }
 }
 
 class Day16 {

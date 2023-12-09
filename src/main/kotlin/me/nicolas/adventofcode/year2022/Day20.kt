@@ -11,13 +11,13 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day20("--- Day 20: Grove Positioning System ---", "https://adventofcode.com/2022/day/20")
+    val day = Day20(2022, 20, "Grove Positioning System")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 
 }
 
-private class Day20(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day20(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(lines: List<String>): Long {
         val initial = lines.mapIndexed { index, i -> Pair(index, i.toLong()) }

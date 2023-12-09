@@ -8,12 +8,12 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day03/data.txt")
     val lines = data.split("\n")
-    val day = Day03("--- Day 3: Gear Ratios ---", "https://adventofcode.com/2023/day/3")
+    val day = Day03(2023, 3, "Gear Ratios")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day03(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private fun Char.isSymbol(): Boolean = this != '.' && !isWhitespace() && !isDigit()
 

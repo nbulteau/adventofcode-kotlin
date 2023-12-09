@@ -139,7 +139,7 @@ private fun Layout.count(charToCount: Char) =
     this.sumOf { string -> string.count { char -> char == charToCount } }
 
 private fun Layout.lookAround(x: Int, y: Int) =
-    Day11.Direction.values().sumBy { direction -> this.lookAround(x, y, direction) }
+    Day11.Direction.entries.sumOf { direction -> this.lookAround(x, y, direction) }
 
 private fun Layout.lookAround(x: Int, y: Int, direction: Day11.Direction): Int {
 
@@ -159,7 +159,7 @@ private fun Layout.lookAround(x: Int, y: Int, direction: Day11.Direction): Int {
 }
 
 fun Layout.lookInDirection(x: Int, y: Int) =
-    Day11.Direction.values().sumBy { direction -> this.lookInDirection(x, y, direction) }
+    Day11.Direction.entries.sumOf { direction -> this.lookInDirection(x, y, direction) }
 
 fun Layout.lookInDirection(x: Int, y: Int, direction: Day11.Direction): Int {
 

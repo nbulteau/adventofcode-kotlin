@@ -11,7 +11,7 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day24("--- Day 24: Blizzard Basin ---", "https://adventofcode.com/2022/day/24", inputs)
+    val day = Day24(2022, 24, "Blizzard Basin", inputs)
     prettyPrintPartOne { day.partOne() }
     prettyPrintPartTwo { day.partTwo() }
 }
@@ -19,8 +19,7 @@ fun main() {
 /**
  * Faster solution using Breadth-First Search.
  */
-private class Day24(title: String, adventOfCodeLink: String, inputs: List<String>) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day24(year: Int, day: Int, title: String, inputs: List<String>) : AdventOfCodeDay(year, day, title) {
 
     private val valley: Valley = buildValley(inputs)
     private val start: Pair<Int, Int> = Pair(inputs.first().indexOfFirst { it == '.' }, 0)

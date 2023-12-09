@@ -43,7 +43,7 @@ class Day24 {
         NORTH_EAST("ne", 0, -1);
 
         companion object {
-            fun byLabel(label: String) = values().first { direction -> label == direction.label }
+            fun byLabel(label: String) = entries.first { direction -> label == direction.label }
         }
     }
 
@@ -80,7 +80,7 @@ class Day24 {
 
         fun countBlackAdjacentTiles(coord: Coord): Int {
 
-            return Direction.values()
+            return Direction.entries
                 .flatMap { direction ->
                     tiles.filter { tile -> tile.coord == Coord(coord.x + direction.dx, coord.y + direction.dy) }
                 }
@@ -99,7 +99,7 @@ class Day24 {
                     }
                 }
                 // now look around for adjacent whites
-                Direction.values().forEach { direction ->
+                Direction.entries.forEach { direction ->
                     val coord = Coord(tile.coord.x + direction.dx, tile.coord.y + direction.dy)
                     val adjacentTile = tiles.find { tile -> tile.coord == coord }
                     // adjacentTile is white
@@ -119,7 +119,7 @@ class Day24 {
         }
     }
 
-    fun extractDirections(line: String): List<Direction> {
+    private fun extractDirections(line: String): List<Direction> {
         val directions = mutableListOf<Direction>()
         var index = 0
         while (index < line.length) {
@@ -191,14 +191,14 @@ class Day24 {
         println("Part two = ${blackTileCoords.size}")
     }
 
-    fun countBlackAdjacentTiles(blackTileCoords: Set<Coord>, coord: Coord): Int {
+    private fun countBlackAdjacentTiles(blackTileCoords: Set<Coord>, coord: Coord): Int {
 
-        return Direction.values()
+        return Direction.entries
             .map { direction -> blackTileCoords.contains(Coord(coord.x + direction.dx, coord.y + direction.dy)) }
             .count { it }
     }
 
-    fun dallyFlip(blackTileCoords: Set<Coord>): Set<Coord> {
+    private fun dallyFlip(blackTileCoords: Set<Coord>): Set<Coord> {
         val newDayCoords = mutableSetOf<Coord>()
 
         blackTileCoords.forEach { coord ->
@@ -210,7 +210,7 @@ class Day24 {
             }
 
             // now look around for adjacent whites
-            Direction.values().forEach { direction ->
+            Direction.entries.forEach { direction ->
                 val aroundCord = Coord(coord.x + direction.dx, coord.y + direction.dy)
                 // adjacentTile is white
                 if (!blackTileCoords.contains(aroundCord)) {

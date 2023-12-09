@@ -13,12 +13,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day09("--- Day 9: Rope Bridge ---", "https://adventofcode.com/2022/day/9")
+    val day = Day09(2022, 9, "Rope Bridge")
     prettyPrintPartOne { day.solve(lines, 2) }
     prettyPrintPartTwo { day.solve(lines, 10) }
 }
 
-private class Day09(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day09(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private val motions = mapOf("R" to Pair(0, 1), "L" to Pair(0, -1), "D" to Pair(1, 0), "U" to Pair(-1, 0))
 

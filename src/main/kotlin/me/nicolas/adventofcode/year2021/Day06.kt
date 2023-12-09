@@ -6,7 +6,6 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/6
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2021/day06/training.txt")
@@ -25,7 +24,7 @@ private class Day06 {
 
     fun solve(lanternfishs: Map<Int, Long>, nbDays: Int): Long {
 
-        var lanternfishsStates = lanternfishs.toMutableMap()
+        val lanternfishsStates = lanternfishs.toMutableMap()
         //println("Initial state: $lanternfishsStates")
         for (day in 1..nbDays) {
             updateLanterfishStates(lanternfishsStates)

@@ -11,14 +11,13 @@ fun main() {
 
     val (mapOfTheBoard, pathYouMustFollow) = data.split("\n\n")
 
-    val day =
-        Day22("--- Day 22: Monkey Map ---", "https://adventofcode.com/2222/day/22", mapOfTheBoard, pathYouMustFollow)
+    val day = Day22(2022, 22, "Monkey Map", mapOfTheBoard, pathYouMustFollow)
     prettyPrintPartOne { day.partOne() }
     prettyPrintPartTwo { day.partTwo() }
 }
 
-private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: String, val pathYouMustFollow: String) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day22(year: Int, day: Int, title: String, mapOfTheBoard: String, val pathYouMustFollow: String) :
+    AdventOfCodeDay(year, day, title) {
 
     private val map: Map<Pair<Int, Int>, Char>
 
@@ -34,9 +33,9 @@ private class Day22(title: String, adventOfCodeLink: String, mapOfTheBoard: Stri
 
         fun turn(char: Char): Direction {
             val turn = ordinal + if (char == 'R') 1 else -1
-            val newDirection = turn % Direction.values().size
-            val index = if (newDirection < 0) Direction.values().size - 1 else newDirection
-            return Direction.values()[index]
+            val newDirection = turn % entries.size
+            val index = if (newDirection < 0) entries.size - 1 else newDirection
+            return entries[index]
         }
 
         fun moveOneStep(currentLocation: Pair<Int, Int>): Pair<Int, Int> {

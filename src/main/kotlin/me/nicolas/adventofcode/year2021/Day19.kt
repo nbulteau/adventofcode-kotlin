@@ -68,8 +68,8 @@ private class Day19Bis {
     data class Scanner(val position: Point3D, val beacons: Set<Point3D>) {
 
         fun findMatchingReports(testedReport: Report): Scanner? {
-            for (face in Face.values()) {
-                for (rotate in Rotate.values()) {
+            for (face in Face.entries) {
+                for (rotate in Rotate.entries) {
                     val testedReportBeacons: Set<Point3D> = testedReport.beacons(face, rotate)
                     for (reportPoint in testedReportBeacons) {
                         for (scanner0Point in this.beacons) {

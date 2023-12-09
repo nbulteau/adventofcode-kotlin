@@ -13,12 +13,12 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day15("---- Day 15: Beacon Exclusion Zone ---", "https://adventofcode.com/2022/day/15")
+    val day = Day15(2022, 15, "Beacon Exclusion Zone")
     prettyPrintPartOne { day.partOne(inputs) }
     prettyPrintPartTwo { day.partTwo(inputs) }
 }
 
-private class Day15(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day15(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(inputs: List<String>): Int {
         val row = mutableMapOf<Int, Char>()

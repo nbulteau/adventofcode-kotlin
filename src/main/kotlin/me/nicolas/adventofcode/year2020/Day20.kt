@@ -46,7 +46,6 @@ class Day20 {
         return arrayOfCharArrays
     }
 
-    @OptIn(ExperimentalTime::class)
     fun solve(input: String) {
 
         val sections = input.split("\n\n")
@@ -424,7 +423,7 @@ class Day20 {
         return image
     }
 
-    fun doRevealSeaMonsters(image: Array<CharArray>, seaMonster: List<Pair<Int, Int>>) {
+    private fun doRevealSeaMonsters(image: Array<CharArray>, seaMonster: List<Pair<Int, Int>>) {
         val seaMonsterHeight = seaMonster.maxOf { pair -> pair.first }
         val seaMonsterWidth = seaMonster.maxOf { pair -> pair.second }
 

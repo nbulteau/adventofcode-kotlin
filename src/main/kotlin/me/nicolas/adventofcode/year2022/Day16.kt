@@ -12,14 +12,12 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day16("--- Day 16: Proboscidea Volcanium ---", "https://adventofcode.com/2022/day/16", inputs)
+    val day = Day16(2022, 16, "Proboscidea Volcanium", inputs)
     prettyPrintPartOne { day.partOne("AA", 30) }
     prettyPrintPartTwo { day.partTwo("AA", 26) }
 }
 
-private class Day16(title: String, adventOfCodeLink: String, inputs: List<String>) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
-
+private class Day16(year: Int, day: Int, title: String, inputs: List<String>) : AdventOfCodeDay(year, day, title) {
     private val valves = buildValves(inputs)
 
     fun partOne(start: String, minutes: Int): Int {
@@ -48,7 +46,7 @@ private class Day16(title: String, adventOfCodeLink: String, inputs: List<String
         )
     }
 
-    private data class Valve(val label: String, val flowRate: Int, val nextValves: List<String>) {
+    data class Valve(val label: String, val flowRate: Int, val nextValves: List<String>) {
         val shortestPaths = nextValves.associateWith { 1 }.toMutableMap()
     }
 

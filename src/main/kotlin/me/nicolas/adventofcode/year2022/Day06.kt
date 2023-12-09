@@ -10,16 +10,14 @@ fun main() {
     val training = readFileDirectlyAsText("/year2022/day06/training.txt")
     val data = readFileDirectlyAsText("/year2022/day06/data.txt")
 
-    val datastream = data
-
-    val day = Day06("--- Day 6: Tuning Trouble ---", "https://adventofcode.com/2022/day/6")
-    prettyPrintPartOne { day.solve(4, datastream) }
-    prettyPrintPartTwo { day.solve(14, datastream) }
-    prettyPrintPartOne { day.solveWithSet(4, datastream) }
-    prettyPrintPartOne { day.solveWithSet(14, datastream) }
+    val day = Day06(2022, 6, "Tuning Trouble")
+    prettyPrintPartOne { day.solve(4, data) }
+    prettyPrintPartTwo { day.solve(14, data) }
+    prettyPrintPartOne { day.solveWithSet(4, data) }
+    prettyPrintPartOne { day.solveWithSet(14, data) }
 }
 
-private class Day06(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun solve(capacity: Int, datastream: String): Int {
         val bufferOfFour = FifoFixedSizeQueue(capacity)

@@ -1,10 +1,10 @@
 package me.nicolas.adventofcode.utils
 
-abstract class AdventOfCodeDay(title: String, adventOfCodeLink: String) {
+abstract class AdventOfCodeDay(year: Int, day: Int, title: String) {
 
     init {
-        println(title)
-        println(blue(adventOfCodeLink))
+        println("--- Day $day: $title ---")
+        println(blue("https://adventofcode.com/$year/day/$day"))
         println()
     }
 }

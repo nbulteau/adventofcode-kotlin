@@ -7,12 +7,12 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day07/data.txt")
-    val day = Day07("--- Day 7: Camel Cards ---", "https://adventofcode.com/2023/day/7")
+    val day = Day07(2023, 7, "Camel Cards")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day07(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(data: String): Int {
         val hands = extractHands(data)

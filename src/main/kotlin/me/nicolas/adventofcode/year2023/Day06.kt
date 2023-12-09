@@ -10,13 +10,13 @@ import kotlin.math.sqrt
 
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day06/data.txt")
-    val day = Day06("--- Day 6: Wait For It ---", "https://adventofcode.com/2023/day/6")
+    val day = Day06(2023, 6, "Wait For It")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
     prettyPrintPartTwo("(with maths)") { day.partTwo(data) }
 }
 
-class Day06(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
     data class Race(val time: Long, val distance: Long) {
 
         // For each whole millisecond you spend at the beginning of the race holding down the button,

@@ -12,16 +12,14 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day19(
-        "--- Day 19: Not Enough Minerals ---", "https://adventofcode.com/2022/day/19", inputs
-    )
+    val day = Day19(2022, 19, "Not Enough Minerals", inputs)
     prettyPrintPartOne { day.partOne(minutes = 24) }
     prettyPrintPartTwo { day.partTwo(minutes = 32) }
 }
 
 
-private class Day19(title: String, adventOfCodeLink: String, inputs: List<String>) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day19(year: Int, day: Int, title: String, inputs: List<String>) :
+    AdventOfCodeDay(year, day, title) {
 
     private data class Blueprint(
         val oreRobotOreCosts: Int,

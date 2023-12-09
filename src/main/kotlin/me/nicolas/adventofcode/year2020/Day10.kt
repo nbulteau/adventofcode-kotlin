@@ -52,7 +52,7 @@ private fun partTwo(adaptersList: List<Int>) {
     }
 
     // init all possible paths map
-    val allPossiblePaths: MutableMap<Int, Long> = adapters.map { adapter -> adapter to 0L }.toMap().toMutableMap()
+    val allPossiblePaths: MutableMap<Int, Long> = adapters.associateWith { adapter -> 0L }.toMutableMap()
     allPossiblePaths[adapters.maxOf { it }] = 1
 
     // number of possible paths is the sum of child possible paths

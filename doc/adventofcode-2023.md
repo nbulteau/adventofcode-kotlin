@@ -9,7 +9,7 @@
 |  05  | If You Give A Seed A Fertilizer | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day05.kt) [\[AoC\]](http://adventofcode.com/2023/day/5)  |
 |  06  | Wait For It | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day06.kt) [\[AoC\]](http://adventofcode.com/2023/day/6)  |
 |  07  | Camel Cards | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day07.kt) [\[AoC\]](http://adventofcode.com/2023/day/7)  |
-|  08  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day08.kt) [\[AoC\]](http://adventofcode.com/2023/day/8)  |
+|  08  | Haunted Wasteland | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day08.kt) [\[AoC\]](http://adventofcode.com/2023/day/8)  |
 |  09  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day09.kt) [\[AoC\]](http://adventofcode.com/2023/day/9)  |
 |  10  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day10.kt) [\[AoC\]](http://adventofcode.com/2023/day/10) |
 |  11  |  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day11.kt) [\[AoC\]](http://adventofcode.com/2023/day/11) |

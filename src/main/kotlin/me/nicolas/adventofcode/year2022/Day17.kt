@@ -10,16 +10,13 @@ fun main() {
     val training = readFileDirectlyAsText("/year2022/day17/training.txt")
     val data = readFileDirectlyAsText("/year2022/day17/data.txt")
 
-    val line = data
-
-    val day = Day17Pouet("--- Day 17: Pyroclastic Flow ---", "https://adventofcode.com/2022/day/17", line)
+    val day = Day17Pouet(2022, 17, "Pyroclastic Flow", data)
     prettyPrintPartOne { day.partOne(2022) }
     prettyPrintPartTwo { day.partTwo(1_000_000_000_000L) }
 }
 
-
-class Day17Pouet(title: String, adventOfCodeLink: String, private val jetPatterns: String) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+class Day17Pouet(year: Int, day: Int, title: String, private val jetPatterns: String) :
+    AdventOfCodeDay(year, day, title) {
 
     private val minus = listOf(Pair(0, 0), Pair(1, 0), Pair(2, 0), Pair(3, 0))
     private val plus = listOf(Pair(1, 0), Pair(0, 1), Pair(1, 1), Pair(2, 1), Pair(1, 2))

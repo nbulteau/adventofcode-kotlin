@@ -36,16 +36,16 @@ private class Day17PartOne {
         for (cycle in 1..6) {
             //pocket.display()
 
-            val nextPocket = pocket.buildListOfCoords().map { coord ->
+            val nextPocket = pocket.buildListOfCoords().associateWith { coord ->
                 val nbNeighborsActiveCube =
                     coord.getNeighborsList().count { pocket.getOrDefault(it, '.') == '#' }
 
                 val cube = pocket.getOrDefault(coord, '.') // inactive if not found
-                coord to when (cube) {
+                when (cube) {
                     '#' -> if (nbNeighborsActiveCube == 2 || nbNeighborsActiveCube == 3) '#' else '.'
                     else -> if (nbNeighborsActiveCube == 3) '#' else '.'
                 }
-            }.toMap()
+            }
             pocket = nextPocket.toMutableMap()
         }
 
@@ -144,16 +144,16 @@ private class Day17PartTwo {
         var pocket: MutableMap<CubeCoord, Char> = initPocket(layout)
 
         for (cycle in 1..6) {
-            val nextPocket = pocket.buildListOfCoords().map { coord ->
+            val nextPocket = pocket.buildListOfCoords().associateWith { coord ->
                 val nbNeighborsActiveCube =
                     coord.getNeighborsCubeCoordList().count { pocket.getOrDefault(it, '.') == '#' }
 
                 val cube = pocket.getOrDefault(coord, '.') // inactive if not found
-                coord to when (cube) {
+                when (cube) {
                     '#' -> if (nbNeighborsActiveCube == 2 || nbNeighborsActiveCube == 3) '#' else '.'
                     else -> if (nbNeighborsActiveCube == 3) '#' else '.'
                 }
-            }.toMap()
+            }
             pocket = nextPocket.toMutableMap()
         }
 

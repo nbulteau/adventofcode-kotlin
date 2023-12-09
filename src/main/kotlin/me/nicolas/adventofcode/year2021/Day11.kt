@@ -8,7 +8,6 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/11
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2021/day11/training.txt")
@@ -73,7 +72,7 @@ class Day11 {
         private val adjacentLocations = mutableMapOf<Octopus, List<Octopus>>()
 
         init {
-            octopuses.forEachIndexed() { index, octopus ->
+            octopuses.forEachIndexed { index, octopus ->
                 adjacentLocations[octopus] = adjacentLocations(index)
             }
         }

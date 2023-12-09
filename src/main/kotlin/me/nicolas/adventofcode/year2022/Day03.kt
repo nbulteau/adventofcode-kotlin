@@ -12,12 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day03("--- Day 3: Rucksack Reorganization ---", "https://adventofcode.com/2022/day/3")
+    val day = Day03(2022, 3, "Rucksack Reorganization")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-private class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day03(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(lines: List<String>): Int {
         return lines.sumOf { rucksack ->

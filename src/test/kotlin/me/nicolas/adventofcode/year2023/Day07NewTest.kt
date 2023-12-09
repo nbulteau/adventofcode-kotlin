@@ -1,11 +1,12 @@
 package me.nicolas.adventofcode.year2023
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class Day07Test {
+import org.junit.jupiter.api.Assertions.*
 
-    private val day = Day07(2023, 7, "Camel Cards")
+class Day07NewTest {
+
+    private val day = Day07New(2023, 7, "Camel Cards")
     private val data = """
         32T3K 765
         T55J5 684

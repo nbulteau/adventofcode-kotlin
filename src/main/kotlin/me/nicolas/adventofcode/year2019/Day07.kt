@@ -6,7 +6,6 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2019/day/7
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2019/day07/training.txt")

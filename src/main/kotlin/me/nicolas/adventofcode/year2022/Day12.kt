@@ -11,12 +11,12 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day12("--- Day 12: Hill Climbing Algorithm ---", "https://adventofcode.com/2022/day/12")
+    val day = Day12(2022, 12, "Hill Climbing Algorithm")
     prettyPrintPartOne { day.partOne(inputs) }
     prettyPrintPartTwo { day.partTwo(inputs) }
 }
 
-private class Day12(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day12(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(inputs: List<String>): Int {
         val (heightmap, end) = buildHeightmap(inputs)

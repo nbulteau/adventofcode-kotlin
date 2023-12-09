@@ -18,7 +18,7 @@ private fun gcd(a: Long, b: Long): Long {
 /**
  * LCM (Least Common Multiple) of two numbers is the smallest number that is divisible by both.
  */
-private fun lcm(a: Long, b: Long) = a * (b / gcd(a, b))
+fun lcm(a: Long, b: Long) = a * (b / gcd(a, b))
 
 fun List<Long>.lcm(): Long {
     return this.reduce { acc, i -> (acc * i) / gcd(acc, i) }.toLong()

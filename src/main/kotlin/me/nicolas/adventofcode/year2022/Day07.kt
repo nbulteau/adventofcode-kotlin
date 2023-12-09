@@ -12,12 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day07("--- Day 7: No Space Left On Device ---", "https://adventofcode.com/2022/day/7")
+    val day = Day07(2022, 7, "No Space Left On Device")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-private class Day07(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(lines: List<String>): Int {
         val filesystem = buildFileSystem(lines)

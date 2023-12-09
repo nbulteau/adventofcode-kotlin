@@ -9,13 +9,12 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 // https://adventofcode.com/2018/day/3
 fun main() {
     val data = readFileDirectlyAsText("/year2018/day03/data.txt")
-    val lines = data.split("\n")
-    val day = Day03("--- Day 3: No Matter How You Slice It ---", "https://adventofcode.com/2018/day/3")
-    prettyPrintPartOne { day.partOne(lines) }
-    prettyPrintPartTwo { day.partTwo(lines) }
+    val day = Day03(2018, 3, "No Matter How You Slice It")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day03(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private data class Claim(val id: Int, val left: Int, val top: Int, val width: Int, val height: Int) {
         val area: List<Pair<Int, Int>>
@@ -26,8 +25,8 @@ class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
             }
     }
 
-    fun partOne(lines: List<String>): Int {
-        val claims = buildClaims(lines)
+    fun partOne(data: String): Int {
+        val claims = buildClaims(data)
 
         return claims
             // flatMap returns a single list of all elements yielded from results of claim.area
@@ -40,8 +39,8 @@ class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
             .count { it.value > 1 }
     }
 
-    fun partTwo(lines: List<String>): Int {
-        val claims = buildClaims(lines)
+    fun partTwo(data: String): Int {
+        val claims = buildClaims(data)
 
         val areaOfFabric = claims
             // flatMap returns a single list of all elements yielded from results of claim.area
@@ -61,7 +60,9 @@ class Day03(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, ad
         return 0
     }
 
-    private fun buildClaims(lines: List<String>): List<Claim> {
+    private fun buildClaims(data: String): List<Claim> {
+        val lines = data.split("\n")
+
         return lines.map { line ->
 
             val (id, left, top, width, height) = line.trim()

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 
  class Day01Test {
 
-    private val day = Day01("--- Day 1: Trebuchet?! ---", "https://adventofcode.com/2023/day/1")
+    private val day = Day01(2023, 1,"Trebuchet?!")
 
     @Test
     fun `part one training`() {

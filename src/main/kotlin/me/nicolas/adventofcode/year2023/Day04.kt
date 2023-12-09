@@ -11,12 +11,12 @@ import kotlin.math.pow
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day04/data.txt")
     val lines = data.split("\n")
-    val day = Day04("--- Day 4: Scratchcards ---", "https://adventofcode.com/2023/day/4")
+    val day = Day04(2023, 4, "Scratchcards")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day04(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private val spaces = Pattern.compile(" +")
 

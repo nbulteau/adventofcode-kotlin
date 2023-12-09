@@ -34,8 +34,7 @@ fun main() {
 private fun partOne(batch: List<String>) {
     val nbValidPassports = batch
         .map { record ->
-            record.split(" ")
-                .map { entry -> entry.substringBefore(":") to entry.substringAfter(":") }.toMap()
+            record.split(" ").associate { entry -> entry.substringBefore(":") to entry.substringAfter(":") }
         }
         .count { map ->
             map.size == 8
@@ -48,8 +47,7 @@ private fun partOne(batch: List<String>) {
 private fun partTwo(batch: List<String>) {
     val nbValidPassports = batch
         .map { record ->
-            record.split(" ")
-                .map { entry -> entry.substringBefore(":") to entry.substringAfter(":") }.toMap()
+            record.split(" ").associate { entry -> entry.substringBefore(":") to entry.substringAfter(":") }
         }
         .count { map ->
             map["byr"]?.toInt() in 1920..2002

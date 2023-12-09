@@ -6,7 +6,6 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2019/day/6
-@OptIn(ExperimentalTime::class)
 fun main() {
 
     val training = readFileDirectlyAsText("/year2019/day06/training.txt")
@@ -56,7 +55,7 @@ private class Day06 {
 
         val youToRoot = graph.pathFrom("YOU")
         val santaToRoot = graph.pathFrom("SAN")
-        val intersection = youToRoot.intersect(santaToRoot).first()
+        val intersection = youToRoot.intersect(santaToRoot.toSet()).first()
 
         return (youToRoot.indexOf(intersection) - 1) + (santaToRoot.indexOf(intersection) - 1)
     }

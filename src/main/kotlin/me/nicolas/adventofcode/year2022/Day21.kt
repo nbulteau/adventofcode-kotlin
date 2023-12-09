@@ -11,14 +11,13 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day21("--- Day 21: Monkey Math ---", "https://adventofcode.com/2122/day/21", lines)
+    val day = Day21(2022, 20, "Monkey Math", lines)
     prettyPrintPartOne { day.partOne() }
     prettyPrintPartTwo { day.partTwo() }
 
 }
 
-private class Day21(title: String, adventOfCodeLink: String, lines: List<String>) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day21(year: Int, day: Int, title: String, lines: List<String>) : AdventOfCodeDay(year, day, title) {
 
     companion object {
         lateinit var monkeys: Map<String, Monkey>

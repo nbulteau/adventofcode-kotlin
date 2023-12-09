@@ -1,5 +1,6 @@
 package me.nicolas.adventofcode.year2018
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 // https://adventofcode.com/2018/day/6
@@ -10,6 +11,6 @@ fun main() {
 
 }
 
-private class Day06 {
+private class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
 }

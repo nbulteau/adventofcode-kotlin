@@ -11,15 +11,12 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day18(
-        "--- Day 18: Boiling Boulders ---", "https://adventofcode.com/2022/day/18", inputs
-    )
+    val day = Day18(2022, 18, "Boiling Boulders", inputs)
     prettyPrintPartOne { day.partOne() }
     prettyPrintPartTwo { day.partTwo() }
 }
 
-private class Day18(title: String, adventOfCodeLink: String, inputs: List<String>) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day18(year: Int, day: Int, title: String, inputs: List<String>) : AdventOfCodeDay(year, day, title) {
 
     private val cubes = inputs.map { line ->
         val (x, y, z) = line.split(",")

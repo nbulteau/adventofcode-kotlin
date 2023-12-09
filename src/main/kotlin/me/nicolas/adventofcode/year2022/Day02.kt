@@ -12,12 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day02("--- Day 2: Rock Paper Scissors ---", "https://adventofcode.com/2022/day/2")
+    val day = Day02(2022, 2, "Rock Paper Scissors")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day02(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day02(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private val shapeYouSelected = mapOf('X' to 1, 'Y' to 2, 'Z' to 3)
 

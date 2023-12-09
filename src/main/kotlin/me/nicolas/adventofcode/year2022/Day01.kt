@@ -12,12 +12,12 @@ fun main() {
 
     val lines = data.split("\n")
 
-    val day = Day01("--- Day 1: Calorie Counting ---", "https://adventofcode.com/2022/day/1")
+    val day = Day01(2022, 1, "Calorie Counting")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day01(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
     fun partOne(numbers: List<String>): Int {
         return processCalories(numbers)
             .maxOf { it }

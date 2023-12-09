@@ -1,12 +1,11 @@
 package me.nicolas.adventofcode.year2023
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class Day03Test {
 
-    private val day = Day03("--- Day 3: Gear Ratios ---", "https://adventofcode.com/2023/day/3")
+    private val day = Day03(2023, 3, "Gear Ratios")
     private val data = """
         467..114..
         ...*......
@@ -19,17 +18,18 @@ class Day03Test {
         ...${'$'}.*....
         .664.598..      
     """.trimIndent()
+
     @Test
     fun `part one training`() {
         val lines = data.split("\n")
 
-        assertEquals( 4361, day.partOne(lines))
+        assertEquals(4361, day.partOne(lines))
     }
 
     @Test
     fun `part two training`() {
         val lines = data.split("\n")
 
-        assertEquals( 467835, day.partTwo(lines))
+        assertEquals(467835, day.partTwo(lines))
     }
 }

@@ -11,13 +11,12 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day23("--- Day 23: Unstable Diffusion ---", "https://adventofcode.com/2022/day/23", inputs)
+    val day = Day23(2022, 23, "Unstable Diffusion", inputs)
     prettyPrintPartOne { day.partOne() }
     prettyPrintPartTwo { day.partTwo() }
 }
 
-private class Day23(title: String, adventOfCodeLink: String, inputs: List<String>) :
-    AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day23(year: Int, day: Int, title: String, inputs: List<String>) : AdventOfCodeDay(year, day, title) {
 
     private val elves: Set<Pair<Int, Int>>
 
@@ -34,7 +33,7 @@ private class Day23(title: String, adventOfCodeLink: String, inputs: List<String
 
         fun moveOneStep(currentLocation: Pair<Int, Int>) = Pair(currentLocation.first + dx, currentLocation.second + dy)
 
-        fun nextDirection() = Direction.values()[(ordinal + 1) % Direction.values().size]
+        fun nextDirection() = entries[(ordinal + 1) % entries.size]
     }
 
     private fun Pair<Int, Int>.lookDirection(direction: Direction, actual: Set<Pair<Int, Int>>): Boolean {

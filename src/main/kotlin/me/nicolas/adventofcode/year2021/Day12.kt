@@ -20,7 +20,6 @@ fun main() {
 
 private class Day12 {
 
-    @OptIn(ExperimentalTime::class)
     fun solve(inputs: List<String>) {
         val graph = initCavesGraph(inputs)
         val cavesAllowedVisits = initCavesAllowedVisits(graph)

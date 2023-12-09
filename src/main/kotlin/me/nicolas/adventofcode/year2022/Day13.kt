@@ -11,12 +11,12 @@ fun main() {
 
     val inputs = data.split("\n")
 
-    val day = Day13("--- Day 13: Distress Signal ---", "https://adventofcode.com/2022/day/13")
+    val day = Day13(2022, 13,"Distress Signal")
     prettyPrintPartOne { day.partOne(inputs) }
     prettyPrintPartTwo { day.partTwo(inputs) }
 }
 
-private class Day13(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+private class Day13(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(inputs: List<String>): Int {
         val packets = inputs.filter { it.isNotBlank() }.map { it.toPacket() }

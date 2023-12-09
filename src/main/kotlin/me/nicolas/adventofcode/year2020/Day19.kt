@@ -41,8 +41,7 @@ private data class RuleOr(val left: RuleExpr, val right: RuleExpr) : Rule()
 
 private fun extractRules(sections: List<String>): Map<Int, Rule> {
     return sections[0]
-        .split("\n")
-        .map { line ->
+        .split("\n").associate { line ->
             val index = line.substringBefore(": ").toInt()
             val rule = line.substringAfter(": ").run {
                 when {
@@ -64,7 +63,7 @@ private fun extractRules(sections: List<String>): Map<Int, Rule> {
                 }
             }
             index to rule
-        }.toMap()
+        }
 }
 
 

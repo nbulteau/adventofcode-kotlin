@@ -9,13 +9,13 @@ import kotlin.math.min
 
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day05/data.txt")
-    val day = Day05("--- Day 5: If You Give A Seed A Fertilizer ---", "https://adventofcode.com/2023/day/5")
+    val day = Day05(2023, 5, "If You Give A Seed A Fertilizer")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
     prettyPrintPartTwo("(Brut force)") { day.partTwoBrutForce(data) }
 }
 
-class Day05(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day05(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     // Represents a mapping between two ranges
     private data class Mapping(val destinationRangeStart: Long, val sourceRangeStart: Long, val rangeLength: Long) {

@@ -52,7 +52,7 @@ class Day21 {
         }
     }
 
-    fun extractFoods(lines: List<String>): Pair<MutableMap<String, Ingredient>, MutableMap<String, Allergen>> {
+    private fun extractFoods(lines: List<String>): Pair<MutableMap<String, Ingredient>, MutableMap<String, Allergen>> {
 
         val ingredients = mutableMapOf<String, Ingredient>()
         val allergens = mutableMapOf<String, Allergen>()
@@ -136,8 +136,7 @@ class Day21 {
         // in a food, an allergen is only in one ingredient
         val allergenIngredient = ingredients.values
             .filter { ingredient -> ingredient.allergen != null }
-            .map { ingredient -> ingredient.allergen!! to ingredient.name }
-            .toMap()
+            .associate { ingredient -> ingredient.allergen!! to ingredient.name }
         val list = allergensSortedByName.joinToString(",") { allergen -> allergenIngredient[allergen]!! }
 
         println("Part two = $list")

@@ -77,7 +77,7 @@ private class Day23PartOne {
             // select a destination cup
             val destination = cups.selectDestinationCup(currentCup, pickUpList)
             // remove the three cups from the circle
-            cups.removeAll(pickUpList)
+            cups.removeAll(pickUpList.toSet())
 
             val insertAt = cups.indexOf(destination) + 1
             cups.addAll(insertAt, pickUpList)

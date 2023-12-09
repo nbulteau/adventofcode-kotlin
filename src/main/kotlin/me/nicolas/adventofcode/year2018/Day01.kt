@@ -6,22 +6,23 @@ import me.nicolas.adventofcode.utils.*
 fun main() {
 
     val data = readFileDirectlyAsText("/year2018/day01/data.txt")
-    val lines = data.split("\n")
-    val day = Day01("--- Day 1: Chronal Calibration ---", "https://adventofcode.com/2018/day/1")
-    prettyPrintPartOne { day.partOne(lines) }
-    prettyPrintPartTwo { day.partTwo(lines) }
+    val day = Day01(2018, 1, "Chronal Calibration")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day01(title: String, adventOfCodeLink: String) : AdventOfCodeDay(title, adventOfCodeLink) {
+class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(lines: List<String>): Int {
+    fun partOne(data: String): Int {
+        val lines = data.split("\n")
 
         return lines.fold(0) { acc, line ->
             acc + line.trim().toInt()
         }
     }
 
-    fun partTwo(lines: List<String>): Int {
+    fun partTwo(data: String): Int {
+        val lines = data.split("\n")
         val set = mutableSetOf<Int>()
 
         val circularList: CircularList<Int> = CircularList(lines.map { it.trim().toInt() })
