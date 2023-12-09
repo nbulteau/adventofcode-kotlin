@@ -33,6 +33,6 @@ class Day04Test {
 
     @Test
     fun `part two training`() {
-        assertEquals(3, day.partTwo(data))
+        assertEquals(4455, day.partTwo(data))
     }
 }
