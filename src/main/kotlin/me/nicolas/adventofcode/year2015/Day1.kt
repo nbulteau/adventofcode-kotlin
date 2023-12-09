@@ -1,41 +1,37 @@
 package me.nicolas.adventofcode.year2015
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
 
 // --- Day 1: Not Quite Lisp ---
 // https://adventofcode.com/2015/day/1
 fun main() {
-
-    println("--- Day 1: Not Quite Lisp ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2015/day01/training.txt")
     val data = readFileDirectlyAsText("/year2015/day01/data.txt")
-
-    // Part One
-    partOne(data)
-
-    // Part Two
-    partTwo(data)
+    val day = Day01(2015, 1, "Not Quite Lisp")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(directions: String) {
-    val result = directions.count { char -> char == '(' } - directions.count { char -> char == ')' }
+class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    println("Part one $result")
-}
+    fun partOne(directions: String): Int {
+        return directions.count { char -> char == '(' } - directions.count { char -> char == ')' }
+    }
 
-private fun partTwo(directions: String) {
-    var floor = 0
-    var index = 0
-    do {
-        when (directions[index]) {
-            '(' -> floor += 1
-            ')' -> floor -= 1
-        }
-        index++
-    } while (floor != -1 && index < directions.length)
+    fun partTwo(directions: String): Int {
+        var floor = 0
+        var index = 0
+        do {
+            when (directions[index]) {
+                '(' -> floor += 1
+                ')' -> floor -= 1
+            }
+            index++
+        } while (floor != -1 && index < directions.length)
 
-    println("Part two $index")
+       return index
+    }
 }
