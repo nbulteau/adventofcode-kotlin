@@ -28,7 +28,7 @@ class Day07New(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, 
     }
 
     private fun solve(lines: List<String>, withJoker: Boolean): Int {
-        val cardsOrder = if (withJoker) "J23456789TQKA" else "23456789TQKA"
+        val cardsOrder = if (withJoker) "J23456789TQKA" else "23456789TJQKA"
         val hands = lines
             // Convert each line to a Hand
             .map { line ->
