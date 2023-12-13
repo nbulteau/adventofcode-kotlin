@@ -2,6 +2,7 @@ package me.nicolas.adventofcode.utils
 
 
 class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
+
     companion object {
         // Create a grid from the data
         fun of(data: String): Grid<Char> {
@@ -17,6 +18,12 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
 
     // Return the list of indices
     val indices: List<Pair<Int, Int>> get() = map.keys.toList()
+    val rows: Int get() = maxX - minX + 1
+    val columns: Int get() = maxY - minY + 1
+    val minX: Int get() = map.keys.minOfOrNull { it.first } ?: 0
+    val minY: Int get() = map.keys.minOfOrNull { it.second } ?: 0
+    val maxX: Int get() = map.keys.maxOfOrNull { it.first } ?: 0
+    val maxY: Int get() = map.keys.maxOfOrNull { it.second } ?: 0
 
     operator fun get(value: T): Pair<Int, Int>? = map.entries.find { it.value == value }?.key
     operator fun get(point: Pair<Int, Int>): T? {
@@ -28,6 +35,9 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
     operator fun set(point: Pair<Int, Int>, value: T) {
         map[Pair(point.first, point.second)] = value
     }
+
+    fun getRow(row: Int) = map.filter { it.key.first == row }.values.toList()
+    fun getColumn(column: Int) = map.filter { it.key.second == column }.values.toList()
 
     fun getCardinalNeighbors(point: Pair<Int, Int>): List<Pair<Int, Int>> {
         val (x, y) = point
@@ -43,6 +53,17 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         if (right in map) neighbors.add(right)
 
         return neighbors
+    }
+
+    fun invert(): Grid<T> {
+        val newGrid = Grid<T>(mutableMapOf())
+
+        for ((point, value) in map) {
+            val newPoint = Pair(point.second, point.first)
+            newGrid[newPoint] = value
+        }
+
+        return newGrid
     }
 
     fun display() {

@@ -17,7 +17,7 @@ class Day11(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     }
 
     fun partTwo(data: String): Long {
-        val galaxies = parseData(data, 1000000)
+        val galaxies = parseData(data, 1_000_000)
 
         return lengthOfTheShortestPathBetweenEveryPairOfGalaxies(galaxies)
     }
