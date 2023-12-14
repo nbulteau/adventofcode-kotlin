@@ -16,6 +16,8 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         }
     }
 
+    fun map(): Map<Pair<Int, Int>, T> = map.toMap()
+
     // Return the list of indices
     val indices: List<Pair<Int, Int>> get() = map.keys.toList()
     val rows: Int get() = maxX - minX + 1
@@ -53,6 +55,10 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         if (right in map) neighbors.add(right)
 
         return neighbors
+    }
+
+    fun findAll(t: T): List<Pair<Int, Int>> {
+        return map.filter { cell -> cell.value === t }.keys.toList()
     }
 
     fun invert(): Grid<T> {
