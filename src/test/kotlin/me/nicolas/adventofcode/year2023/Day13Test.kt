@@ -26,12 +26,12 @@ class Day13Test {
         """.trimIndent()
 
     @Test
-    fun partOne() {
+    fun `part one training`() {
         assertEquals(405, day.partOne(data))
     }
 
     @Test
-    fun partTwo() {
+    fun `part two training`() {
         assertEquals(400, day.partTwo(data))
     }
 }

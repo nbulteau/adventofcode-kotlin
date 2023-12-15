@@ -27,7 +27,7 @@ class Day14Test {
     }
 
     @Test
-    fun partTwo() {
+    fun `part two training`() {
         assertEquals(64, day.partTwo(data))
     }
 }
