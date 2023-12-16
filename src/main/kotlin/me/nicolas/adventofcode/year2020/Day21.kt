@@ -127,7 +127,7 @@ class Day21 {
                     allergensChecked.add(allergen)
                 }
             }
-            allergensToCheck.removeAll(allergensChecked)
+            allergensToCheck.removeAll(allergensChecked.toSet())
         }
     }
 

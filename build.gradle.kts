@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test-junit5"))
+    testImplementation ("org.assertj:assertj-core:3.8.0")
 }
 
 tasks.test {
