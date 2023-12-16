@@ -24,6 +24,6 @@ class Day15Test {
     fun `part two training`() {
         val data = "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"
 
-        assertEquals(145, day.partTwo(data))
+        assertEquals(1320, day.partTwo(data))
     }
 }
