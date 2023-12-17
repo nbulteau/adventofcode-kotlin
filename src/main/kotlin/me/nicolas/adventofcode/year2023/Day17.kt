@@ -45,9 +45,11 @@ class Day17(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         // Start in the top left corner and going east (right)
         val startEast = PointInDirection(Pair(0, 0), Direction.EAST, 0)
         val eastPath = findShortestPath(startEast, end, neighbours, cost)
+        println("East score: ${eastPath.getScore()}")
         // Start in the top left corner and going south (down)
         val startSouth = PointInDirection(Pair(0, 0), Direction.SOUTH, 0)
         val southPath = findShortestPath(startSouth, end, neighbours, cost)
+        println("South score: ${southPath.getScore()}")
 
         return min(eastPath.getScore(), southPath.getScore())
     }

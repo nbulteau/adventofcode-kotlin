@@ -1,5 +1,10 @@
 package me.nicolas.adventofcode.utils
 
+import java.awt.Color
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+import java.io.File
+
 
 /**
  * Grid implementation with a map of Pair<Int, Int> to T
@@ -93,6 +98,43 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         return newGrid
     }
 
+    /** Check if the grid is empty */
+    fun isEmpty(): Boolean = map.isEmpty()
+
+    /** Clear the grid */
+    fun clear() {
+        map.clear()
+    }
+
+    /** Check if the grid contains a specific value */
+    fun contains(value: T): Boolean = map.containsValue(value)
+
+    /** Replace all occurrences of a specific value with a new value */
+    fun replace(oldValue: T, newValue: T) {
+        map.replaceAll { _, v -> if (v == oldValue) newValue else v }
+    }
+
+    /** Count the number of occurrences of a specific value in the grid */
+    fun count(value: T): Int = map.values.count { it == value }
+
+    /** Rotate the grid 90 degrees clockwise */
+    fun rotateClockwise(): Grid<T> {
+        val newMap = mutableMapOf<Pair<Int, Int>, T>()
+        for ((point, value) in map) {
+            newMap[Pair(point.second, -point.first)] = value
+        }
+        return Grid(newMap)
+    }
+
+    /** Rotate the grid 90 degrees counter-clockwise */
+    fun rotateCounterClockwise(): Grid<T> {
+        val newMap = mutableMapOf<Pair<Int, Int>, T>()
+        for ((point, value) in map) {
+            newMap[Pair(-point.second, point.first)] = value
+        }
+        return Grid(newMap)
+    }
+
     /**
      * Display the grid (Debug purpose)
      * This function prints the grid to the console for debugging purposes.
@@ -110,6 +152,26 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
             println()
         }
         println()
+    }
+
+
+    /**
+     * Generate a picture from the grid using the given mapping function.
+     * This function takes a mapping function that maps each value in the grid to a color.
+     * It creates a BufferedImage and sets the color of each pixel according to the mapping function.
+     * Finally, it writes the image to a file.
+     */
+    fun generatePicture(mappingFunction: (T) -> Color, filename: String) {
+        val width = maxX - minX + 1
+        val height = maxY - minY + 1
+        val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+
+        for ((point, value) in map) {
+            val color = mappingFunction(value)
+            image.setRGB(point.first - minX, point.second - minY, color.rgb)
+        }
+
+        ImageIO.write(image, "png", File(filename))
     }
 }
 
