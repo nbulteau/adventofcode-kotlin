@@ -1,11 +1,5 @@
 package me.nicolas.adventofcode.utils
 
-import java.awt.Color
-import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
-import java.io.File
-
-
 /**
  * Grid implementation with a map of Pair<Int, Int> to T
  * This class represents a 2D grid where each cell is represented by a pair of integers (x, y) and holds a value of type T.
@@ -38,6 +32,7 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
     val maxY: Int get() = map.keys.maxOfOrNull { it.second } ?: 0
 
     operator fun get(value: T): Pair<Int, Int>? = map.entries.find { it.value == value }?.key
+
     /**
      * Get the value at the given point in the grid.
      * If the point does not exist in the grid, it returns null.
@@ -45,9 +40,11 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
     operator fun get(point: Pair<Int, Int>): T? {
         return map[Pair(point.first, point.second)]
     }
+
     operator fun set(x: Int, y: Int, value: T) {
         map[Pair(x, y)] = value
     }
+
     operator fun set(point: Pair<Int, Int>, value: T) {
         map[Pair(point.first, point.second)] = value
     }
@@ -152,26 +149,6 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
             println()
         }
         println()
-    }
-
-
-    /**
-     * Generate a picture from the grid using the given mapping function.
-     * This function takes a mapping function that maps each value in the grid to a color.
-     * It creates a BufferedImage and sets the color of each pixel according to the mapping function.
-     * Finally, it writes the image to a file.
-     */
-    fun generatePicture(mappingFunction: (T) -> Color, filename: String) {
-        val width = maxX - minX + 1
-        val height = maxY - minY + 1
-        val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-
-        for ((point, value) in map) {
-            val color = mappingFunction(value)
-            image.setRGB(point.first - minX, point.second - minY, color.rgb)
-        }
-
-        ImageIO.write(image, "png", File(filename))
     }
 }
 

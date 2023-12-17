@@ -1,6 +1,10 @@
 package me.nicolas.adventofcode.year2018
 
 import me.nicolas.adventofcode.utils.*
+import java.awt.Color
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
 import kotlin.math.abs
 
 // https://adventofcode.com/2018/day/6
@@ -82,5 +86,25 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             Pair(parts.last().toInt(), parts.first().toInt())
         }
         return coords
+    }
+
+    /**
+     * Generate a picture from the grid using the given mapping function.
+     * This function takes a mapping function that maps each value in the grid to a color.
+     * It creates a BufferedImage and sets the color of each pixel according to the mapping function.
+     * Finally, it writes the image to a file.
+     */
+    private fun Grid<Char>.generatePicture(mappingFunction: (Char) -> Color, filename: String) {
+        val width = maxX - minX + 1
+        val height = maxY - minY + 1
+        val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+
+        for ((point, value) in this.map()) {
+            val color = mappingFunction(value)
+            image.setRGB(point.first - minX, point.second - minY, color.rgb)
+
+        }
+
+        ImageIO.write(image, "png", File(filename))
     }
 }

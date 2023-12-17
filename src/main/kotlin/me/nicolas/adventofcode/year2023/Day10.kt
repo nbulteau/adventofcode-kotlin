@@ -1,6 +1,10 @@
 package me.nicolas.adventofcode.year2023
 
 import me.nicolas.adventofcode.utils.*
+import java.awt.Color
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
 
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day10/data.txt")
@@ -15,7 +19,7 @@ class Day10(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val startPoint = grid['S']!!
         val path = getPath(startPoint, grid)
 
-        grid.cleanGridAndDisplay(path)
+        // grid.cleanGridAndDisplay(path)
 
         return path.size / 2
     }
@@ -51,8 +55,18 @@ class Day10(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             }
             .toSet()
 
+        /*
         // Debug
-        // grid.cleanGridAndDisplay(path, inPoints)
+        grid.cleanGridAndDisplay(path, inPoints)
+        val mappingFunction: (Char) -> Color = {
+            when (it) {
+                'I' -> Color.RED
+                '.' -> Color.GREEN
+                else -> Color.BLACK
+            }
+        }
+        grid.generatePicture(mappingFunction, "2023-day10-part2.png")
+        */
 
         return inPoints.size
     }
@@ -144,6 +158,25 @@ class Day10(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             }
         }
         this.display()
+    }
+
+    /**
+     * Generate a picture from the grid using the given mapping function.
+     * This function takes a mapping function that maps each value in the grid to a color.
+     * It creates a BufferedImage and sets the color of each pixel according to the mapping function.
+     * Finally, it writes the image to a file.
+     */
+    private fun Grid<Char>.generatePicture(mappingFunction: (Char) -> Color, filename: String) {
+        val width = maxX - minX + 1
+        val height = maxY - minY + 1
+        val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+
+        for ((point, value) in this.map()) {
+            val color = mappingFunction(value)
+            image.setRGB(point.first - minX, point.second - minY, color.rgb)
+        }
+
+        ImageIO.write(image, "png", File(filename))
     }
 }
 
