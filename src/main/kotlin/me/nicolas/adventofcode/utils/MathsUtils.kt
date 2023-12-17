@@ -3,11 +3,10 @@ package me.nicolas.adventofcode.utils
 import kotlin.math.abs
 
 /**
- * GCD (Greatest Common Divisor) or HCF (Highest Common Factor)
- * of two numbers is the largest number that divides both of them.
+ * GCD (Greatest Common Divisor) or HCF (Highest Common Factor) of two numbers is the largest number that divides both of them.
  */
 tailrec fun Long.gcd(other: Long): Long =
-    if(other == 0L) this
+    if (other == 0L) this
     else other.gcd(this % other)
 
 /**
@@ -17,9 +16,16 @@ tailrec fun Long.gcd(other: Long): Long =
 fun Long.lcm(other: Long): Long =
     (this * other) / this.gcd(other)
 
+/**
+ * LCM (Least Common Multiple) for a list of numbers
+ */
 fun List<Long>.lcm(): Long {
     return this.reduce { acc, i -> (acc * i) / acc.gcd(i) }.toLong()
 }
+
+/**
+ * Manhattan distance between two points
+ */
 fun Pair<Int, Int>.manhattanDistance(other: Pair<Int, Int>): Long =
     abs(this.first - other.first).toLong() + abs(this.second - other.second).toLong()
 

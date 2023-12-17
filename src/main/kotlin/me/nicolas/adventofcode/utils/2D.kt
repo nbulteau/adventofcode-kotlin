@@ -1,10 +1,14 @@
 package me.nicolas.adventofcode.utils
 
 
+/**
+ * Grid implementation with a map of Pair<Int, Int> to T
+ * This class represents a 2D grid where each cell is represented by a pair of integers (x, y) and holds a value of type T.
+ */
 class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
 
     companion object {
-        // Create a grid from the data
+        // Create a grid (Grid<Char>) from the data string (each line is a row)
         fun of(data: String): Grid<Char> {
             val map = data.lines().flatMapIndexed { rowIndex, row ->
                 row.mapIndexed { colIndex, element ->
@@ -16,9 +20,10 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         }
     }
 
+    /** Return a copy of the map */
     fun map(): Map<Pair<Int, Int>, T> = map.toMap()
 
-    // Return the list of indices
+    /** Return the list of indices (Pair<Int, Int>) */
     val indices: List<Pair<Int, Int>> get() = map.keys.toList()
     val rows: Int get() = maxX - minX + 1
     val columns: Int get() = maxY - minY + 1
@@ -28,6 +33,10 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
     val maxY: Int get() = map.keys.maxOfOrNull { it.second } ?: 0
 
     operator fun get(value: T): Pair<Int, Int>? = map.entries.find { it.value == value }?.key
+    /**
+     * Get the value at the given point in the grid.
+     * If the point does not exist in the grid, it returns null.
+     */
     operator fun get(point: Pair<Int, Int>): T? {
         return map[Pair(point.first, point.second)]
     }
@@ -41,6 +50,10 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
     fun getRow(row: Int) = map.filter { it.key.first == row }.values.toList()
     fun getColumn(column: Int) = map.filter { it.key.second == column }.values.toList()
 
+    /**
+     * Get all the cardinal neighbors (up, down, left, right) of the given point in the grid.
+     * It returns a list of points that are neighbors to the given point.
+     */
     fun getCardinalNeighbors(point: Pair<Int, Int>): List<Pair<Int, Int>> {
         val (x, y) = point
         val neighbors = mutableListOf<Pair<Int, Int>>()
@@ -57,10 +70,18 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         return neighbors
     }
 
+    /**
+     * Find all occurrences of a given value in the grid.
+     * This function takes a value of type T and returns a list of points (Pair<Int, Int>) where this value is found in the grid.
+     */
     fun findAll(t: T): List<Pair<Int, Int>> {
         return map.filter { cell -> cell.value === t }.keys.toList()
     }
 
+    /**
+     * Invert the grid. This function swaps the x and y coordinates of each point in the grid.
+     * It returns a new grid with the inverted points.
+     */
     fun invert(): Grid<T> {
         val newGrid = Grid<T>(mutableMapOf())
 
@@ -72,6 +93,10 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         return newGrid
     }
 
+    /**
+     * Display the grid (Debug purpose)
+     * This function prints the grid to the console for debugging purposes.
+     */
     fun display() {
         val xMin = map.keys.minByOrNull { it.first }!!.first
         val xMax = map.keys.maxByOrNull { it.first }!!.first
