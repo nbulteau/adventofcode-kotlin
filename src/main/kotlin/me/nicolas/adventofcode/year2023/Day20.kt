@@ -4,7 +4,7 @@ import me.nicolas.adventofcode.utils.*
 
 fun main() {
     val data = readFileDirectlyAsText("/year2023/day20/data.txt")
-    val day = Day20(2023, 20, "")
+    val day = Day20(2023, 20, "Pulse Propagation")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
