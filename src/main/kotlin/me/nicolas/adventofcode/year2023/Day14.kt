@@ -75,7 +75,7 @@ class Day14(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         return this
     }
 
-    enum class Direction(val dx: Int, val dy: Int) {
+    private enum class Direction(val dx: Int, val dy: Int) {
         NORTH(-1, 0),
         EAST(0, 1),
         SOUTH(1, 0),

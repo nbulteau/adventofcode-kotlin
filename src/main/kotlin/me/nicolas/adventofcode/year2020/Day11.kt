@@ -62,39 +62,69 @@ class Day11 {
         WEST(-1, 0),
         NORTH_WEST(-1, -1);
     }
-}
 
-private fun Layout.processLayoutPartOne(): Layout {
-    val height = this.size - 1
-    val width = this[0].length - 1
-    val newLayout = mutableListOf<String>()
 
-    for (y in 0..height) {
-        var newString = ""
+    private fun Layout.processLayoutPartOne(): Layout {
+        val height = this.size - 1
+        val width = this[0].length - 1
+        val newLayout = mutableListOf<String>()
 
-        for (x in 0..width) {
-            when (this[y][x]) {
-                '.' -> newString += "."
-                'L' -> {
-                    newString += if (this.lookAround(x, y) == 0) {
-                        "#"
-                    } else {
-                        "L"
+        for (y in 0..height) {
+            var newString = ""
+
+            for (x in 0..width) {
+                when (this[y][x]) {
+                    '.' -> newString += "."
+                    'L' -> {
+                        newString += if (this.lookAround(x, y) == 0) {
+                            "#"
+                        } else {
+                            "L"
+                        }
                     }
-                }
 
-                '#' -> {
-                    newString += if (this.lookAround(x, y) >= 4) {
-                        "L"
-                    } else {
-                        "#"
+                    '#' -> {
+                        newString += if (this.lookAround(x, y) >= 4) {
+                            "L"
+                        } else {
+                            "#"
+                        }
                     }
                 }
             }
+            newLayout += newString
         }
-        newLayout += newString
+        return newLayout
     }
-    return newLayout
+
+    // Debug purpose
+    private fun Layout.displayLayout() {
+        println()
+        this.forEach { string -> println(string) }
+    }
+
+    private fun Layout.count(charToCount: Char) =
+        this.sumOf { string -> string.count { char -> char == charToCount } }
+
+    private fun Layout.lookAround(x: Int, y: Int) =
+        Day11.Direction.entries.sumOf { direction -> this.lookAround(x, y, direction) }
+
+    private fun Layout.lookAround(x: Int, y: Int, direction: Direction): Int {
+
+        val height = this.size - 1
+        val width = this[0].length - 1
+
+        val nextX = x + direction.dx
+        val nextY = y + direction.dy
+
+        if (nextX in 0..width && nextY in 0..height) {
+            if (this[nextY][nextX] == '#') {
+                return 1
+            }
+        }
+
+        return 0
+    }
 }
 
 fun Layout.processLayoutPartTwo(): Layout {
@@ -130,34 +160,6 @@ fun Layout.processLayoutPartTwo(): Layout {
     return newLayout
 }
 
-private fun Layout.displayLayout() {
-    println()
-    this.forEach { string -> println(string) }
-}
-
-private fun Layout.count(charToCount: Char) =
-    this.sumOf { string -> string.count { char -> char == charToCount } }
-
-private fun Layout.lookAround(x: Int, y: Int) =
-    Day11.Direction.entries.sumOf { direction -> this.lookAround(x, y, direction) }
-
-private fun Layout.lookAround(x: Int, y: Int, direction: Day11.Direction): Int {
-
-    val height = this.size - 1
-    val width = this[0].length - 1
-
-    val nextX = x + direction.dx
-    val nextY = y + direction.dy
-
-    if (nextX in 0..width && nextY in 0..height) {
-        if (this[nextY][nextX] == '#') {
-            return 1
-        }
-    }
-
-    return 0
-}
-
 fun Layout.lookInDirection(x: Int, y: Int) =
     Day11.Direction.entries.sumOf { direction -> this.lookInDirection(x, y, direction) }
 
@@ -183,6 +185,5 @@ fun Layout.lookInDirection(x: Int, y: Int, direction: Day11.Direction): Int {
 
     return 0
 }
-
 
 

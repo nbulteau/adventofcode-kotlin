@@ -60,7 +60,10 @@ class Day12(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             // and there is no . before the first group of damaged springs
             // and the first group of damaged springs is the last group of damaged springs or the next char is not #
             // then we can remove the first group of damaged springs and recurse
-            if (springs.first() in "#?" && groupsOfDamagedSprings.first() <= springs.length && "." !in springs.take(groupsOfDamagedSprings.first()) && (groupsOfDamagedSprings.first() == springs.length || springs[groupsOfDamagedSprings.first()] != '#')) {
+            if (springs.first() in "#?"
+                && groupsOfDamagedSprings.first() <= springs.length
+                && "." !in springs.take(groupsOfDamagedSprings.first())
+                && (groupsOfDamagedSprings.first() == springs.length || springs[groupsOfDamagedSprings.first()] != '#')) {
                 result += count(springs.drop(groupsOfDamagedSprings.first() + 1), groupsOfDamagedSprings.drop(1))
             }
 

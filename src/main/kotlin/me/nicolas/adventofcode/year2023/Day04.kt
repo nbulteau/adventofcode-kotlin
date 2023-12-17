@@ -5,7 +5,6 @@ import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.util.regex.Pattern
-import kotlin.math.max
 import kotlin.math.pow
 
 fun main() {
@@ -23,8 +22,12 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     data class Card(val winningNumbers: List<Int>, val numbersYouHave: List<Int>) {
         val points: Int
             // if you have 1 winning number, you win 1 point
-            // if winning is <= 0, you win 0 points thanks to the max(0, winning - 1)
-            get() = 2.0.pow(max(0, winning - 1)).toInt()
+            get() = if (winning == 0) {
+                0
+            } else {
+                (2.0.pow(winning - 1)).toInt()
+            }
+
 
         val winning: Int
             get() = numbersYouHave.count { winningNumbers.contains(it) }
@@ -34,7 +37,10 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val cards = buildCards(lines)
 
         return cards
-            .sumOf { card -> card.points }
+            .sumOf { card ->
+                println("${card.points}")
+                card.points
+            }
     }
 
     fun partTwo(lines: List<String>): Int {
