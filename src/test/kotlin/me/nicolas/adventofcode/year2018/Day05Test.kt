@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 class Day05Test {
 
-    private val day = Day04(2018, 4, "Repose Record")
+    private val day = Day05(2018, 5, "Alchemical Reduction")
     private val data = """
         dabAcCaCBAcCcaDA
     """.trimIndent()
@@ -17,6 +17,6 @@ class Day05Test {
 
     @Test
     fun `part two training`() {
-        assertEquals(42, day.partTwo(data))
+        assertEquals(4, day.partTwo(data))
     }
 }
