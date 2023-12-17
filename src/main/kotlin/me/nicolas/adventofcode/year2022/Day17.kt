@@ -145,7 +145,7 @@ class Day17Pouet(year: Int, day: Int, title: String, private val jetPatterns: St
 
     private infix fun Pair<Int, Int>.move(direction: Direction) = this + direction.coord
 
-    enum class Direction(val coord: Pair<Int, Int>) {
+    private enum class Direction(val coord: Pair<Int, Int>) {
         DOWN(Pair(0, -1)),
         LEFT(Pair(-1, 0)),
         RIGHT(Pair(1, 0)),
