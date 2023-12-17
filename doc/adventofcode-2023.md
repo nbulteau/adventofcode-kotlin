@@ -18,7 +18,7 @@
 | 14  | Parabolic Reflector Dish        | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day14.kt) [\[AoC\]](http://adventofcode.com/2023/day/14) |
 | 15  | Lens Library                    | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day15.kt) [\[AoC\]](http://adventofcode.com/2023/day/15) |
 | 16  | The Floor Will Be Lava          | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day16.kt) [\[AoC\]](http://adventofcode.com/2023/day/16) |
-| 17  |                                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day17.kt) [\[AoC\]](http://adventofcode.com/2023/day/17) |
+| 17  | Clumsy Crucible                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day17.kt) [\[AoC\]](http://adventofcode.com/2023/day/17) |
 | 18  |                                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day18.kt) [\[AoC\]](http://adventofcode.com/2023/day/18) |
 | 19  |                                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day19.kt) [\[AoC\]](http://adventofcode.com/2023/day/19) |
 | 20  |                                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day20.kt) [\[AoC\]](http://adventofcode.com/2023/day/20) |

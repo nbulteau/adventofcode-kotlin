@@ -1,0 +1,29 @@
+#### Daily Solution Index for 2018
+
+| Day | Title                       | Links                                                                                                                                                                          |
+|-----|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 01  | Chronal Calibration         | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day01.kt) [\[AoC\]](http://adventofcode.com/2018/day/1)  |
+| 02  | Inventory Management System | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day02.kt) [\[AoC\]](http://adventofcode.com/2018/day/2)  |
+| 03  | No Matter How You Slice It  | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day03.kt) [\[AoC\]](http://adventofcode.com/2018/day/3)  |
+| 04  | Repose Record               | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day04.kt) [\[AoC\]](http://adventofcode.com/2018/day/4)  |
+| 05  | Alchemical Reduction        | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day05.kt) [\[AoC\]](http://adventofcode.com/2018/day/5)  |
+| 06  | Chronal Coordinates         | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day06.kt) [\[AoC\]](http://adventofcode.com/2018/day/6)  |
+| 07  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day07.kt) [\[AoC\]](http://adventofcode.com/2018/day/7)  |
+| 08  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day08.kt) [\[AoC\]](http://adventofcode.com/2018/day/8)  |
+| 09  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day09.kt) [\[AoC\]](http://adventofcode.com/2018/day/9)  |
+| 10  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day10.kt) [\[AoC\]](http://adventofcode.com/2018/day/10) |
+| 11  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day11.kt) [\[AoC\]](http://adventofcode.com/2018/day/11) |
+| 12  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day12.kt) [\[AoC\]](http://adventofcode.com/2018/day/12) |
+| 13  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day13.kt) [\[AoC\]](http://adventofcode.com/2018/day/13) |
+| 14  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day14.kt) [\[AoC\]](http://adventofcode.com/2018/day/14) |
+| 15  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day15.kt) [\[AoC\]](http://adventofcode.com/2018/day/15) |
+| 16  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day16.kt) [\[AoC\]](http://adventofcode.com/2018/day/16) |
+| 17  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day17.kt) [\[AoC\]](http://adventofcode.com/2018/day/17) |
+| 18  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day18.kt) [\[AoC\]](http://adventofcode.com/2018/day/18) |
+| 19  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day19.kt) [\[AoC\]](http://adventofcode.com/2018/day/19) |
+| 20  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day20.kt) [\[AoC\]](http://adventofcode.com/2018/day/20) |
+| 21  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day21.kt) [\[AoC\]](http://adventofcode.com/2018/day/21) |
+| 22  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day22.kt) [\[AoC\]](http://adventofcode.com/2018/day/22) |
+| 23  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day23.kt) [\[AoC\]](http://adventofcode.com/2018/day/23) |
+| 24  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day24.kt) [\[AoC\]](http://adventofcode.com/2018/day/24) |
+| 25  |                             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2018/Day25.kt) [\[AoC\]](http://adventofcode.com/2018/day/25) |
