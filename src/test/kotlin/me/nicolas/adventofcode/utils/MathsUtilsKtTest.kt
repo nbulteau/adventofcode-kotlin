@@ -1,6 +1,7 @@
 package me.nicolas.adventofcode.utils
 
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class MathsUtilsKtTest {
 
@@ -33,5 +34,17 @@ class MathsUtilsKtTest {
         assert(listOf(8L, 12L).lcm() == 24L)
         assert(listOf(54L, 24L).lcm() == 216L)
         assert(listOf(48L, 180L).lcm() == 720L)
+    }
+
+    @Test
+    fun testShoelaceArea() {
+        val points = listOf(
+            Pair(3L, 4L),
+            Pair(5L, 11L),
+            Pair(12L, 8L),
+            Pair(9L, 5L),
+            Pair(5L, 6L)
+        )
+        assertEquals(30L, shoelaceArea(points))
     }
 }

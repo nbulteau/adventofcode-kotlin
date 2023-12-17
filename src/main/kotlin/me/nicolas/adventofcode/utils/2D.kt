@@ -4,7 +4,7 @@ package me.nicolas.adventofcode.utils
  * Grid implementation with a map of Pair<Int, Int> to T
  * This class represents a 2D grid where each cell is represented by a pair of integers (x, y) and holds a value of type T.
  */
-class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
+class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
 
     companion object {
         // Create a grid (Grid<Char>) from the data string (each line is a row)
@@ -114,22 +114,20 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
     /** Count the number of occurrences of a specific value in the grid */
     fun count(value: T): Int = map.values.count { it == value }
 
-    /** Rotate the grid 90 degrees clockwise */
-    fun rotateClockwise(): Grid<T> {
-        val newMap = mutableMapOf<Pair<Int, Int>, T>()
-        for ((point, value) in map) {
-            newMap[Pair(point.second, -point.first)] = value
-        }
-        return Grid(newMap)
-    }
+    fun floodFill(startPoint: Pair<Int, Int>, newValue: T): Grid<T> {
+        val originalValue = get(startPoint) ?: return this
+        val visited = mutableSetOf<Pair<Int, Int>>()
+        val queue = ArrayDeque<Pair<Int, Int>>()
+        queue.add(startPoint)
 
-    /** Rotate the grid 90 degrees counter-clockwise */
-    fun rotateCounterClockwise(): Grid<T> {
-        val newMap = mutableMapOf<Pair<Int, Int>, T>()
-        for ((point, value) in map) {
-            newMap[Pair(-point.second, point.first)] = value
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+            if (current in visited || get(current) != originalValue) continue
+            this[current] = newValue
+            visited.add(current)
+            queue.addAll(getCardinalNeighbors(current))
         }
-        return Grid(newMap)
+        return this
     }
 
     /**
@@ -151,6 +149,7 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T>) {
         println()
     }
 }
+
 
 
 
