@@ -71,7 +71,7 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         for (x in 0..width) {
             for (y in 0..height) {
                 val distances = coords.map {
-                    abs(x - it.first) + Math.abs(y - it.second)
+                    abs(x - it.first) + abs(y - it.second)
                 }
                 safeRegions.add( distances.sum())
             }
