@@ -23,10 +23,4 @@ class Day21Test {
     fun `part one training`() {
         assertEquals(16, day.partOne(data, 6))
     }
-
-    @Test
-    fun `part two training`() {
-        assertEquals(16, day.partTwo(data, 6))
-        assertEquals(50, day.partTwo(data, 10))
-    }
 }

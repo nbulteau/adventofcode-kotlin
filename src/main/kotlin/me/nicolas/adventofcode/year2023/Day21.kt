@@ -79,6 +79,9 @@ class Day21(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             currentPositions = nextPositions
             nextPositions = mutableSetOf()
 
+            if(index % 10 == 0)
+                println("GFG.Data($index,${currentPositions.size}),")
+
             // We are looking for a cycle
             if (index % 131 == 65) {
                 val countIncrease = currentPositions.size - lastCycleCount
