@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.utils
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class MathsUtilsKtTest {
 
