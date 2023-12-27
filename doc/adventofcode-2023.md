@@ -25,7 +25,7 @@
 | 21  | Step Counter                    | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day21.kt) [\[AoC\]](http://adventofcode.com/2023/day/21) |
 | 22  | Sand Slabs                      | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day22.kt) [\[AoC\]](http://adventofcode.com/2023/day/22) |
 | 23  | A Long Walk                     | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day23.kt) [\[AoC\]](http://adventofcode.com/2023/day/23) |
-| 24  |                                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day24.kt) [\[AoC\]](http://adventofcode.com/2023/day/24) |
-| 25  |                                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day25.kt) [\[AoC\]](http://adventofcode.com/2023/day/25) |
+| 24  | Never Tell Me The Odds          | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day24.kt) [\[AoC\]](http://adventofcode.com/2023/day/24) |
+| 25  | Snowverload                     | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2023/Day25.kt) [\[AoC\]](http://adventofcode.com/2023/day/25) |
                                                         
 
