@@ -13,7 +13,6 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-
 class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     // LicenseNode class represents a node in the license tree
