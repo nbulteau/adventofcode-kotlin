@@ -1,30 +1,24 @@
 package me.nicolas.adventofcode.year2019
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2019/day/7
+
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2019/day07/training.txt")
     val data = readFileDirectlyAsText("/year2019/day07/data.txt")
-
-    val inputs = data.split(",").map { it.toInt() }.toIntArray()
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day07().partOne(inputs.clone()) })
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day07().partTwo(inputs.clone()) })
+    val day = Day07(2019, 7, "Amplification Circuit")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day07 {
+class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
+    fun partOne(data: String): Int {
+        val program = data.split(",").map { it.toInt() }.toIntArray()
 
-    fun partOne(program: IntArray): Int {
         val permutations = listOf(0, 1, 2, 3, 4).permutations()
 
         val all = permutations.map { runPhase(program, it) }
@@ -32,16 +26,20 @@ private class Day07 {
         return all.maxOf { it }
     }
 
-    fun partTwo(program: IntArray): Int {
+    fun partTwo(data: String): Int {
+
+        val program = data.split(",").map { it.toInt() }.toIntArray()
+
         val permutations = listOf(5, 6, 7, 8, 9).permutations()
 
         var inputValue = 0
-        permutations.map {
+        val foo = permutations.map {
             inputValue = runAmplified(program, it, inputValue)
             inputValue
         }
         val all = permutations.map { runPhase(program, it) }
 
+        // find the largest output signal that can be sent to the thrusters by trying every combination of phase settings on the amplifiers
         return all.maxOf { it }
     }
 
@@ -55,6 +53,7 @@ private class Day07 {
             IntCodeProgram(program.clone()).execute(mutableListOf(settings[id], previous)).first()
         }
 
+    // Permutations of a list of integers (https://rosettacode.org/wiki/Permutations#Kotlin)
     private fun List<Int>.permutations(): List<List<Int>> =
         if (this.size <= 1) {
             listOf(this)
