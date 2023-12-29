@@ -17,17 +17,17 @@ fun main() {
 class Day09(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(data: String): Long {
-        val (players, totalMarbles) = extractData(data)
+        val (players, totalMarbles) = extractInts(data)
 
         return solve(players, totalMarbles)
     }
     fun partTwo(data: String): Long {
-        val (players, totalMarbles) = extractData(data)
+        val (players, totalMarbles) = extractInts(data)
 
         return solve(players, totalMarbles * 100)
     }
 
-    private fun extractData(data: String): List<Int> {
+    private fun extractInts(data: String): List<Int> {
         return "-?\\d+".toRegex().findAll(data).map { it.value.toInt() }.toList()
     }
 

@@ -33,7 +33,7 @@ class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val permutations = listOf(5, 6, 7, 8, 9).permutations()
 
         var inputValue = 0
-        val foo = permutations.map {
+        permutations.map {
             inputValue = runAmplified(program, it, inputValue)
             inputValue
         }
