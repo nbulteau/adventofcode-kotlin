@@ -8,7 +8,7 @@ class Day10Test {
     private val day = Day10(2018, 10, "The Stars Align")
 
     @Test
-    fun `part one training two`() {
+    fun `part one training`() {
         val data = """
             position=< 9,  1> velocity=< 0,  2>
             position=< 7,  0> velocity=<-1,  0>
