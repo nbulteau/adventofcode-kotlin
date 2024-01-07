@@ -1,5 +1,7 @@
 package me.nicolas.adventofcode.utils
 
+import kotlin.math.abs
+
 /**
  * Grid implementation with a map of Pair<Int, Int> to T
  * This class represents a 2D grid where each cell is represented by a pair of integers (x, y) and holds a value of type T.
@@ -148,6 +150,33 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
         }
         println()
     }
+}
+
+data class Point(val x: Int, val y: Int) : Comparable<Point> {
+
+    fun distanceTo(otherX: Int, otherY: Int): Int =
+        abs(x - otherX) + abs(y - otherY)
+
+    fun distanceTo(other: Point): Int =
+        distanceTo(other.x, other.y)
+
+    fun cardinalNeighbors(): List<Point> =
+        // Note: Generate in reading order!
+        listOf(
+            Point(x, y - 1),
+            Point(x - 1, y),
+            Point(x + 1, y),
+            Point(x, y + 1)
+        ).filter { it.x >= 0 && it.y >= 0 }
+
+    override fun compareTo(other: Point): Int =
+        when {
+            y < other.y -> -1
+            y > other.y -> 1
+            x < other.x -> -1
+            x > other.x -> 1
+            else -> 0
+        }
 }
 
 
