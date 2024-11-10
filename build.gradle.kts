@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "2.0.21"
     application
 }
 
@@ -16,7 +16,7 @@ dependencies {
     implementation("net.sf.jung:jung-graph-impl:2.1.1")
 
     testImplementation(kotlin("test-junit5"))
-    testImplementation ("org.assertj:assertj-core:3.8.0")
+    testImplementation("org.assertj:assertj-core:3.26.3")
 }
 
 tasks.test {
