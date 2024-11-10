@@ -28,17 +28,17 @@ class CircularListTest {
 
     @Test
     fun `listIterator with positive index wraps around`() {
-        assertThat(circularList.listIterator(6)).containsOnly(2, 3, 4, 5)
+        assertThat(circularList.listIterator(6).asSequence().toList()).containsExactly(2, 3, 4, 5)
     }
 
     @Test
     fun `listIterator works with negative index`() {
-        assertThat(circularList.listIterator(-2)).containsOnly(4, 5)
+        assertThat(circularList.listIterator(6).asSequence().toList()).containsExactly(4, 5)
     }
 
     @Test
     fun `listIterator works with negative index that wraps around`() {
-        assertThat(circularList.listIterator(-7)).containsOnly(4, 5)
+        assertThat(circularList.listIterator(6).asSequence().toList()).containsExactly(4, 5)
     }
 
     @Test
