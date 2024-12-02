@@ -88,12 +88,12 @@ private fun generateDay(day: Int?, year: Int) {
 
             @Test
             fun partOne() {
-                assertEquals(0, day.partOne(\"\"))
+                assertEquals(0, day.partOne(""))
             }
 
             @Test
             fun partTwo() {
-                assertEquals(0, day.partTwo(\"\"))
+                assertEquals(0, day.partTwo(""))
             }
         }
     """.trimIndent()
