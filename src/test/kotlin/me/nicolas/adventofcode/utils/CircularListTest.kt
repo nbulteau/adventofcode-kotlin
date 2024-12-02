@@ -4,11 +4,17 @@ import org.junit.jupiter.api.Test
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 
 
 class CircularListTest {
 
-    private val circularList = CircularList(listOf(1, 2, 3, 4, 5))
+    private lateinit var circularList: CircularList<Int>
+
+    @BeforeEach
+    fun beforeEach(){
+        circularList = CircularList(listOf(1, 2, 3, 4, 5))
+    }
 
     @Test
     fun `get with positive index wraps around`() {
@@ -29,16 +35,6 @@ class CircularListTest {
     @Test
     fun `listIterator with positive index wraps around`() {
         assertThat(circularList.listIterator(6).asSequence().toList()).containsExactly(2, 3, 4, 5)
-    }
-
-    @Test
-    fun `listIterator works with negative index`() {
-        assertThat(circularList.listIterator(6).asSequence().toList()).containsExactly(4, 5)
-    }
-
-    @Test
-    fun `listIterator works with negative index that wraps around`() {
-        assertThat(circularList.listIterator(6).asSequence().toList()).containsExactly(4, 5)
     }
 
     @Test

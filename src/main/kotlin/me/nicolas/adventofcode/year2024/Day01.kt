@@ -10,16 +10,15 @@ import kotlin.math.abs
 // https://adventofcode.com/2024/day/1
 fun main() {
     val data = readFileDirectlyAsText("/year2024/day01/data.txt")
-    val lines = data.split("\r\n")
     val day = Day01(2024, 1, "Historian Hysteria")
-    prettyPrintPartOne { day.partOne(lines) }
-    prettyPrintPartTwo { day.partTwo(lines) }
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
 class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
-    fun partOne(lines: List<String>): Int {
+    fun partOne(data: String): Int {
 
-        val (left, right) = buildLists(lines)
+        val (left, right) = buildLists(data)
 
         val sortedLeft = left.sorted()
         val sortedRight = right.sorted()
@@ -29,9 +28,9 @@ class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         }
     }
 
-    fun partTwo(lines: List<String>): Int {
+    fun partTwo(data: String): Int {
 
-        val (left, right) = buildLists(lines)
+        val (left, right) = buildLists(data)
 
         return left.sumOf { leftNumber ->
             leftNumber * right.count { rightNumber ->
@@ -40,9 +39,11 @@ class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         }
     }
 
-    private fun buildLists(lines: List<String>): Pair<List<Int>, List<Int>> {
+    private fun buildLists(data: String): Pair<List<Int>, List<Int>> {
+        val lines = data.split("\n")
+
         return lines.map { line ->
-            line.split("   ").map { it.toInt() }.let { it.first() to it.last() }
+            line.trim().split("   ").map { it.toInt() }.let { it.first() to it.last() }
         }.unzip()
     }
 }

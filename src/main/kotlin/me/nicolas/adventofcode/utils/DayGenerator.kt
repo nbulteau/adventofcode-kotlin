@@ -10,20 +10,20 @@ fun main(args: Array<String>) {
     }
 
     val day = args[0].toIntOrNull()
+    val year = if (args.size > 1) args[1].toIntOrNull() ?: Year.now().value else Year.now().value
 
-    generateDay(day)
+    generateDay(day, year)
 }
 
-private fun generateDay(dayNumber: Int?) {
-    if (dayNumber == null || dayNumber <= 0) {
+private fun generateDay(day: Int?, year: Int) {
+    if (day == null || day <= 0) {
         println("Invalid day number provided.")
         return
     }
 
-    val currentYear = Year.now().value
-    val packageName = "year$currentYear"
-    val className = "Day%02d".format(dayNumber)
-    val fileName = "src/me.nicolas.adventofcode.utils.main/kotlin/me/nicolas/adventofcode/$packageName/$className.kt"
+    val packageName = "year$year"
+    val className = "Day%02d".format(day)
+    val fileName = "src/main/kotlin/me/nicolas/adventofcode/$packageName/$className.kt"
 
     val fileContent = """
         package me.nicolas.adventofcode.$packageName
@@ -33,22 +33,21 @@ private fun generateDay(dayNumber: Int?) {
         import me.nicolas.adventofcode.utils.prettyPrintPartTwo
         import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-        // --- Day 1: ---
-        // https://adventofcode.com/$currentYear/day/$dayNumber
-        fun me.nicolas.adventofcode.utils.main() {
-            val data = readFileDirectlyAsText("/$packageName/day${dayNumber.toString().padStart(2, '0')}/data.txt")
-            val lines = data.split("\n")
-            val day = $className($currentYear, $dayNumber, "")
-            prettyPrintPartOne { day.partOne(lines) }
-            prettyPrintPartTwo { day.partTwo(lines) }
+        // --- Day $day: ---
+        // https://adventofcode.com/$year/day/$day
+        fun main() {
+            val data = readFileDirectlyAsText("/$packageName/day${day.toString().padStart(2, '0')}/data.txt")
+            val day = $className($year, $day, "")
+            prettyPrintPartOne { day.partOne(data) }
+            prettyPrintPartTwo { day.partTwo(data) }
         }
 
         class $className(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
-            fun partOne(lines: List<String>): Int {
+            fun partOne(data: String): Int {
                 return 0
             }
 
-            fun partTwo(lines: List<String>): Int {
+            fun partTwo(data: String): Int {
                 return 0
             }
         }
@@ -56,16 +55,21 @@ private fun generateDay(dayNumber: Int?) {
 
     val file = File(fileName)
     file.parentFile.mkdirs()
+
+    if (file.exists()) {
+        println("File $fileName already exists.")
+        return
+    }
     file.writeText(fileContent)
 
     // Generate the data file
-    val dataFileName = "src/me.nicolas.adventofcode.utils.main/resources/me/nicolas/adventofcode/$packageName/day${dayNumber.toString().padStart(2, '0')}/data.txt"
+    val dataFileName = "src/main/resources/me/nicolas/adventofcode/$packageName/day${day.toString().padStart(2, '0')}/data.txt"
     val dataFile = File(dataFileName)
     dataFile.parentFile.mkdirs()
     dataFile.writeText("")
 
     // Generate the riddle file
-    val riddleFileName = "src/me.nicolas.adventofcode.utils.main/resources/me/nicolas/adventofcode/$packageName/day${dayNumber.toString().padStart(2, '0')}/riddle.txt"
+    val riddleFileName = "src/main/resources/me/nicolas/adventofcode/$packageName/day${day.toString().padStart(2, '0')}/riddle.txt"
     val riddleFile = File(riddleFileName)
     riddleFile.parentFile.mkdirs()
     riddleFile.writeText("")
@@ -80,16 +84,16 @@ private fun generateDay(dayNumber: Int?) {
         import kotlin.test.assertEquals
 
         class ${className}Test {
-            private val day = $className($currentYear, $dayNumber, "")
+            private val day = $className($year, $day, "")
 
             @Test
             fun partOne() {
-                assertEquals(0, day.partOne(emptyList()))
+                assertEquals(0, day.partOne(\"\"))
             }
 
             @Test
             fun partTwo() {
-                assertEquals(0, day.partTwo(emptyList()))
+                assertEquals(0, day.partTwo(\"\"))
             }
         }
     """.trimIndent()
