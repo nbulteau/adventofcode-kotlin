@@ -39,10 +39,10 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         )
 
         fun checkDirection(x: Int, y: Int, dx: Int, dy: Int): Boolean {
-            for (i in 0 until word.length) {
-                val newX = x + i * dx
-                val newY = y + i * dy
-                if (!isValid(newX, newY) || grid[newX][newY] != word[i]) {
+            for (i in word.indices) {
+                val nextX = x + i * dx
+                val nextY = y + i * dy
+                if (!isValid(nextX, nextY) || grid[nextX][nextY] != word[i]) {
                     return false
                 }
             }
