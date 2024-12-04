@@ -16,7 +16,7 @@ fun main() {
 
 class Day03(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    val regEx = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)")
+    private val regEx = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)")
 
     fun partOne(data: String): Int {
 
