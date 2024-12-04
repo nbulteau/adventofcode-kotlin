@@ -85,15 +85,19 @@ private fun generateDay(day: Int?, year: Int) {
 
         class ${className}Test {
             private val day = $className($year, $day, "")
+            
+            val test = ""${'"'}
+                
+            ""${'"'}.trimIndent()
 
             @Test
             fun partOne() {
-                assertEquals(0, day.partOne(""))
+                assertEquals(0, day.partOne(test))
             }
 
             @Test
             fun partTwo() {
-                assertEquals(0, day.partTwo(""))
+                assertEquals(0, day.partTwo(test))
             }
         }
     """.trimIndent()

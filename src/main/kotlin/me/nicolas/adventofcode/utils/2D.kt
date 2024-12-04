@@ -43,6 +43,10 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
         return map[Pair(point.first, point.second)]
     }
 
+    operator fun get(x: Int, y: Int): T? {
+        return map[Pair(x, y)]
+    }
+
     operator fun set(x: Int, y: Int, value: T) {
         map[Pair(x, y)] = value
     }
