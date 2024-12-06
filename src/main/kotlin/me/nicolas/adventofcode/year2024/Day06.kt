@@ -27,18 +27,12 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         }
     }
 
-    private fun Pair<Int, Int>.stepForward(direction: Direction): Pair<Int, Int> {
-        return Pair(this.first + direction.point.first, this.second + direction.point.second)
-    }
+    private fun Pair<Int, Int>.stepForward(direction: Direction): Pair<Int, Int> =
+        Pair(this.first + direction.point.first, this.second + direction.point.second)
 
     fun partOne(data: String): Int {
         val grid = Grid.of(data)
         val visited = process(grid)
-
-        visited.forEach { t ->
-            grid[t] = 'X'
-        }
-        grid.display()
 
         return visited.size
     }
@@ -49,10 +43,8 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
         val rows = grid.rows
         val columns = grid.columns
-
-        fun Grid<Char>.isInMap(point: Pair<Int, Int>): Boolean {
-            return point.first >= 0 && point.first < columns && point.second >= 0 && point.second < rows
-        }
+        fun Grid<Char>.isInMap(point: Pair<Int, Int>) =
+            point.first in 0..<columns && point.second >= 0 && point.second < rows
 
         val visited = mutableSetOf<Pair<Int, Int>>()
 
@@ -74,11 +66,12 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val rows = grid.rows
         val columns = grid.columns
 
-        fun Grid<Char>.isInMap(point: Pair<Int, Int>): Boolean {
-            return point.first >= 0 && point.first < columns && point.second >= 0 && point.second < rows
-        }
+        fun Grid<Char>.isInMap(point: Pair<Int, Int>) =
+            point.first in 0..<columns && point.second >= 0 && point.second < rows
 
-        val pointsToTest = grid.indices - grid.findAll('#') - grid.findAll('^')
+        // val pointsToTest = grid.indices - grid.findAll('#').toSet() - grid.findAll('^').toSet()
+        val pointsToTest = process(grid) - grid.findAll('^').toSet()
+
         val obstructions = mutableSetOf<Pair<Int, Int>>()
         pointsToTest.forEach { point ->
             grid = Grid.of(data)
@@ -90,8 +83,7 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
             var isLoop = false
             do {
-                if(!visited.add(Pair(guard, currentDirection))) {
-                    // Loop detected
+                if (!visited.add(Pair(guard, currentDirection))) {
                     isLoop = true
                     break
                 }
