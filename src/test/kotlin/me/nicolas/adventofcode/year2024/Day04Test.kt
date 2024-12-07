@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class Day04Test {
-    private val day = Day04(2024, 4, "")
+    private val day = Day04(2024, 4, "Ceres Search")
 
     val testPart1 = """
         ....XXMAS.

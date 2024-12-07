@@ -5,11 +5,11 @@ import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 2: ---
+// --- Day 2: Red-Nosed Reports ---
 // https://adventofcode.com/2024/day/2
 fun main() {
     val data = readFileDirectlyAsText("/year2024/day02/data.txt")
-    val day = Day02(2024, 2, "")
+    val day = Day02(2024, 2, "Red-Nosed Reports")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }

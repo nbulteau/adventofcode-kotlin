@@ -9,7 +9,7 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 // https://adventofcode.com/2024/day/5
 fun main() {
     val data = readFileDirectlyAsText("/year2024/day05/data.txt")
-    val day = Day05(2024, 5, "")
+    val day = Day05(2024, 5, "Print Queue")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
