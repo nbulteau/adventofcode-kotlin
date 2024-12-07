@@ -73,7 +73,7 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val pointsToTest = process(grid) - grid.findAll('^').toSet()
 
         val obstructions = mutableSetOf<Pair<Int, Int>>()
-        pointsToTest.forEach { point ->
+        pointsToTest.parallelStream().forEach { point ->
             grid = Grid.of(data)
             grid[point] = '#'
             var guard = grid.findAll('^').first()
