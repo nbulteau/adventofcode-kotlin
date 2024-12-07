@@ -15,7 +15,7 @@ class GridTest {
         """.trimIndent()
         )
 
-        assertEquals(9, grid.map().size)
+        assertEquals(9, grid.toMap().size)
         assertEquals('1', grid[Pair(0, 0)])
         assertEquals('2', grid[Pair(0, 1)])
         assertEquals('3', grid[Pair(0, 2)])
@@ -81,7 +81,7 @@ class GridTest {
 
         val invertedGrid = grid.invert()
 
-        assertEquals(9, invertedGrid.map().size)
+        assertEquals(9, invertedGrid.toMap().size)
         assertEquals('1', invertedGrid[Pair(0, 0)])
         assertEquals('4', invertedGrid[Pair(0, 1)])
         assertEquals('7', invertedGrid[Pair(0, 2)])
@@ -289,7 +289,7 @@ class GridTest {
     }
 
     @Test
-    fun getMap() {
+    fun getCopy() {
         val grid = Grid.of(
             """
             123
@@ -298,7 +298,7 @@ class GridTest {
         """.trimIndent()
         )
 
-        assertEquals(9, grid.map().size)
+        assertEquals(9, grid.toMap().size)
     }
 
     @Test
@@ -313,7 +313,7 @@ class GridTest {
 
         grid.clear()
 
-        assertEquals(0, grid.map().size)
+        assertEquals(0, grid.toMap().size)
     }
 
     @Test
@@ -362,7 +362,7 @@ class GridTest {
 
         grid.replace('1', 'a')
 
-        assertEquals(9, grid.map().size)
+        assertEquals(9, grid.toMap().size)
         assertEquals('a', grid[Pair(0, 0)])
         assertEquals('2', grid[Pair(0, 1)])
         assertEquals('3', grid[Pair(0, 2)])

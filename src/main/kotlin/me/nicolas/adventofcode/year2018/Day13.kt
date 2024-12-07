@@ -63,7 +63,7 @@ class Day13(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         tracks: Grid<Char>,
         sortedCarts: Set<Cart>,
     ) {
-        val copy = tracks.map().toMutableMap()
+        val copy = tracks.toMap().toMutableMap()
         for (cart in sortedCarts) {
             when {
                 !cart.alive -> copy[cart.position] = 'X'
@@ -113,7 +113,7 @@ class Day13(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     // Extract the tracks and carts from the input data
     private fun extractTracksAndCarts(data: String): Pair<Grid<Char>, Set<Cart>> {
         val tracks = Grid.of(data)
-        val carts: Set<Cart> = tracks.map().mapNotNull { (point, value) ->
+        val carts: Set<Cart> = tracks.toMap().mapNotNull { (point, value) ->
             if (value in setOf('>', '<', '^', 'v')) {
                 // Replace cart with track piece (for the display)
                 tracks[point] = when (value) {

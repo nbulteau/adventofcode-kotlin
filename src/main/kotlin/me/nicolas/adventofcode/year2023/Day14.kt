@@ -29,7 +29,7 @@ class Day14(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
         // We need to find the cycle length to avoid doing 1 billion cycles (which would take a long time)
         while (cycle < total) {
-            val currentGridKey = grid.map().map { it.value.toString() }.joinTo(StringBuilder(), "").toString()
+            val currentGridKey = grid.toMap().map { it.value.toString() }.joinTo(StringBuilder(), "").toString()
             if (currentGridKey in cache) {
                 cycleLength = cycle - cache[currentGridKey]!!
                 break

@@ -171,7 +171,7 @@ class Day10(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val height = maxY - minY + 1
         val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
 
-        for ((point, value) in this.map()) {
+        for ((point, value) in this.toMap()) {
             val color = mappingFunction(value)
             image.setRGB(point.first - minX, point.second - minY, color.rgb)
         }

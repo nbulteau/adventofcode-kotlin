@@ -16,7 +16,7 @@ fun main() {
 
 class Day05(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
     fun partOne(data: String): Int {
-        val parts = data.split("\r\n\r\n")
+        val parts = data.split("\n\n")
         val rules =
             parts[0].split("\n").groupBy({ it.split("|")[0].trim().toInt() }) { it.substringAfter("|").trim().toInt() }
         val updates = parts[1].split("\n").map { line -> line.split(",") }
@@ -27,7 +27,7 @@ class Day05(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
 
     fun partTwo(data: String): Int {
-        val parts = data.split("\r\n\r\n")
+        val parts = data.split("\n\n")
         val rules =
             parts[0].split("\n").groupBy({ it.split("|")[0].trim().toInt() }) { it.substringAfter("|").trim().toInt() }
         val updates = parts[1].split("\n").map { line -> line.split(",") }

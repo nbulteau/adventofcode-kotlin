@@ -21,22 +21,22 @@ class Day16(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     fun partTwo(data: String): Int {
         val contraption = Grid.of(data)
         // North edges
-        val norths = contraption.map()
+        val norths = contraption.toMap()
             .filter { (key, _) -> key.first == 0 }.keys
             .map { point -> point to Direction.SOUTH }
             .toList()
         // East edges
-        val easts = contraption.map()
+        val easts = contraption.toMap()
             .filter { (key, _) -> key.second == contraption.columns - 1 }.keys
             .map { point -> point to Direction.WEST }
             .toList()
         // South edges
-        val souths = contraption.map()
+        val souths = contraption.toMap()
             .filter { (key, _) -> key.first == contraption.rows - 1 }.keys
             .map { point -> point to Direction.NORTH }
             .toList()
         // West edges
-        val wests = contraption.map().filter { (key, _) -> key.second == 0 }.keys
+        val wests = contraption.toMap().filter { (key, _) -> key.second == 0 }.keys
             .map { point -> point to Direction.EAST }
             .toList()
 

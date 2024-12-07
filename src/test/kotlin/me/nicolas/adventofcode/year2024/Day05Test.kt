@@ -41,11 +41,11 @@ class Day05Test {
 
     @Test
     fun partOne() {
-        assertEquals(143, day.partOne(testPart1 + "\r\n\r\n" + testPart2))
+        assertEquals(143, day.partOne(testPart1 + "\n\n" + testPart2))
     }
 
     @Test
     fun partTwo() {
-        assertEquals(123, day.partTwo(testPart1 + "\r\n\r\n" + testPart2))
+        assertEquals(123, day.partTwo(testPart1 + "\n\n" + testPart2))
     }
 }

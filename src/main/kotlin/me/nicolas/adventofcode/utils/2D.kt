@@ -22,7 +22,9 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     }
 
     /** Return a copy of the map */
-    fun map(): Map<Pair<Int, Int>, T> = map.toMap()
+    fun copy(): Grid<T> = Grid(map.toMutableMap())
+
+    fun toMap(): Map<Pair<Int, Int>, T> = map.toMap()
 
     /** Return the list of indices (Pair<Int, Int>) */
     val indices: List<Pair<Int, Int>> get() = map.keys.toList()

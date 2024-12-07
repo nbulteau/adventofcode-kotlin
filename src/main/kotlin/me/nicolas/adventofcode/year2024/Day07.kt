@@ -17,24 +17,14 @@ fun main() {
 class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(data: String): Long {
-
         val operators: List<(Long, Long) -> Long> = listOf(Long::plus, Long::times)
-
-        return data.split('\n')
-            .map { parseLine(it) }
-            .filter { (testValue, numbers) -> isSolvable(testValue, numbers, operators) }
-            .sumOf { (testValue, _) -> testValue }
+        return solve(data, operators)
     }
 
     fun partTwo(data: String): Long {
-
         val operators: List<(Long, Long) -> Long> =
             listOf(Long::plus, Long::times, { first, second -> "$first$second".toLong() })
-
-        return data.split('\n')
-            .map { parseLine(it) }
-            .filter { (testValue, numbers) -> isSolvable(testValue, numbers, operators) }
-            .sumOf { (testValue, _) -> testValue }
+        return solve(data, operators)
     }
 
     private fun parseLine(line: String): Pair<Long, List<Long>> {
@@ -45,23 +35,26 @@ class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         return testValue to numbers
     }
 
-    private fun isSolvable(testValue: Long, numbers: List<Long>, operators: List<(Long, Long) -> Long>): Boolean {
+    private fun solve(data: String, operators: List<(Long, Long) -> Long>): Long {
+        return data.split('\n')
+            .map { parseLine(it) }
+            .filter { (testValue, numbers) -> isSolvable(testValue, numbers, operators) }
+            .sumOf { (testValue, _) -> testValue }
+    }
 
-        fun recurse(currentValue: Long, remainingNumbers: List<Long>): Boolean {
-            if (remainingNumbers.isEmpty()) {
+    private fun isSolvable(testValue: Long, numbers: List<Long>, operators: List<(Long, Long) -> Long>): Boolean {
+        fun recurse(currentValue: Long, index: Int): Boolean {
+            if (index == numbers.size) {
                 return currentValue == testValue
             }
-
-            // optimize: exit as soon as possible
+            // Optimization: exit early if current value exceeds test value
             if (currentValue > testValue) {
                 return false
             }
-
             return operators.any { op ->
-                recurse(op(currentValue, remainingNumbers.first()), remainingNumbers.subList(1, remainingNumbers.size))
+                recurse(op(currentValue, numbers[index]), index + 1)
             }
         }
-
-        return recurse(numbers.first(), numbers.subList(1, numbers.size))
+        return recurse(numbers.first(), 1)
     }
 }
