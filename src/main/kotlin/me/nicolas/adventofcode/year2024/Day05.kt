@@ -16,49 +16,55 @@ fun main() {
 
 class Day05(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
     fun partOne(data: String): Int {
-        val parts = data.split("\n\n")
-        val rules =
-            parts[0].split("\n").groupBy({ it.split("|")[0].trim().toInt() }) { it.substringAfter("|").trim().toInt() }
-        val updates = parts[1].split("\n").map { line -> line.split(",") }
-            .map { update -> update.map { page -> page.trim().toInt() } }
+        val (rules, updates) = parseData(data)
 
-        return updates.filter { isValid(rules, it) }.sumOf { it[it.size / 2] }
+        return updates
+            .filter { update -> update.isValid(rules) }
+            .sumOf { update -> update[update.size / 2] }
     }
 
 
     fun partTwo(data: String): Int {
+        val (rules, updates) = parseData(data)
+
+        val comparator = fun(a: Int, b: Int): Int {
+            return when {
+                (rules[a]?.contains(b) == true) -> -1
+                (rules[b]?.contains(a) == true) -> 1
+                else -> 0
+            }
+        }
+
+        return updates
+            .filter { update -> !update.isValid(rules) }
+            .map { update -> update.sortedWith(comparator) }
+            .sumOf { update -> update[update.size / 2] }
+    }
+
+    private fun parseData(data: String): Pair<Map<Int, List<Int>>, List<List<Int>>> {
         val parts = data.split("\n\n")
-        val rules =
-            parts[0].split("\n").groupBy({ it.split("|")[0].trim().toInt() }) { it.substringAfter("|").trim().toInt() }
+        val rules = parts[0].split("\n")
+            .groupBy({ line -> line.split("|")[0].trim().toInt() }) { line ->
+                line.substringAfter("|").trim().toInt()
+            }
         val updates = parts[1].split("\n").map { line -> line.split(",") }
             .map { update -> update.map { page -> page.trim().toInt() } }
-        val incorrect = updates.filter { !isValid(rules, it) }
+        return Pair(rules, updates)
+    }
 
-        val sorted = incorrect.map {
-            val comparator = fun(a: Int, b: Int): Int {
-                return when {
-                    (rules[a]?.contains(b) == true) -> -1
-                    (rules[b]?.contains(a) == true) -> 1
-                    else -> 0
-                }
+
+    private fun List<Int>.isValid(rules: Map<Int, List<Int>>): Boolean {
+        val updateList = this.toMutableList()
+
+        while (updateList.isNotEmpty()) {
+            val head = updateList.removeFirst()
+            if (updateList.any { rules[it]?.contains(head) == true }) {
+                return false
             }
-            it.sortedWith(comparator)
         }
 
-        return sorted.sumOf { it[it.size / 2] }
+        return true
     }
 }
 
-private fun isValid(rules: Map<Int, List<Int>>, update: List<Int>): Boolean {
-    val updateList = update.toMutableList()
-
-    while (updateList.isNotEmpty()) {
-        val head = updateList.removeFirst()
-        if (updateList.any { rules[it]?.contains(head) == true }) {
-            return false
-        }
-    }
-
-    return true
-}
 
