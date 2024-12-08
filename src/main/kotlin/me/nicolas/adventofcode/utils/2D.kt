@@ -106,6 +106,11 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     /** Check if the grid is empty */
     fun isEmpty(): Boolean = map.isEmpty()
 
+    fun isValid(x: Int, y: Int) = x >= 0 && x < rows && y >= 0 && y < columns
+
+    fun isValid(point: Pair<Int, Int>) = point.second >= 0 && point.second < rows && point.first >= 0 && point.first < columns
+
+
     /** Clear the grid */
     fun clear() {
         map.clear()

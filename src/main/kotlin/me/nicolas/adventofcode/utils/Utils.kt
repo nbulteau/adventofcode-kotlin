@@ -35,3 +35,22 @@ fun prettyPrintPartTwo(message: String? = null,lambda: () -> Any) {
     prettyPrint("Part two answer ${message ?: ""} :", measureTimedValue { lambda() })
 }
 
+fun <T> Iterable<T>.combinations(length: Int): Sequence<List<T>> {
+    val pool = this.toList()
+    val n = pool.size
+    if (length > n) return emptySequence()
+    val indices = IntArray(length) { it }
+    return sequence {
+        while (true) {
+            yield(indices.map { pool[it] })
+            var i = length
+            do {
+                i--
+                if (i == -1) return@sequence
+            } while (indices[i] == i + n - length)
+            indices[i]++
+            for (j in i + 1 until length) indices[j] = indices[j - 1] + 1
+        }
+    }
+}
+
