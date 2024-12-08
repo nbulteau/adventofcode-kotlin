@@ -37,12 +37,12 @@ private fun generateDay(day: Int?, year: Int) {
         // https://adventofcode.com/$year/day/$day
         fun main() {
             val data = readFileDirectlyAsText("/$packageName/day${day.toString().padStart(2, '0')}/data.txt")
-            val day = $className($year, $day, "")
+            val day = $className($year, $day)
             prettyPrintPartOne { day.partOne(data) }
             prettyPrintPartTwo { day.partTwo(data) }
         }
 
-        class $className(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
+        class $className(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
             fun partOne(data: String): Int {
                 return 0
             }
@@ -84,7 +84,7 @@ private fun generateDay(day: Int?, year: Int) {
         import kotlin.test.assertEquals
 
         class ${className}Test {
-            private val day = $className($year, $day, "")
+            private val day = $className($year, $day)
             
             val test = ""${'"'}
                 
