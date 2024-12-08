@@ -4,7 +4,7 @@ import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 
-// --- Day 10: ---
+// --- Day 10: Elves Look, Elves Say ---
 // https://adventofcode.com/2015/day/10
 fun main() {
     //val data = readFileDirectlyAsText("/year2015/day10/data.txt")
@@ -13,7 +13,7 @@ fun main() {
     prettyPrintPartTwo { day.partTwo("1321131112") }
 }
 
-class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day10(year: Int, day: Int, title: String = "Elves Look, Elves Say") : AdventOfCodeDay(year, day, title) {
 
     private fun lookAndSay(input: String): String {
         val result = StringBuilder()
