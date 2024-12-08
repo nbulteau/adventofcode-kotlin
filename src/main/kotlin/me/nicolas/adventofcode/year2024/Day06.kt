@@ -80,7 +80,7 @@ class Day06(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         pointsToTest.forEach { point ->
             // Optimization : clean the grid each turn
             if (previous != null) {
-                grid[previous] = '.'
+                grid[previous!!] = '.'
             }
             grid[point] = '#'
 

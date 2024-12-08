@@ -18,12 +18,14 @@ class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
     fun partOne(data: String): Long {
         val operators: List<(Long, Long) -> Long> = listOf(Long::plus, Long::times)
+
         return solve(data, operators)
     }
 
     fun partTwo(data: String): Long {
         val operators: List<(Long, Long) -> Long> =
             listOf(Long::plus, Long::times, { first, second -> "$first$second".toLong() })
+
         return solve(data, operators)
     }
 
