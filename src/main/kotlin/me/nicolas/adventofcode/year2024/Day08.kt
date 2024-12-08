@@ -30,7 +30,8 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
         }
 
         return antennas.flatMap { (_, positions) ->
-            positions.combinations(2).toList()
+            positions.combinations(2)
+                .toList()
                 .flatMap { sequence -> getAntinodesFor(sequence.first(), sequence.last()) }
         }
             .distinct()
@@ -72,8 +73,11 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
         }
 
         return antennas.flatMap { (_, positions) ->
-            positions.combinations(2).toList()
-                .flatMap { sequence -> getAntinodesFor(sequence.first(), sequence.last()) }
+            positions.combinations(2)
+                .toList()
+                .flatMap { sequence ->
+                    getAntinodesFor(sequence.first(), sequence.last())
+                }
         }
             .distinct()
             .count()

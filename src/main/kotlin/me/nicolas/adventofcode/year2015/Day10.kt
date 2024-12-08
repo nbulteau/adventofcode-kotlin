@@ -23,34 +23,30 @@ class Day10(year: Int, day: Int, title: String = "Elves Look, Elves Say") : Adve
             if (input[i] == input[i - 1]) {
                 count++
             } else {
-                result.append(count)
-                result.append(input[i - 1])
+                appendCountAndChar(result, count, input[i - 1])
                 count = 1
             }
         }
 
         // Append the last run of digits
-        result.append(count)
-        result.append(input[input.length - 1])
+        appendCountAndChar(result, count, input[input.length - 1])
 
         return result.toString()
     }
 
-
-    fun partOne(data: String): Int {
-        var sequence = data
-
-        for (i in 0 until 40) {
-            sequence = lookAndSay(sequence)
-        }
-
-        return sequence.length
+    private fun appendCountAndChar(sb: StringBuilder, count: Int, char: Char) {
+        sb.append(count)
+        sb.append(char)
     }
 
-    fun partTwo(data: String): Int {
+    fun partOne(data: String): Int = calculateSequenceLength(data, 40)
+
+    fun partTwo(data: String): Int = calculateSequenceLength(data, 50)
+
+    private fun calculateSequenceLength(data: String, iterations: Int): Int {
         var sequence = data
 
-        for (i in 0 until 50) {
+        repeat(iterations) {
             sequence = lookAndSay(sequence)
         }
 
