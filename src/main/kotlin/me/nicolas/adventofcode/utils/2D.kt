@@ -165,6 +165,9 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
 
 data class Point(val x: Int, val y: Int) : Comparable<Point> {
 
+    operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+    operator fun minus(other: Point) = Point(x - other.x, y - other.y)
+
     fun distanceTo(otherX: Int, otherY: Int): Int =
         abs(x - otherX) + abs(y - otherY)
 
@@ -179,6 +182,10 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
             Point(x + 1, y),
             Point(x, y + 1)
         ).filter { it.x >= 0 && it.y >= 0 }
+
+    fun isNeighbourWith(other: Point): Boolean {
+        return other in this.cardinalNeighbors()
+    }
 
     override fun compareTo(other: Point): Int =
         when {

@@ -67,7 +67,7 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
     fun partTwo(data: String): Int {
 
-        val grid = data.lines().map { it.toCharArray() }
+        val grid = data.lines().map { line -> line.toCharArray() }
 
         val rows = grid.size
         val columns = grid[0].size

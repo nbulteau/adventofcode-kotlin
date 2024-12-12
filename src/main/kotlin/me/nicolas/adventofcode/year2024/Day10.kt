@@ -91,7 +91,6 @@ class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
             if (x < 0 || x >= rows || y < 0 || y >= columns) return
 
             visited[y][x] = true
-            path.add(Pair(x, y))
 
             val currentHeight = map[y][x]
 
@@ -111,6 +110,8 @@ class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
             if (x < rows - 1 && map[y][x + 1] == currentHeight + 1) {
                 dfsHelper(x + 1, y, path, visited)
             }
+
+            path.add(Pair(x, y))
 
             // After exploring all possible paths from this point, add the path to the set
             if (currentHeight == 9) {
