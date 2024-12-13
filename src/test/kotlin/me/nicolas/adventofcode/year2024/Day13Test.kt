@@ -32,12 +32,7 @@ class Day13Test {
     }
 
     @Test
-    fun partOneBis() {
-        assertEquals(480, day.part1(test.lines()))
-    }
-
-    @Test
     fun partTwo() {
-        assertEquals(875318608908, day.part2(test.lines()))
+        assertEquals(875318608908, day.partTwo(test))
     }
 }
