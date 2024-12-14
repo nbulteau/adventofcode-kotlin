@@ -47,6 +47,18 @@ class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         //   [ Ax, Bx ]
         //   [ Ay, By ]
         // ]
+
+        /**
+         * m * ax + n * bx = px
+         * m * ay + n * by = py
+         *
+         * m = (px - n * bx) / ax
+         * (px - n * bx) * ay / ax + n * by = py
+         * (px * ay - n * ay * bx) / ax + n * by = py
+         * n * (by - ay * bx / ax) = py - px * ay / ax
+         * n = (py - (px * ay) / ax) )/ (by - ay * bx / ax)
+         */
+
         // Calculate the determinant of the matrix formed by buttonA and buttonB
         val determinant = buttonA.dx * buttonB.dy - buttonB.dx * buttonA.dy
 
