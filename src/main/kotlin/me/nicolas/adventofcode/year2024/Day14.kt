@@ -62,14 +62,20 @@ class Day14(year: Int, day: Int, title: String = "Restroom Redoubt", val width: 
         return quadrantCounts.fold(1) { product, count -> product * count }
     }
 
-    private fun displayRobots(robots: List<Point>) {
-        val grid = List(height) { MutableList(width) { 0 } }
+    private fun buildGrid(robots: List<Point>): List<String> {
+        val grid = Array(height) { Array<Int>(width) { 0 } }
         for ((x, y) in robots) {
             grid[y][x]++
         }
 
-        grid.forEach { line ->
-            println(line.joinToString("") { if (it == 0) " " else "#" })
+        return grid.map { row ->
+            row.joinToString("") { cell ->
+                if (cell > 0) {
+                    "#"
+                } else {
+                    " "
+                }
+            }
         }
     }
 
@@ -79,7 +85,7 @@ class Day14(year: Int, day: Int, title: String = "Restroom Redoubt", val width: 
         val quadrantCounts = countRobotsInQuadrants(positionsAfter100Seconds)
         val safetyFactor = calculateSafetyFactor(quadrantCounts)
 
-        // displayRobots(positionsAfter100Seconds)
+        // println(displayRobots(positionsAfter100Seconds))
 
         return safetyFactor
     }
@@ -89,21 +95,33 @@ class Day14(year: Int, day: Int, title: String = "Restroom Redoubt", val width: 
 
         val nbRobots = robots.size
 
-        var counter = 1
+        var seconds = 1
         while (true) {
 
             robots = robots.map { robot ->
                 Robot(moveRobot(robot, 1), robot.velocity)
             }
 
+            // find if at least 8 robots are on the same line
+            // val grid = buildGrid(robots.map { robot -> robot.position })
+            // if(grid.any { line -> line.contains("########") }) {
+            //    println("Seconds: $seconds")
+            //    grid.forEach { line -> println(line) }
+            //     return counter
+            // }
+
             // If all robots are in different positions, return the counter (display the picture of a Christmas tree)
             if(robots.map { robot -> robot.position }.toSet().size == nbRobots) {
-                displayRobots(robots.map { it.position })
-                return counter
+                buildGrid(robots.map { robot -> robot.position })
+                println("Seconds: $seconds")
+                val grid = buildGrid(robots.map { robot -> robot.position })
+                grid.forEach { line -> println(line) }
+
+                return seconds
             }
-            counter++
+            seconds++
         }
 
-        return counter
+        return seconds
     }
 }
