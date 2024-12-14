@@ -42,40 +42,24 @@ class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         }
     }
 
+    /**
+     * prizeX = aPresses * buttonA.dx + bPresses * buttonB.dx
+     * prizeY = aPresses * buttonA.dy + bPresses * buttonB.dy
+     */
     private fun findCheapestWayToWin(prize: Prize, buttonA: Button, buttonB: Button): Long {
-        // matrix: [
-        //   [ Ax, Bx ]
-        //   [ Ay, By ]
-        // ]
 
-        /**
-         * m * ax + n * bx = px
-         * m * ay + n * by = py
-         *
-         * m = (px - n * bx) / ax
-         * (px - n * bx) * ay / ax + n * by = py
-         * (px * ay - n * ay * bx) / ax + n * by = py
-         * n * (by - ay * bx / ax) = py - px * ay / ax
-         * n = (py - (px * ay) / ax) )/ (by - ay * bx / ax)
-         */
+        val aPresses =
+            (prize.x * buttonB.dy - prize.y * buttonB.dx) / (buttonB.dy * buttonA.dx - buttonB.dx * buttonA.dy)
+        val bPresses =
+            (prize.x * buttonA.dy - prize.y * buttonA.dx) / (buttonA.dy * buttonB.dx - buttonB.dy * buttonA.dx)
 
-        // Calculate the determinant of the matrix formed by buttonA and buttonB
-        val determinant = buttonA.dx * buttonB.dy - buttonB.dx * buttonA.dy
+        val isSolved =
+            buttonA.dx * aPresses + buttonB.dx * bPresses == prize.x && buttonA.dy * aPresses + buttonB.dy * bPresses == prize.y
 
-        // Calculate the inverse of the matrix
-        val inverse = listOf(
-            listOf(buttonB.dy, -buttonB.dx),
-            listOf(-buttonA.dy, buttonA.dx)
-        )
-
-        val aPresses = (prize.x * inverse[0][0] + prize.y * inverse[0][1])
-        val bPresses = (prize.x * inverse[1][0] + prize.y * inverse[1][1])
-
-        // Check if the solution is valid (both aPresses and bPresses should be divisible by the determinant)
-        return if (aPresses % determinant != 0L || bPresses % determinant != 0L) {
-            0L
+        return if (isSolved) {
+            3 * aPresses + bPresses
         } else {
-            (3 * aPresses + bPresses) / determinant
+            0
         }
     }
 
