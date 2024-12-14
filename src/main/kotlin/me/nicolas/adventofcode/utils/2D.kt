@@ -108,6 +108,8 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
 
     fun isValid(x: Int, y: Int) = x >= 0 && x < rows && y >= 0 && y < columns
 
+    fun isValid(point: Point) = point.y >= 0 && point.y < rows && point.x >= 0 && point.x < columns
+
     fun isValid(point: Pair<Int, Int>) = point.second >= 0 && point.second < rows && point.first >= 0 && point.first < columns
 
 

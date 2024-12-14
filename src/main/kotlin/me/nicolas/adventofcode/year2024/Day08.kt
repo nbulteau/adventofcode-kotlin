@@ -18,13 +18,13 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
 
         val grid = Grid.of(data)
 
-        fun getAntinodesFor(a: Pair<Int, Int>, b: Pair<Int, Int>): List<Pair<Int, Int>> {
-            val deltaX = b.second - a.second
-            val deltaY = b.first - a.first
+        fun getAntinodesFor(a: Point, b: Point): List<Point> {
+            val deltaX = b.x - a.x
+            val deltaY = b.y - a.y
 
-            return mutableListOf<Pair<Int, Int>>(
-                Pair(a.first - deltaY, a.second - deltaX),
-                Pair(b.first + deltaY, b.second + deltaX)
+            return mutableListOf<Point>(
+                Point(a.y - deltaY, a.x - deltaX),
+                Point(b.y + deltaY, b.x + deltaX)
             )
                 .filter { point -> grid.isValid(point) }
         }
@@ -38,11 +38,12 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
             .count()
     }
 
-    private fun extractAntennas(data: String): Map<Char, List<Pair<Int, Int>>> {
+    private fun extractAntennas(data: String): Map<Char, List<Point>> {
         val antennas = Grid.of(data).toMap()
             .filter { (_, value) -> value != '.' }
-            .map { (position, value) -> Pair(value, position) }
+            .map { (position, value) -> Pair(value, Point(position.first, position.second)) }
             .groupBy({ value -> value.first }) { value -> value.second }
+
         return antennas
     }
 
@@ -52,21 +53,21 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
 
         val grid = Grid.of(data)
 
-        fun getAntinodesFor(a: Pair<Int, Int>, b: Pair<Int, Int>): List<Pair<Int, Int>> {
-            val deltaX = b.second - a.second
-            val deltaY = b.first - a.first
+        fun getAntinodesFor(a: Point, b: Point): List<Point> {
+            val deltaX = b.x - a.x
+            val deltaY = b.y - a.y
 
-            val antinodes = mutableListOf<Pair<Int, Int>>()
+            val antinodes = mutableListOf<Point>()
             var aAntinode = a.copy()
             while (grid.isValid(aAntinode)) {
                 antinodes.add(aAntinode)
-                aAntinode = Pair(aAntinode.first - deltaY, aAntinode.second - deltaX)
+                aAntinode = Point(aAntinode.x - deltaX, aAntinode.y - deltaY)
             }
 
             var bAntinode = b.copy()
             while (grid.isValid(bAntinode)) {
                 antinodes.add(bAntinode)
-                bAntinode = Pair(bAntinode.first + deltaY, bAntinode.second + deltaX)
+                bAntinode = Point(bAntinode.x + deltaX, bAntinode.y + deltaY)
             }
 
             return antinodes
