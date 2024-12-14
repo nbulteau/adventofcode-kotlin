@@ -43,8 +43,8 @@ class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
     }
 
     /**
-     * prizeX = aPresses * buttonA.dx + bPresses * buttonB.dx
-     * prizeY = aPresses * buttonA.dy + bPresses * buttonB.dy
+     * prizeX = buttonA.dx * aPresses + buttonB.dx * bPresses
+     * prizeY = buttonA.dy * aPresses + buttonB.dy * bPresses
      */
     private fun findCheapestWayToWin(prize: Prize, buttonA: Button, buttonB: Button): Long {
 
