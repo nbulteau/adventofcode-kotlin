@@ -42,13 +42,17 @@ class Day05(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     }
 
     private fun parseData(data: String): Pair<Map<Int, List<Int>>, List<List<Int>>> {
-        val parts = data.split("\n\n")
-        val rules = parts[0].split("\n")
+        val input = data.lines()
+        val split = input.indexOf("") // Find the first empty line
+
+        val rules = input.subList(0, split)
             .groupBy({ line -> line.split("|")[0].trim().toInt() }) { line ->
                 line.substringAfter("|").trim().toInt()
             }
-        val updates = parts[1].split("\n").map { line -> line.split(",") }
+        val updates = input.drop(split + 1)
+            .map { line -> line.split(",") }
             .map { update -> update.map { page -> page.trim().toInt() } }
+
         return Pair(rules, updates)
     }
 

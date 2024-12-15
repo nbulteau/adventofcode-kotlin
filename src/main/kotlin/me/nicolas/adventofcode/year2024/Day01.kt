@@ -40,7 +40,7 @@ class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     }
 
     private fun buildLists(data: String): Pair<List<Int>, List<Int>> {
-        val lines = data.split("\n")
+        val lines = data.lines()
 
         return lines.map { line ->
             line.trim().split("   ").map { it.toInt() }.let { it.first() to it.last() }

@@ -17,9 +17,7 @@ fun main() {
 class Day02(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
     fun partOne(data: String): Int {
 
-        val lines = data.split("\n")
-
-        val results = lines.map { line ->
+        val results = data.lines().map { line ->
             val report = line.split(" ").map { string -> string.trim().toInt() }
             report.isReportValid()
         }
@@ -29,9 +27,7 @@ class Day02(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
     fun partTwo(data: String): Int {
 
-        val lines = data.split("\n")
-
-        val results = lines.map { line ->
+        val results = data.lines().map { line ->
             val report = line.split(" ").map { string -> string.trim().toInt() }
 
             val allPermutations = report.buildAllPermutations()
