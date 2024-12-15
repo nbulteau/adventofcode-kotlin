@@ -54,7 +54,6 @@ class Day12(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
             }
         }.sum()
 
-
     private fun Point.isInMap(map: List<CharArray>) = x in map.indices && y in map[0].indices
 
     private fun solve(data: String, process: (Map<Side, List<Point>>) -> Int): Int {
@@ -110,10 +109,10 @@ class Day12(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
     }
 
     fun partOne(data: String): Int {
-        return solve(data) { countPerimeter(it) }
+        return solve(data) { region -> countPerimeter(region) }
     }
 
     fun partTwo(data: String): Int {
-        return solve(data) { countSides(it) }
+        return solve(data) { region -> countSides(region) }
     }
 }
