@@ -35,39 +35,41 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
         val start = Point(findOne('S')!!)
         val end = Point(findOne('E')!!)
 
-        queue.add(Path(0, listOf(start), Directions.right))
+        // Start Tile (marked S) facing East
+        queue.add(Path(score = 0, points = listOf(start), direction = Directions.right))
 
         var score = Int.MAX_VALUE
         val scores = mutableMapOf<Pair<Point, Pair<Int, Int>>, Int>()
         val seats = mutableSetOf<Point>()
 
         while (queue.isNotEmpty()) {
-            val node = queue.poll()
-            val key = node.end to node.direction
+            val path = queue.poll()
+            // The key is the current point and the direction
+            val key = path.key
 
-            if (node.end == end) {
-                if (node.score <= score) {
-                    score = node.score
+            if (path.end == end) {
+                if (path.score <= score) {
+                    score = path.score
                 } else {
                     break
                 }
-                seats.addAll(node.points)
+                seats.addAll(path.points)
             }
 
             // Don't revisit points with a worse score
-            if (scores.containsKey(key) && scores[key]!! < node.score) {
+            if (scores.containsKey(key) && scores[key]!! < path.score) {
                 continue
             }
-            scores[key] = node.score
+            scores[key] = path.score
 
-            val nextPoint = node.end + node.direction
+            val nextPoint = path.nextPoint
 
             // As long as there isn't a wall, we can proceed forwards
             if (this[nextPoint.x, nextPoint.y] != '#') {
-                queue.add(node.move())
+                queue.add(path.move())
             }
-            queue.add(node.turnLeft())
-            queue.add(node.turnRight())
+            queue.add(path.turnLeft())
+            queue.add(path.turnRight())
         }
 
         return score to seats
@@ -94,12 +96,21 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
         fun Pair<Int, Int>.turnRight(): Pair<Int, Int> =
             Directions.cardinals[(Directions.cardinals.indexOf(this) + 1).mod(4)]
 
-        val end get() = points.last()
+        val end
+            get() = points.last()
+
+        val key
+            get() = end to direction
+
+        val nextPoint
+            get() = end + direction
 
         fun turnLeft() = copy(score = score + 1000, direction = direction.turnLeft())
         fun turnRight() = copy(score = score + 1000, direction = direction.turnRight())
 
         fun move() = copy(score = score + 1, points = points + (end + direction))
+
+
     }
 }
 
