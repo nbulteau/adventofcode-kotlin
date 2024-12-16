@@ -17,21 +17,23 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
 
     fun partOne(data: String): Int {
         val maze = Grid.of(data)
+        val (score, _) = maze.dijkstra()
 
-        return maze.dijkstra().first
+        return score
     }
 
     fun partTwo(data: String): Int {
         val maze = Grid.of(data)
+        val (_, seats) = maze.dijkstra()
 
-        return maze.dijkstra().second.size
+        return seats.size
     }
 
-    // 
+    // Dijkstra's algorithm to find all the shortest paths from S to E
     private fun Grid<Char>.dijkstra(): Pair<Int, Set<Point>> {
-        val queue = PriorityQueue<Path>(compareBy { it.score })
-        val start = Point(findAll('S').first())
-        val end = Point(findAll('E').first())
+        val queue = PriorityQueue<Path>(compareBy { path -> path.score })
+        val start = Point(findOne('S')!!)
+        val end = Point(findOne('E')!!)
 
         queue.add(Path(0, listOf(start), Directions.right))
 
@@ -43,16 +45,27 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
             val node = queue.poll()
             val key = node.end to node.direction
 
-            if (node.end == end) { // We did it :)
-                if (node.score <= score) score = node.score else break
+            if (node.end == end) {
+                if (node.score <= score) {
+                    score = node.score
+                } else {
+                    break
+                }
                 seats.addAll(node.points)
             }
 
-            if (scores.containsKey(key) && scores[key]!! < node.score) continue // Don't revisit points with a worse score, should keep us out of loops
+            // Don't revisit points with a worse score
+            if (scores.containsKey(key) && scores[key]!! < node.score) {
+                continue
+            }
             scores[key] = node.score
 
-            val (x, y) = node.end + node.direction
-            if (this[x, y] != '#') queue.add(node.move()) // As long as there isn't a wall, we can proceed forwards
+            val nextPoint = node.end + node.direction
+
+            // As long as there isn't a wall, we can proceed forwards
+            if (this[nextPoint.x, nextPoint.y] != '#') {
+                queue.add(node.move())
+            }
             queue.add(node.turnLeft())
             queue.add(node.turnRight())
         }
