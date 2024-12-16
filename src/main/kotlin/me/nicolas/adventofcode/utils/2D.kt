@@ -27,15 +27,22 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     fun toMap(): Map<Pair<Int, Int>, T> = map.toMap()
 
     /** Return the list of indices (Pair<Int, Int>) */
-    val indices: List<Pair<Int, Int>> get() = map.keys.toList()
-    val rows: Int get() = maxX - minX + 1
-    val columns: Int get() = maxY - minY + 1
-    val minX: Int get() = map.keys.minOfOrNull { it.first } ?: 0
-    val minY: Int get() = map.keys.minOfOrNull { it.second } ?: 0
-    val maxX: Int get() = map.keys.maxOfOrNull { it.first } ?: 0
-    val maxY: Int get() = map.keys.maxOfOrNull { it.second } ?: 0
+    val indices: List<Pair<Int, Int>>
+        get() = map.keys.toList()
+    val rows: Int
+        get() = maxX - minX + 1
+    val columns: Int
+        get() = maxY - minY + 1
+    val minX: Int
+        get() = map.keys.minOfOrNull { point -> point.first } ?: 0
+    val minY: Int
+        get() = map.keys.minOfOrNull { point -> point.second } ?: 0
+    val maxX: Int
+        get() = map.keys.maxOfOrNull { point -> point.first } ?: 0
+    val maxY: Int
+        get() = map.keys.maxOfOrNull { point -> point.second } ?: 0
 
-    operator fun get(value: T): Pair<Int, Int>? = map.entries.find { it.value == value }?.key
+    operator fun get(value: T): Pair<Int, Int>? = map.entries.find { entry -> entry.value == value }?.key
 
     /**
      * Get the value at the given point in the grid.
@@ -58,6 +65,7 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     }
 
     fun getRow(row: Int) = map.filter { it.key.first == row }.values.toList()
+
     fun getColumn(column: Int) = map.filter { it.key.second == column }.values.toList()
 
     /**
@@ -69,13 +77,21 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
         val neighbors = mutableListOf<Pair<Int, Int>>()
 
         val up = Pair(x, y + 1)
-        if (up in map) neighbors.add(up)
+        if (up in map) {
+            neighbors.add(up)
+        }
         val down = Pair(x, y - 1)
-        if (down in map) neighbors.add(down)
+        if (down in map) {
+            neighbors.add(down)
+        }
         val left = Pair(x - 1, y)
-        if (left in map) neighbors.add(left)
+        if (left in map) {
+            neighbors.add(left)
+        }
         val right = Pair(x + 1, y)
-        if (right in map) neighbors.add(right)
+        if (right in map) {
+            neighbors.add(right)
+        }
 
         return neighbors
     }
@@ -84,9 +100,13 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
      * Find all occurrences of a given value in the grid.
      * This function takes a value of type T and returns a list of points (Pair<Int, Int>) where this value is found in the grid.
      */
-    fun findAll(t: T): List<Pair<Int, Int>> {
-        return map.filter { cell -> cell.value === t }.keys.toList()
-    }
+    fun findAll(t: T): List<Pair<Int, Int>> =
+        map.filter { cell ->
+            cell.value === t
+        }.keys.toList()
+
+    fun findOne(t: T): Pair<Int, Int>? =
+        map.entries.find { it.value === t }?.key
 
     /**
      * Invert the grid. This function swaps the x and y coordinates of each point in the grid.
@@ -106,11 +126,11 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     /** Check if the grid is empty */
     fun isEmpty(): Boolean = map.isEmpty()
 
-    fun isValid(x: Int, y: Int) = x >= 0 && x < rows && y >= 0 && y < columns
+    fun isValid(x: Int, y: Int) = x in 0..<rows && y >= 0 && y < columns
 
-    fun isValid(point: Point) = point.y >= 0 && point.y < rows && point.x >= 0 && point.x < columns
+    fun isValid(point: Point) = isValid(point.x, point.y)
 
-    fun isValid(point: Pair<Int, Int>) = point.second >= 0 && point.second < rows && point.first >= 0 && point.first < columns
+    fun isValid(point: Pair<Int, Int>) = isValid(point.first, point.second)
 
 
     /** Clear the grid */
@@ -123,12 +143,19 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
 
     /** Replace all occurrences of a specific value with a new value */
     fun replace(oldValue: T, newValue: T) {
-        map.replaceAll { _, v -> if (v == oldValue) newValue else v }
+        map.replaceAll { _, value ->
+            if (value == oldValue) {
+                newValue
+            } else {
+                value
+            }
+        }
     }
 
     /** Count the number of occurrences of a specific value in the grid */
     fun count(value: T): Int = map.values.count { it == value }
 
+    /** Flood fill the grid with a new value starting from a specific point */
     fun floodFill(startPoint: Pair<Int, Int>, newValue: T): Grid<T> {
         val originalValue = get(startPoint) ?: return this
         val visited = mutableSetOf<Pair<Int, Int>>()
@@ -137,11 +164,14 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
 
         while (queue.isNotEmpty()) {
             val current = queue.removeFirst()
-            if (current in visited || get(current) != originalValue) continue
+            if (current in visited || get(current) != originalValue) {
+                continue
+            }
             this[current] = newValue
             visited.add(current)
             queue.addAll(getCardinalNeighbors(current))
         }
+
         return this
     }
 
@@ -174,11 +204,9 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
 
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
 
-    fun distanceTo(otherX: Int, otherY: Int): Int =
-        abs(x - otherX) + abs(y - otherY)
+    fun distanceTo(otherX: Int, otherY: Int): Int = abs(x - otherX) + abs(y - otherY)
 
-    fun distanceTo(other: Point): Int =
-        distanceTo(other.x, other.y)
+    fun distanceTo(other: Point): Int = distanceTo(other.x, other.y)
 
     fun cardinalNeighbors(): List<Point> =
         // Note: Generate in reading order!
