@@ -1,11 +1,7 @@
 package me.nicolas.adventofcode.year2024
 
-import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.Point
-import me.nicolas.adventofcode.utils.prettyPrintPartOne
-import me.nicolas.adventofcode.utils.prettyPrintPartTwo
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import java.util.PriorityQueue
+import me.nicolas.adventofcode.utils.*
+import java.util.*
 
 // --- Day 16: Reindeer Maze ---
 // https://adventofcode.com/2024/day/16
@@ -18,126 +14,74 @@ fun main() {
 
 class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCodeDay(year, day, title) {
 
-    // Tile class to represent a point in the maze with a direction
-    private data class Tile(val point: Point, val dx: Int, val dy: Int) {
-
-        fun neighbors(reindeerMaze: List<CharArray>, distance: Int): List<Pair<Tile, Int>> {
-
-            val turnLeft = Tile(point, dy, -dx)
-            val turnRight = Tile(point, -dy, dx)
-
-            val forward = Tile(Point(point.x + dx, point.y + dy), dx, dy)
-            if (reindeerMaze[forward.point.y][forward.point.x] == '#') {
-                return listOf(turnLeft to distance + 1000, turnRight to distance + 1000)
-            }
-
-            return listOf(turnLeft to distance + 1000, turnRight to distance + 1000, forward to distance + 1)
-        }
-    }
-
-    private fun List<CharArray>.findStart(): Tile {
-        for (y in this.indices) {
-            for (x in this[0].indices) {
-                if (this[y][x] == 'S') {
-                    return Tile(Point(x, y), 1, 0)
-                }
-            }
-        }
-        throw IllegalStateException("No start found")
-    }
-
-    private fun List<CharArray>.findEnd(): Point {
-        for (y in this.indices) {
-            for (x in this[0].indices) {
-                if (this[y][x] == 'E') {
-                    return Point(x, y)
-                }
-            }
-        }
-        throw IllegalStateException("No end found")
-    }
-
-    // Recursive function to paint the path from the end to the start
-    private fun paintPaths(visited: MutableSet<Tile>, map: Map<Tile, Pair<Int, List<Tile>>>, current: Tile): Set<Tile> {
-        if (current in visited) return visited
-        visited.add(current)
-        for (node in map[current]!!.second) {
-            paintPaths(visited, map, node)
-        }
-        return visited
-    }
 
     fun partOne(data: String): Int {
-        val reindeerMaze = data.lines().map {
-            it.toCharArray()
-        }
+        val maze = Grid.of(data)
 
-        // Pair of Tile and distance to reach it : priority queue to get the closest tile to the end first
-        val unvisitedSet = PriorityQueue<Pair<Tile, Int>> { tile1, tile2 -> tile1.second - tile2.second }
-
-        val start = reindeerMaze.findStart()
-        val visited = mutableSetOf(start)
-        unvisitedSet.add(start to 0)
-        val end = reindeerMaze.findEnd()
-
-        while (unvisitedSet.isNotEmpty()) {
-            val tile = unvisitedSet.remove()
-            val neighbors = tile.first.neighbors(reindeerMaze, tile.second)
-            for (neighbor in neighbors) {
-                if (neighbor.first in visited) {
-                    continue
-                }
-                visited.add(neighbor.first)
-                unvisitedSet.add(neighbor)
-                if (end == neighbor.first.point) {
-                    return neighbor.second
-                }
-            }
-        }
-
-        throw IllegalStateException("No end found")
+        return maze.dijkstra().first
     }
-
-
 
     fun partTwo(data: String): Int {
-        val reindeerMaze = data.lines().map {
-            it.toCharArray()
-        }
-        val unvisitedSet = PriorityQueue<Pair<Tile, Int>> { tile1, tile2 -> tile1.second - tile2.second }
-        val start = reindeerMaze.findStart()
-        val visited = mutableMapOf(start to (0 to mutableListOf<Tile>()))
-        unvisitedSet.add(start to 0)
-        val end = reindeerMaze.findEnd()
+        val maze = Grid.of(data)
 
-        while (unvisitedSet.isNotEmpty()) {
-            val node = unvisitedSet.remove()
-            val neighbors = node.first.neighbors(reindeerMaze, node.second)
-            for (neighbor in neighbors) {
-                val first = if (end == neighbor.first.point) {
-                    Tile(neighbor.first.point, 0, 0) // This is the end
-                } else {
-                    neighbor.first
-                }
-                if (first in visited) {
-                    val seen = visited[first]!!
-                    if (neighbor.second == seen.first) {
-                        seen.second.add(node.first)
-                    }
-                    continue
-                }
-                visited[first] = neighbor.second to mutableListOf(node.first)
-                if (end != first) { // Not the end
-                    unvisitedSet.add(neighbor)
-                }
+        return maze.dijkstra().second.size
+    }
+
+    fun Grid<Char>.dijkstra(): Pair<Int, Set<Point>> {
+        val queue = PriorityQueue<Path>(compareBy { it.score })
+        val start = Point(findAll('S').first())
+        val end = Point(findAll('E').first())
+
+        queue.add(Path(0, listOf(start), Directions.East))
+
+        var score = Int.MAX_VALUE
+        val scores = mutableMapOf<Pair<Point, Pair<Int, Int>>, Int>()
+        val seats = mutableSetOf<Point>()
+
+        while (queue.isNotEmpty()) {
+            val node = queue.poll()
+            val key = node.end to node.direction
+
+            if (node.end == end) { // We did it :)
+                if (node.score <= score) score = node.score else break
+                seats.addAll(node.points)
             }
+
+            if (scores.containsKey(key) && scores[key]!! < node.score) continue // Don't revisit points with a worse score, should keep us out of loops
+            scores[key] = node.score
+
+            val (x, y) = node.end + node.direction
+            if (this[x, y] != '#') queue.add(node.move()) // As long as there isn't a wall, we can proceed forwards
+            queue.add(node.turn(cw = false))
+            queue.add(node.turn(cw = true))
         }
 
-        val allTiles = paintPaths(mutableSetOf(), visited, Tile(end, 0, 0))
-        for (tile in allTiles) {
-            reindeerMaze[tile.point.y][tile.point.x] = 'O'
-        }
+        return score to seats
+    }
 
-        return reindeerMaze.sumOf { line -> line.count { it == 'O' } }
+    object Directions {
+
+        val North = -1 to 0
+        val East = 0 to 1
+        val South = 1 to 0
+        val West = 0 to -1
+
+        val CARDINALS = listOf(North, East, South, West)
+    }
+
+    data class Path(
+        val score: Int,
+        val points: List<Point>,
+        val direction: Pair<Int, Int>
+    ) {
+        fun Pair<Int, Int>.turn(cw: Boolean): Pair<Int, Int> =
+            Directions.CARDINALS[(Directions.CARDINALS.indexOf(this) + if (cw) 1 else -1).mod(4)]
+
+        val end get() = points.last()
+        fun turn(cw: Boolean) = copy(score = score + 1000, direction = direction.turn(cw))
+        fun move() = copy(score = score + 1, points = points + (end + direction))
+
     }
 }
+
+
