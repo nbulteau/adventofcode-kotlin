@@ -14,27 +14,26 @@ fun main() {
 
 class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCodeDay(year, day, title) {
 
+
     fun partOne(data: String): Int {
         val maze = Grid.of(data)
-        val (score, _) = maze.dijkstra()
 
-        return score
+        return maze.dijkstra().first
     }
 
     fun partTwo(data: String): Int {
         val maze = Grid.of(data)
-        val (_, seats) = maze.dijkstra()
 
-        return seats.size
+        return maze.dijkstra().second.size
     }
 
-    // Djikstra's algorithm to find the shortest path from 'S' to 'E'
+    // 
     private fun Grid<Char>.dijkstra(): Pair<Int, Set<Point>> {
-        val start = Point(findOne('S')!!)
-        val end = Point(findOne('E')!!)
+        val queue = PriorityQueue<Path>(compareBy { it.score })
+        val start = Point(findAll('S').first())
+        val end = Point(findAll('E').first())
 
-        val queue = PriorityQueue<Path>(compareBy { path -> path.score })
-        queue.add(Path(score = 0, points = listOf(start), direction = Directions.up))
+        queue.add(Path(0, listOf(start), Directions.right))
 
         var score = Int.MAX_VALUE
         val scores = mutableMapOf<Pair<Point, Pair<Int, Int>>, Int>()
@@ -44,27 +43,16 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
             val node = queue.poll()
             val key = node.end to node.direction
 
-            // We reached the end
-            if (node.end == end) {
-                if (node.score <= score) {
-                    score = node.score
-                } else {
-                    break
-                }
-                // Add all the seats we visited
+            if (node.end == end) { // We did it :)
+                if (node.score <= score) score = node.score else break
                 seats.addAll(node.points)
             }
 
-            if (scores.containsKey(key) && scores[key]!! < node.score) {
-                continue  // Don't revisit points with a worse score
-            }
+            if (scores.containsKey(key) && scores[key]!! < node.score) continue // Don't revisit points with a worse score, should keep us out of loops
             scores[key] = node.score
 
             val (x, y) = node.end + node.direction
-            // As long as there isn't a wall, we can proceed forwards
-            if (this[x, y] != '#') {
-                queue.add(node.move())
-            }
+            if (this[x, y] != '#') queue.add(node.move()) // As long as there isn't a wall, we can proceed forwards
             queue.add(node.turnLeft())
             queue.add(node.turnRight())
         }
@@ -82,16 +70,18 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
         val cardinals = listOf(up, right, down, left)
     }
 
-    private data class Path(val score: Int, val points: List<Point>, val direction: Pair<Int, Int>) {
-
-        private fun Pair<Int, Int>.turnLeft(): Pair<Int, Int> =
+    private data class Path(
+        val score: Int,
+        val points: List<Point>,
+        val direction: Pair<Int, Int>,
+    ) {
+        fun Pair<Int, Int>.turnLeft(): Pair<Int, Int> =
             Directions.cardinals[(Directions.cardinals.indexOf(this) - 1).mod(4)]
 
-        private fun Pair<Int, Int>.turnRight(): Pair<Int, Int> =
+        fun Pair<Int, Int>.turnRight(): Pair<Int, Int> =
             Directions.cardinals[(Directions.cardinals.indexOf(this) + 1).mod(4)]
 
-        val end
-            get() = points.last()
+        val end get() = points.last()
 
         fun turnLeft() = copy(score = score + 1000, direction = direction.turnLeft())
         fun turnRight() = copy(score = score + 1000, direction = direction.turnRight())

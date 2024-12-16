@@ -6,17 +6,16 @@ import kotlin.test.assertEquals
 class Day11Test {
     private val day = Day11(2015, 11)
     
-    val test = """
-        
+    val test1 = """
+        abcdefgh
     """.trimIndent()
 
+    val test2 = """
+        ghijklmn
+    """.trimIndent()
     @Test
     fun partOne() {
-        assertEquals(0, day.partOne(test))
-    }
-
-    @Test
-    fun partTwo() {
-        assertEquals(0, day.partTwo(test))
+        assertEquals("abcdffaa", day.partOne(test1))
+        assertEquals("ghjaabcc", day.partOne(test2))
     }
 }

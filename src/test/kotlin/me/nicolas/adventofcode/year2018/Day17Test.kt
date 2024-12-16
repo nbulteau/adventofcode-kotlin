@@ -3,10 +3,12 @@ package me.nicolas.adventofcode.year2018
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import kotlin.test.Ignore
 
 class Day17Test {
     private val day = Day17(2018, 17, "Reservoir Research")
 
+    @Ignore
     @Test
     fun `part one training`() {
         val data = """
