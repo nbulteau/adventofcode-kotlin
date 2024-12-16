@@ -7,6 +7,7 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
     constructor(pair: Pair<Int, Int>) : this(pair.first, pair.second)
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+
     operator fun plus(pair: Pair<Int, Int>) = Point(x + pair.first, y + pair.second)
 
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
