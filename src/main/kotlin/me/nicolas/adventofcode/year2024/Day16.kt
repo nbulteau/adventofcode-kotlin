@@ -16,24 +16,24 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
 
 
     fun partOne(data: String): Int {
-        val maze = Grid.of(data)
+        val maze = SimpleGrid.of(data)
         val (score, _) = maze.dijkstra()
 
         return score
     }
 
     fun partTwo(data: String): Int {
-        val maze = Grid.of(data)
+        val maze = SimpleGrid.of(data)
         val (_, seats) = maze.dijkstra()
 
         return seats.size
     }
 
     // Dijkstra's algorithm to find all the shortest paths from S to E
-    private fun Grid<Char>.dijkstra(): Pair<Int, Set<Point>> {
+    private fun SimpleGrid<Char>.dijkstra(): Pair<Int, Set<Point>> {
         val queue = PriorityQueue<Path>(compareBy { path -> path.score })
-        val start = Point(findOne('S')!!)
-        val end = Point(findOne('E')!!)
+        val start = findOne { it == 'S' }
+        val end = findOne { it == 'E' }
 
         // Start Tile (marked S) facing East
         queue.add(Path(score = 0, points = listOf(start), direction = Directions.right))
@@ -65,7 +65,7 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
             val nextPoint = path.nextPoint
 
             // As long as there isn't a wall, we can proceed forwards
-            if (this[nextPoint.x, nextPoint.y] != '#') {
+            if (this[nextPoint] != '#') {
                 queue.add(path.move())
             }
             queue.add(path.turnLeft())

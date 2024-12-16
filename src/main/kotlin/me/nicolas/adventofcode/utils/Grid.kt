@@ -1,7 +1,5 @@
 package me.nicolas.adventofcode.utils
 
-import kotlin.math.abs
-
 /**
  * Grid implementation with a map of Pair<Int, Int> to T
  * This class represents a 2D grid where each cell is represented by a pair of integers (x, y) and holds a value of type T.
@@ -29,16 +27,22 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     /** Return the list of indices (Pair<Int, Int>) */
     val indices: List<Pair<Int, Int>>
         get() = map.keys.toList()
+
     val rows: Int
         get() = maxX - minX + 1
+
     val columns: Int
         get() = maxY - minY + 1
+
     val minX: Int
         get() = map.keys.minOfOrNull { point -> point.first } ?: 0
+
     val minY: Int
         get() = map.keys.minOfOrNull { point -> point.second } ?: 0
+
     val maxX: Int
         get() = map.keys.maxOfOrNull { point -> point.first } ?: 0
+
     val maxY: Int
         get() = map.keys.maxOfOrNull { point -> point.second } ?: 0
 
@@ -106,7 +110,7 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
         }.keys.toList()
 
     fun findOne(t: T): Pair<Int, Int>? =
-        map.entries.find { it.value === t }?.key
+        map.entries.find { (_, value) -> value === t }?.key
 
     /**
      * Invert the grid. This function swaps the x and y coordinates of each point in the grid.
@@ -195,41 +199,6 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     }
 }
 
-data class Point(val x: Int, val y: Int) : Comparable<Point> {
-
-    constructor(pair: Pair<Int, Int>) : this(pair.first, pair.second)
-
-    operator fun plus(other: Point) = Point(x + other.x, y + other.y)
-    operator fun plus(pair: Pair<Int, Int>) = Point(x + pair.first, y + pair.second)
-
-    operator fun minus(other: Point) = Point(x - other.x, y - other.y)
-
-    fun distanceTo(otherX: Int, otherY: Int): Int = abs(x - otherX) + abs(y - otherY)
-
-    fun distanceTo(other: Point): Int = distanceTo(other.x, other.y)
-
-    fun cardinalNeighbors(): List<Point> =
-        // Note: Generate in reading order!
-        listOf(
-            Point(x, y - 1),
-            Point(x - 1, y),
-            Point(x + 1, y),
-            Point(x, y + 1)
-        ).filter { it.x >= 0 && it.y >= 0 }
-
-    fun isNeighbourWith(other: Point): Boolean {
-        return other in this.cardinalNeighbors()
-    }
-
-    override fun compareTo(other: Point): Int =
-        when {
-            y < other.y -> -1
-            y > other.y -> 1
-            x < other.x -> -1
-            x > other.x -> 1
-            else -> 0
-        }
-}
 
 
 

@@ -16,7 +16,7 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
 
         val antennas = extractAntennas(data)
 
-        val grid = Grid.of(data)
+        val grid = SimpleGrid.of(data)
 
         fun getAntinodesFor(a: Point, b: Point): List<Point> {
             val deltaX = b.x - a.x
@@ -26,7 +26,7 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
                 Point(a.y - deltaY, a.x - deltaX),
                 Point(b.y + deltaY, b.x + deltaX)
             )
-                .filter { point -> grid.isValid(point) }
+                .filter { point -> grid.contains(point) }
         }
 
         return antennas.flatMap { (_, positions) ->
@@ -39,9 +39,9 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
     }
 
     private fun extractAntennas(data: String): Map<Char, List<Point>> {
-        val antennas = Grid.of(data).toMap()
+        val antennas = SimpleGrid.of(data).entries
             .filter { (_, value) -> value != '.' }
-            .map { (position, value) -> Pair(value, Point(position.first, position.second)) }
+            .map { (position, value) -> Pair(value, position) }
             .groupBy({ value -> value.first }) { value -> value.second }
 
         return antennas
@@ -51,7 +51,7 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
 
         val antennas = extractAntennas(data)
 
-        val grid = Grid.of(data)
+        val grid = SimpleGrid.of(data)
 
         fun getAntinodesFor(a: Point, b: Point): List<Point> {
             val deltaX = b.x - a.x
@@ -59,13 +59,13 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
 
             val antinodes = mutableListOf<Point>()
             var aAntinode = a.copy()
-            while (grid.isValid(aAntinode)) {
+            while (grid.contains(aAntinode)) {
                 antinodes.add(aAntinode)
                 aAntinode = Point(aAntinode.x - deltaX, aAntinode.y - deltaY)
             }
 
             var bAntinode = b.copy()
-            while (grid.isValid(bAntinode)) {
+            while (grid.contains(bAntinode)) {
                 antinodes.add(bAntinode)
                 bAntinode = Point(bAntinode.x + deltaX, bAntinode.y + deltaY)
             }
