@@ -30,6 +30,7 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
     }
 
     // Dijkstra's algorithm to find all the shortest paths from S to E
+    // https://www.redblobgames.com/pathfinding/a-star/implementation.html#python-dijkstra
     private fun SimpleGrid<Char>.dijkstra(): Pair<Int, Set<Point>> {
         val queue = PriorityQueue<Path>(compareBy { path -> path.score })
         val start = findOne { it == 'S' }

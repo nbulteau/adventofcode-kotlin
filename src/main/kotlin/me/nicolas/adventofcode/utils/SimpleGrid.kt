@@ -37,7 +37,6 @@ class SimpleGrid<T>(
     val entries: Map<Point, T> = data
 
     val rows = matrix.indices
-
     val columns = matrix.first().indices
 
     var height = matrix.size
