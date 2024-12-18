@@ -33,10 +33,11 @@ class Day17(year: Int, day: Int, title: String = "Chronospatial Computer") : Adv
     fun partTwoBruteForce(data: String): Long {
         val (_, program) = parseInput(data)
 
-        return LongStream.range(0L, 256).filter { registerValue ->
+        return LongStream.range(0L, Long.MAX_VALUE).filter { registerValue ->
+            println("Trying Register A: $registerValue")
             val computer = Computer(registerA = registerValue, registerB = 0L, registerC = 0L)
             val output = computer.run(program)
-            println("Register A: $registerValue, Output: $output, binary: ${output.joinToString("") { it.toString(2) }}")
+            // println("Register A: $registerValue, Output: $output, binary: ${output.joinToString("") { it.toString(2) }}")
             if (output == program) {
                 println("Solution Register A: $registerValue")
             }
@@ -108,7 +109,7 @@ class Day17(year: Int, day: Int, title: String = "Chronospatial Computer") : Adv
             8 * findAMatchingOutput(program, target.subList(1, target.size))
         }
 
-        while (Computer(aStart, 0, 0).run(program) != target) {
+        while (Computer(registerA = aStart, registerB = 0, registerC = 0).run(program) != target) {
             aStart++
         }
 
