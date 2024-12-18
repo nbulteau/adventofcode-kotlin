@@ -42,7 +42,6 @@ class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val
 
         var cutSize = nbBytes
 
-        // Simulate the first nbBytes bytes falling onto the grid
         coordinates.take(cutSize).forEach { coord ->
             grid[Point(coord.y, coord.x)] = '#'
         }
