@@ -15,17 +15,11 @@ fun main() {
 class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val nbBytes: Int = 1024) :
     AdventOfCodeDay(year, day, title) {
 
-    private val directions = arrayOf(
-        Pair(0, 1),
-        Pair(0, -1),
-        Pair(1, 0),
-        Pair(-1, 0)
-    )
-
     fun partOne(data: String): Int {
-        val grid = SimpleGrid(gridSize, gridSize)
-        val coordinates = data.lines().map {
-            val (x, y) = it.split(",").map { it.toInt() }
+        val grid = SimpleGrid(gridSize)
+
+        val coordinates = data.lines().map { line ->
+            val (x, y) = line.split(",").map { it.toInt() }
             Point(x, y)
         }
 
@@ -35,16 +29,16 @@ class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val
         }
 
         // BFS to find the shortest path
-        return bfs(grid, Point(0, 0), Point(gridSize - 1, gridSize - 1), directions)
+        return bfs(grid, Point(0, 0), Point(gridSize - 1, gridSize - 1))
     }
 
     fun partTwo(data: String): String {
-        val coordinates = data.lines().map {
-            val (x, y) = it.split(",").map { it.toInt() }
+        val coordinates = data.lines().map { line ->
+            val (x, y) = line.split(",").map { it.toInt() }
             Point(x, y)
         }
 
-        val grid = SimpleGrid(gridSize, gridSize)
+        val grid = SimpleGrid(gridSize)
 
         var cutSize = nbBytes
 
@@ -58,7 +52,7 @@ class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val
             grid[Point(corrupted.y, corrupted.x)] = '#'
 
             // BFS to find the shortest path
-            val steps = bfs(grid, Point(0, 0), Point(gridSize - 1, gridSize - 1), directions)
+            val steps = bfs(grid, Point(0, 0), Point(gridSize - 1, gridSize - 1))
             if (steps == -1) {
                 break
             }
@@ -71,7 +65,7 @@ class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val
         return "${blockingCoordinate.x},${blockingCoordinate.y}"
     }
 
-    private fun bfs(grid: SimpleGrid<Char>, start: Point, end: Point, directions: Array<Pair<Int, Int>>): Int {
+    private fun bfs(grid: SimpleGrid<Char>, start: Point, end: Point): Int {
         val queue = LinkedList<Pair<Point, Int>>()
         val visited = mutableSetOf<Point>()
 
@@ -85,10 +79,8 @@ class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val
                 return steps
             }
 
-            for (direction in directions) {
-                val next = current + direction
-
-                if (next in grid.points && next !in visited && grid[next] != '#') {
+            for (next in current.cardinalNeighbors()) {
+                if (grid.contains(next) && next !in visited && grid[next] != '#') {
                     queue.add(Pair(next, steps + 1))
                     visited.add(next)
                 }

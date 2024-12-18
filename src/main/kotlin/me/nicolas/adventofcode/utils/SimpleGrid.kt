@@ -86,4 +86,6 @@ class SimpleGrid<T>(
 
 }
 
+fun SimpleGrid(size: Int) = SimpleGrid(Array(size) { Array(size) { '.' } })
+
 fun SimpleGrid(width: Int, height: Int) = SimpleGrid(Array(height) { Array(width) { '.' } })
