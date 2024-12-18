@@ -8,7 +8,7 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
 
-    operator fun plus(pair: Pair<Int, Int>) = Point(x + pair.first, y + pair.second)
+    operator fun plus(delta: Pair<Int, Int>) = Point(x + delta.first, y + delta.second)
 
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
 
