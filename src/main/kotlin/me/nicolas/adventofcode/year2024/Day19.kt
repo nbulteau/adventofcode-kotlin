@@ -5,7 +5,7 @@ import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 19: ---
+// --- Day 19:Linen Layout ---
 // https://adventofcode.com/2024/day/19
 fun main() {
     val data = readFileDirectlyAsText("/year2024/day19/data.txt")
@@ -14,7 +14,7 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day19(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day19(year: Int, day: Int, title: String = "Linen Layout") : AdventOfCodeDay(year, day, title) {
     fun partOne(data: String): Int {
         val (patterns, designs) = parseInput(data)
 
@@ -27,6 +27,7 @@ class Day19(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         return designs.sumOf { design -> countWaysToConstructDesign(design, patterns) }
     }
 
+    // Return true if the design can be constructed using the patterns
     private fun canConstructDesign(design: String, patterns: List<String>, cache: MutableMap<String, Boolean> = mutableMapOf()): Boolean {
         if (design.isEmpty()) {
             return true
@@ -49,13 +50,7 @@ class Day19(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         return false
     }
 
-    private fun parseInput(data: String): Pair<List<String>, List<String>> {
-        val lines = data.lines()
-        val patterns = lines[0].split(", ").map { it.trim() }
-        val designs = lines.drop(2).map { it.trim() }
-        return Pair(patterns, designs)
-    }
-
+    // Return the number of ways to construct the design using the patterns
     private fun countWaysToConstructDesign(design: String, patterns: List<String>, cache: MutableMap<String, Long> = mutableMapOf()): Long {
         if (design.isEmpty()) {
             return 1
@@ -73,5 +68,13 @@ class Day19(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         cache[design] = count
 
         return count
+    }
+
+    private fun parseInput(data: String): Pair<List<String>, List<String>> {
+        val lines = data.lines()
+        val patterns = lines.first().split(", ").map { line -> line.trim() }
+        val designs = lines.drop(2).map { line -> line.trim() }
+
+        return Pair(patterns, designs)
     }
 }
