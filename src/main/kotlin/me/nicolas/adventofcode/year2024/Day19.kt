@@ -21,6 +21,12 @@ class Day19(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         return designs.count { design -> canConstructDesign(design, patterns) }
     }
 
+    fun partTwo(data: String): Long {
+        val (patterns, designs) = parseInput(data)
+
+        return designs.sumOf { design -> countWaysToConstructDesign(design, patterns) }
+    }
+
     private fun canConstructDesign(design: String, patterns: List<String>, cache: MutableMap<String, Boolean> = mutableMapOf()): Boolean {
         if (design.isEmpty()) {
             return true
@@ -41,12 +47,6 @@ class Day19(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         cache[design] = false
 
         return false
-    }
-
-    fun partTwo(data: String): Long {
-        val (patterns, designs) = parseInput(data)
-
-        return designs.sumOf { design -> countWaysToConstructDesign(design, patterns) }
     }
 
     private fun parseInput(data: String): Pair<List<String>, List<String>> {
