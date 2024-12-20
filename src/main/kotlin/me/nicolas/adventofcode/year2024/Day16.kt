@@ -110,8 +110,6 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
         fun turnRight() = copy(score = score + 1000, direction = direction.turnRight())
 
         fun move() = copy(score = score + 1, points = points + (end + direction))
-
-
     }
 }
 
