@@ -12,6 +12,24 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+ * The code simulates bytes falling onto a grid and uses a breadth-first search (BFS) algorithm to find the shortest path from the top-left corner to the bottom-right corner.
+ *
+ * Part One:
+ * - The partOne function initializes a grid and parses the input data to get the coordinates of the bytes.
+ * - It simulates the first nbBytes bytes falling onto the grid by marking the corresponding coordinates as corrupted ('#').
+ * - It then uses the bfs function to find the shortest path from the top-left corner to the bottom-right corner and returns the number of steps.
+ *
+ * Part Two:
+ * - The partTwo function also initializes the grid and parses the input data.
+ * - It simulates bytes falling onto the grid one by one, checking after each byte if the path to the exit is still reachable using the bfs function.
+ * - If the path is blocked, it returns the coordinates of the byte that caused the blockage.
+ *
+ * BFS Function:
+ * - The bfs function performs a breadth-first search to find the shortest path from the start to the end point.
+ * - It uses a queue to explore each position and its neighbors, keeping track of the number of steps taken to reach each position.
+ * - If the end point is reached, it returns the number of steps; otherwise, it returns -1 if no path is found.
+ */
 class Day18(year: Int, day: Int, title: String = "", val gridSize: Int = 71, val nbBytes: Int = 1024) :
     AdventOfCodeDay(year, day, title) {
 

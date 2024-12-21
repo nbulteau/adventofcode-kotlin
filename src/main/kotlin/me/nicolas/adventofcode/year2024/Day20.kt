@@ -13,6 +13,29 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+A program must navigate a racetrack represented by a grid, starting at 'S' and ending at 'E'.
+The program can move up, down, left, or right, and it can cheat by passing through walls for up to 2 picoseconds in Part One and up to 20 picoseconds in Part Two.
+The goal is to find the shortest path from 'S' to 'E' and calculate the number of cheats that save a certain amount of time.
+
+Part One and Part Two Methods:
+- partOne and partTwo methods take the input data and a threshold value to calculate the number of cheats that save at least the given threshold of picoseconds.
+- Both methods use a breadth-first search (BFS) algorithm to find the shortest path from 'S' to 'E'.
+
+Breadth-First Search (BFS):
+- The bfs method performs a BFS to find the shortest path from the start to the end position.
+- It uses a queue to explore each position and its neighbors, keeping track of the number of steps taken to reach each position.
+- The BFS ensures that the program does not move into walls ('#').
+
+Cheat Calculation:
+- The partOne method calculates the number of cheats that save at least 100 picoseconds by considering cheats that last up to 2 picoseconds.
+- The partTwo method extends this calculation to consider cheats that last up to 20 picoseconds.
+- Both methods use a set of valid offsets to determine the positions that can be reached by cheating.
+
+Helper Methods:
+- manhattanDistance calculate the Manhattan distance from the origin (0,0) to the point.
+ */
+
 class Day20(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(data: String, threshold: Int = 100): Int {
@@ -86,5 +109,6 @@ class Day20(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         return visited
     }
 
+    // Calculate the Manhattan distance from the origin (0,0) to the point.
     private val Point.manhattanDistance get() = abs(x) + abs(y)
 }

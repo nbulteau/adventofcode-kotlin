@@ -15,6 +15,18 @@ fun main() {
     //prettyPrintPartTwo { day.partTwoBruteForce(data) }
 }
 
+/**
+ * The code simulates a chronospatial computer that executes a program to generate a sequence of outputs based on the input values.
+ *
+ * Part One
+ * Simulating Bytes Falling:
+ * - It simulates the first nbBytes bytes falling onto the grid by marking the corresponding coordinates as corrupted ('#').
+ * Finding Shortest Path:
+ * - It uses the bfs function to find the shortest path from the top-left corner (Point(0, 0)) to the bottom-right corner (Point(gridSize - 1, gridSize - 1)).
+ * - The function returns the number of steps required to reach the end point.
+ *
+ * Part Two
+ */
 class Day17(year: Int, day: Int, title: String = "Chronospatial Computer") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(data: String): String {

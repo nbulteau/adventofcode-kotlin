@@ -14,6 +14,26 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+The code determine how many designs can be constructed using a given set of towel patterns and then count the number of ways each design can be constructed.
+
+partOne Method:
+- Parses the input data to get the list of patterns and designs.
+- Counts how many designs can be constructed using the available patterns.
+- Uses the canConstructDesign method to check if a design can be constructed.
+
+partTwo Method:
+- Parses the input data to get the list of patterns and designs.
+- Sums up the number of ways each design can be constructed using the available patterns.
+- Uses the countWaysToConstructDesign method to count the number of ways to construct a design.
+
+Helper Methods:
+- canConstructDesign: Recursively checks if a design can be constructed using the available patterns.
+Uses a cache to store results for subproblems to avoid redundant calculations.
+- countWaysToConstructDesign: Recursively counts the number of ways to construct a design using the available patterns.
+Uses a cache to store results for subproblems to avoid redundant calculations.
+ */
+
 class Day19(year: Int, day: Int, title: String = "Linen Layout") : AdventOfCodeDay(year, day, title) {
     fun partOne(data: String): Int {
         val (patterns, designs) = parseInput(data)
