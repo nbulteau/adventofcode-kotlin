@@ -19,8 +19,8 @@ class Day22Test {
 
     val test3 = """
         1
-        10
-        100
+        2
+        3
         2024
     """.trimIndent()
 
@@ -31,6 +31,6 @@ class Day22Test {
 
     @Test
     fun partTwo() {
-        assertEquals(23, day.partTwo(test1))
+        assertEquals(23, day.partTwo(test3))
     }
 }
