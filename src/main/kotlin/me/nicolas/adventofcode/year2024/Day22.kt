@@ -12,22 +12,56 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+ * To solve this problem, we need to simulate the generation of secret numbers and their corresponding prices for each buyer.
+ * Then, we need to find the sequence of four consecutive price changes that maximizes the number of bananas we can get by selling at the right time.
+ *
+ * Part One
+ * - Generate Secret Numbers: For each buyer, generate 2000 secret numbers starting from their initial secret number using the given transformation rules.
+ * - Sum the 2000th Secret Numbers: Calculate the sum of the 2000th secret number for each buyer.
+ *
+ * Part Two
+ * - Generate Prices: For each buyer, convert the secret numbers to prices by taking the last digit of each secret number.
+ * - Calculate Price Changes: Calculate the changes in prices for each buyer.
+ * - Find the Best Sequence: Determine the sequence of four consecutive price changes that maximizes the total number of bananas we can get by selling at the right time.
+ */
+
 class Day22(year: Int, day: Int, title: String = "Monkey Market") : AdventOfCodeDay(year, day, title) {
 
-    fun generateSecretNumbers(start: Long, nbPasswords: Int): List<Long> {
-        val secretNumbers = mutableListOf<Long>()
+    fun partOne(data: String): Long {
+        val initialSecrets = data.lines().map { line -> line.toLong() }
+        val secretNumbers = initialSecrets.map { seed -> generateSecretNumbers(seed) }
+
+        return secretNumbers.sumOf { list -> list.last() }
+    }
+
+    fun partTwo(data: String): Int {
+        val initialSecrets = data.lines().map { line -> line.toLong() }
+        val secretNumbers = initialSecrets.map { seed -> generateSecretNumbers(seed) }
+
+        val sequenceForHighestPrice = secretNumbers
+            .flatMap { list -> list.transformSecretNumbers() }
+            .groupBy { (sequence, _) -> sequence }
+            .mapValues { (_, values) -> values.sumOf { (_, count) -> count } }
+
+        return sequenceForHighestPrice
+            .maxBy { (_, value) -> value }.value
+    }
+
+    private fun generateSecretNumbers(start: Long): List<Long> {
+        val secretNumbers = mutableListOf(start)
         var current = start
-        repeat(nbPasswords) {
-            secretNumbers.add(current)
+        repeat(times = 2000) {
             current = nextSecretNumber(current)
+            secretNumbers.add(current)
         }
         return secretNumbers
     }
 
-    private val memo = mutableMapOf<Long, Long>()
+    private val cache = mutableMapOf<Long, Long>()
 
     private fun nextSecretNumber(secret: Long): Long {
-        return memo.computeIfAbsent(secret) { current ->
+        return cache.computeIfAbsent(secret) { current ->
             var nextSecret = current
             nextSecret = (nextSecret xor (nextSecret * 64)) % 16777216
             nextSecret = (nextSecret xor (nextSecret / 32)) % 16777216
@@ -36,37 +70,12 @@ class Day22(year: Int, day: Int, title: String = "Monkey Market") : AdventOfCode
         }
     }
 
-    fun partOne(data: String, nbPasswords: Int = 2001): Long {
-        val initialSecrets = data.lines().map { line -> line.toLong() }
-
-        return initialSecrets.sumOf { seed ->
-            generateSecretNumbers(seed, nbPasswords).last()
-        }
-    }
-
-    fun partTwo(data: String, nbPasswords: Int = 2001): Int {
-
-        // Generate the sequence of differences between each pair of consecutive numbers in the sequence.
-        val sequenceForHighestPrice = data.lines()
-            .flatMap { line ->
-                generateSecretNumbers(line.toLong(), nbPasswords)
-                    .map { it.toInt() % 10 }
-                    .zipWithNext { a, b -> b to (b - a) }
-                    .windowed(4) { list ->
-                        list.map { it.second } to list.last().first
-                    }
-                    .distinctBy { (d, _) -> d }
+    // processes the list of secret numbers to generate sequences of differences and filters them to ensure uniqueness
+    private fun List<Long>.transformSecretNumbers(): List<Pair<List<Int>, Int>> =
+        this.map { secret -> secret.toInt() % 10 }
+            .zipWithNext { a, b -> b to (b - a) }
+            .windowed(4) { list ->
+                list.map { pair -> pair.second } to list.last().first
             }
-
-
-        // Group the sequenceForHighestPrice list by the first element of each pair (sequence, _).
-        val groupedSequences = sequenceForHighestPrice.groupBy { (sequence, _) -> sequence }
-            // Sum the counts for each group.
-            .mapValues { (_, values) -> values.sumOf { (_, count) -> count } }
-
-        // Get the maximum value from the map of grouped sequences
-        val bestValue = groupedSequences.maxByOrNull { (_, value) -> value }?.value
-
-        return bestValue ?: 0
-    }
+            .distinctBy { (list, _) -> list }
 }

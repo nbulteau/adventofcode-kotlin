@@ -12,6 +12,21 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+ * To solve this problem, we need to find all the shortest paths from the start tile 'S' to the end tile 'E' in the maze.
+ * We can use Dijkstra's algorithm to achieve this, as it is well-suited for finding the shortest path in a weighted graph.
+ * In this case, the weights are the scores associated with moving forward (1 point) and turning (1000 points).
+ *
+ * Part One: Finding the Lowest Score
+ * - Parse the Input: Read the maze from the input file and convert it into a grid.
+ * - Initialize Dijkstra's Algorithm: Start from the 'S' tile facing East and use a priority queue to explore the paths.
+ * - Explore Paths: For each path, calculate the score for moving forward, turning left, and turning right. Add these new paths to the priority queue.
+ * - Track Scores: Keep track of the minimum score to reach the 'E' tile.
+ *
+ * Part Two: Finding All Best Paths
+ * - Run Dijkstra's Algorithm: As in Part One, but this time, keep track of all the tiles that are part of the best paths.
+ * - Mark Best Path Tiles: Once the shortest path(s) are found, mark all the tiles that are part of these paths.
+ */
 class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCodeDay(year, day, title) {
 
 
