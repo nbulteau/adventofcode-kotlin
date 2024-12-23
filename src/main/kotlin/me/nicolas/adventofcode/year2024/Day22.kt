@@ -5,6 +5,7 @@ import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
+// --- Day 22: Monkey Market ---
 fun main() {
     val data = readFileDirectlyAsText("/year2024/day22/data.txt")
     val day = Day22(2024, 22)
