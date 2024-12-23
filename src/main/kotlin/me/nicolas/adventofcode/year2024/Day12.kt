@@ -11,7 +11,8 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day12(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+
+class Day12(year: Int, day: Int, title: String = "Garden Groups") : AdventOfCodeDay(year, day, title) {
 
     private enum class Side { UP, DOWN, LEFT, RIGHT }
 
@@ -40,14 +41,14 @@ class Day12(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
 
             // Group the sorted points by their x or y coordinates depending on the side
             when (side) {
-                Side.UP, Side.DOWN -> sorted.groupBy { point -> point.x }.values.sumOf { points ->
-                    points.zipWithNext().count { (pointA, pointB) ->
+                Side.UP, Side.DOWN -> sorted.groupBy { point -> point.x }.values.sumOf { pointList ->
+                    pointList.zipWithNext().count { (pointA, pointB) ->
                         pointB.y - pointA.y != 1
                     } + 1
                 }
 
-                Side.LEFT, Side.RIGHT -> sorted.groupBy { point -> point.y }.values.sumOf { points ->
-                    points.zipWithNext().count { (pointA, pointB) ->
+                Side.LEFT, Side.RIGHT -> sorted.groupBy { point -> point.y }.values.sumOf { pointList ->
+                    pointList.zipWithNext().count { (pointA, pointB) ->
                         pointB.x - pointA.x != 1
                     } + 1
                 }

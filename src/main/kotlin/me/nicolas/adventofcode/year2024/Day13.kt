@@ -14,6 +14,15 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+ * The code simulates a game where you have to press two buttons to win a prize.
+ *
+ * Part One
+ * - It calculates the minimum number of tokens required to win the prize.
+ *
+ * Part Two
+ * - It calculates the minimum number of tokens required to win the prize after adding 10000000000000 to each prize's X and Y coordinates.
+ */
 class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
 
     private data class Button(val dx: Long, val dy: Long)
@@ -27,7 +36,7 @@ class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
             for (bPresses in 0..100) {
                 val finalX = aPresses * buttonA.dx + bPresses * buttonB.dx
                 val finalY = aPresses * buttonA.dy + bPresses * buttonB.dy
-                if (finalX.toLong() == prize.x && finalY.toLong() == prize.y) {
+                if (finalX == prize.x && finalY == prize.y) {
                     // Calculate the total number of tokens required
                     val tokens = aPresses * 3 + bPresses
                     minTokens = minOf(minTokens, tokens)
@@ -66,7 +75,7 @@ class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
     private fun parseInput(input: List<String>): List<Triple<Button, Button, Prize>> {
         val machines = mutableListOf<Triple<Button, Button, Prize>>()
 
-        for (i in 0 until input.size step 4) {
+        for (i in input.indices step 4) {
             val buttonAConfig = input[i].split("Button A: X+", ", Y+").drop(1).map { it.toLong() }
             val buttonBConfig = input[i + 1].split("Button B: X+", ", Y+").drop(1).map { it.toLong() }
             val prizeLocation = input[i + 2].split("Prize: X=", ", Y=").drop(1).map { it.toLong() }

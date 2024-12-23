@@ -11,6 +11,9 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+/**
+ *  It simulates the movement of a robot in a warehouse, pushing boxes around according to a sequence of instructions.
+ */
 class Day15(year: Int, day: Int, title: String = "Warehouse Woes") : AdventOfCodeDay(year, day, title) {
 
     private val directions = mapOf(
