@@ -20,6 +20,11 @@ fun readFileDirectlyAsText(fileName: String): String {
     return File("$path/$fileName").readText(Charsets.UTF_8)
 }
 
+fun writeFileDirectlyAsText(fileName: String, content: String) {
+    val path = Paths.get("src/main/resources/me/nicolas/adventofcode").toAbsolutePath().toString()
+    File("$path/$fileName").writeText(content)
+}
+
 /** pretty print the result of a function with the time it took to execute */
 fun prettyPrint(message: String, timedResponse: TimedValue<Any>) {
     println("$message ${blue(timedResponse.value)} (${green(timedResponse.duration.toDouble(DurationUnit.MILLISECONDS))} ms)")

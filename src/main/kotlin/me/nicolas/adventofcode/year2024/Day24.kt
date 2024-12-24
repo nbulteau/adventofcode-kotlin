@@ -1,9 +1,6 @@
 package me.nicolas.adventofcode.year2024
 
-import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.prettyPrintPartOne
-import me.nicolas.adventofcode.utils.prettyPrintPartTwo
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.*
 
 // --- Day 24: Crossed Wires ---
 // https://adventofcode.com/2024/day/24
@@ -36,10 +33,75 @@ class Day24(year: Int, day: Int, title: String = "Crossed Wires") : AdventOfCode
 
     fun partTwo(data: String): String {
         val (_, gateInstructions) = parseInput(data)
+        generateDotGraph(gateInstructions)
 
         val swapped = swapWiresForFullAdder(gateInstructions)
 
         return swapped.sorted().joinToString(",")
+    }
+
+    private fun generateDotGraph(gateInstructions: List<GateInstruction>) {
+        val wires = gateInstructions.flatMap { instruction ->
+            listOf(instruction.inputs.first(), instruction.inputs.last(), instruction.output)
+        }.toSet()
+
+        val dot = StringBuilder()
+        dot.append("digraph G {\n")
+        dot.append("\tsubgraph cluster_x {\n")
+        wires.filter { wire -> wire.startsWith("x") }.sorted().forEach { wire ->
+            dot.append("\t\t$wire[shape=square,style=filled,fillcolor=deepskyblue]\n")
+        }
+        dot.append("\t}\n")
+        dot.append("\tsubgraph cluster_y {\n")
+        wires.filter { wire -> wire.startsWith("y") }.sorted().forEach { wire ->
+            dot.append("\t\t$wire[shape=square,style=filled,fillcolor=dodgerblue]\n")
+        }
+        dot.append("\t}\n")
+        dot.append("\tsubgraph cluster_z {\n")
+        val zNodes = wires.filter { wire -> wire.startsWith("z") }.sorted()
+        zNodes.forEach { wire ->
+            dot.append("\t\t$wire[style=filled,fillcolor=purple,fontcolor=white]\n")
+        }
+        dot.append("\t\t{ rank=same;")
+        zNodes.forEach { wire -> dot.append(" $wire;") }
+        dot.append("}\n")
+
+        dot.append("\t}\n")
+
+        wires.filter { wire -> !wire.startsWith("x") && !wire.startsWith("y") && !wire.startsWith("z") }
+            .sorted().forEach { wire ->
+                dot.append("\t$wire[shape=square,style=filled,fillcolor=lightgrey]\n")
+            }
+        dot.append("\n\n")
+
+        gateInstructions.forEach { instruction ->
+            dot.append("${instruction.inputs[0]}_${instruction.operation}_${instruction.inputs[1]}")
+            dot.append(
+                when (instruction.operation) {
+                    "AND" -> {
+                        "[label=AND,style=filled,shape=invtrapezium,fillcolor=yellow]\n"
+                    }
+
+                    "XOR" -> {
+                        "[label=XOR,style=filled,shape=invtrapezium,fillcolor=red]\n"
+                    }
+
+                    "OR" -> {
+                        "[label=OR,style=filled,shape=invtrapezium,fillcolor=green]\n"
+                    }
+
+                    else -> {}
+                }
+            )
+
+            dot.append("${instruction.inputs[0]}_${instruction.operation}_${instruction.inputs[1]} -> ${instruction.output}\n")
+            dot.append("${instruction.inputs[0]} -> ${instruction.inputs[0]}_${instruction.operation}_${instruction.inputs[1]}\n")
+            dot.append("${instruction.inputs[1]} -> ${instruction.inputs[0]}_${instruction.operation}_${instruction.inputs[1]}\n")
+        }
+        dot.append("}")
+
+        // write the dot file
+        writeFileDirectlyAsText("/year2024/day24/graph.dot", dot.toString())
     }
 
     /**
@@ -65,7 +127,7 @@ class Day24(year: Int, day: Int, title: String = "Crossed Wires") : AdventOfCode
         }.toSet()
         println("${wires.size} distinct wires")
         val bitCount = (0..64).first { i -> ("x" + i.toString().padStart(2, '0')) !in wires }
-        val lastZ = "z"+ bitCount.toString().padStart(2, '0')
+        val lastZ = "z" + bitCount.toString().padStart(2, '0')
 
         val swapped = mutableListOf<String>()
         var c0: String? = null
@@ -170,7 +232,7 @@ class Day24(year: Int, day: Int, title: String = "Crossed Wires") : AdventOfCode
         while (true) {
             var newValuesComputed = false
             for (instruction in gateInstructions) {
-                if (wireValues.containsKey(instruction.output)){
+                if (wireValues.containsKey(instruction.output)) {
                     continue
                 }
 
