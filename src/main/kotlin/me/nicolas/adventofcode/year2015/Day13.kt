@@ -17,25 +17,36 @@ fun main() {
 
 class Day13(year: Int, day: Int, title: String = "Knights of the Dinner Table") : AdventOfCodeDay(year, day, title) {
     fun partOne(data: String): Int {
-        val happinessMap = parseInput(data)
-        val guests = happinessMap.keys.flatMap { listOf(it.first, it.second) }.toSet()
+        val (guests, happinessMap) = parseInput(data)
 
         return findOptimalHappiness(guests, happinessMap)
     }
 
+    fun partTwo(data: String): Int {
+        val (guests, map) = parseInput(data)
+
+        val happinessMap = map.toMutableMap()
+        val me = "Me"
+        guests.forEach { guest ->
+            happinessMap[guest to me] = 0
+            happinessMap[me to guest] = 0
+        }
+
+        return findOptimalHappiness(guests + me, happinessMap)
+    }
+
     fun partOneOptimized(data: String): Int {
-        val happinessMap = parseInput(data)
-        val guests = happinessMap.keys.flatMap { listOf(it.first, it.second) }.toSet()
+        val (guests, happinessMap) = parseInput(data)
         val guestList = guests.toList()
-        val n = guestList.size
+        val guestListSize = guestList.size
 
         // Initialize memoization array with minimum integer values
-        val cache = Array(1 shl n) { IntArray(n) { Int.MIN_VALUE } }
+        val cache = Array(1 shl guestListSize) { IntArray(guestListSize) { Int.MIN_VALUE } }
 
         // Define a recursive function to calculate the maximum happiness
-        fun dp(mask: Int, last: Int): Int {
+        fun calculateMaxHappiness(mask: Int, last: Int): Int {
             // If all guests are seated, return the happiness of the last and first guest
-            if (mask == (1 shl n) - 1) {
+            if (mask == (1 shl guestListSize) - 1) {
                 return happinessMap.getOrDefault(guestList[last] to guestList[0], 0) +
                         happinessMap.getOrDefault(guestList[0] to guestList[last], 0)
             }
@@ -44,12 +55,12 @@ class Day13(year: Int, day: Int, title: String = "Knights of the Dinner Table") 
 
             var maxHappiness = Int.MIN_VALUE
             // Try seating each guest who is not yet seated
-            for (i in 0 until n) {
+            for (i in 0 until guestListSize) {
                 if (mask and (1 shl i) == 0) {
                     val nextMask = mask or (1 shl i)
                     val happiness = happinessMap.getOrDefault(guestList[last] to guestList[i], 0) +
                             happinessMap.getOrDefault(guestList[i] to guestList[last], 0) +
-                            dp(nextMask, i)
+                            calculateMaxHappiness(nextMask, i)
                     maxHappiness = maxOf(maxHappiness, happiness)
                 }
             }
@@ -60,33 +71,25 @@ class Day13(year: Int, day: Int, title: String = "Knights of the Dinner Table") 
 
         var maxHappiness = Int.MIN_VALUE
         // Start the recursive function for each guest
-        for (i in 0 until n) {
-            maxHappiness = maxOf(maxHappiness, dp(1 shl i, i))
+        for (i in 0 until guestListSize) {
+            maxHappiness = maxOf(maxHappiness, calculateMaxHappiness(1 shl i, i))
         }
         return maxHappiness
     }
 
-    fun partTwo(data: String): Int {
-        val happinessMap = parseInput(data).toMutableMap()
-        val guests = happinessMap.keys.flatMap { listOf(it.first, it.second) }.toSet().toMutableSet()
-        val me = "Me"
-        guests.forEach { guest ->
-            happinessMap[guest to me] = 0
-            happinessMap[me to guest] = 0
-        }
-        guests.add(me)
-        return findOptimalHappiness(guests, happinessMap)
-    }
-
     private val regex = """(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+).""".toRegex()
 
-    private fun parseInput(data: String): Map<Pair<String, String>, Int> {
-        return data.lines().mapNotNull { line ->
+    private fun parseInput(data: String): Pair<Set<String>, Map<Pair<String, String>, Int>> {
+        val happinessMap = data.lines().mapNotNull { line ->
             regex.matchEntire(line)?.destructured?.let { (person1, gainOrLose, units, person2) ->
                 val happiness = if (gainOrLose == "gain") units.toInt() else -units.toInt()
                 (person1 to person2) to happiness
             }
         }.toMap()
+
+        val guests = happinessMap.keys.flatMap { pair -> listOf(pair.first, pair.second) }.toSet()
+
+        return guests to happinessMap
     }
 
     // Find the optimal happiness by evaluating every possible seating arrangement.
