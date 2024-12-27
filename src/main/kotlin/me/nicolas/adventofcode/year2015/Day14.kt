@@ -48,12 +48,18 @@ class Day14(year: Int, day: Int, title: String = "Reindeer Olympics") : AdventOf
         }
     }
 
+    // Calculate the distance a reindeer can travel in a given time
     private fun calculateDistance(reindeer: Reindeer, totalTime: Int): Int {
+        // Calculate the time it takes for a full cycle of flying and resting.
         val cycleTime = reindeer.flyTime + reindeer.restTime
+        // Calculate the number of full cycles that can be completed in the given time.
         val fullCycles = totalTime / cycleTime
+        //Calculate the remaining time after accounting for the full cycles.
         val remainingTime = totalTime % cycleTime
+        // Calculate the effective flying time by taking the minimum of the remaining time and the flying time.
         val flyTime = fullCycles * reindeer.flyTime + minOf(remainingTime, reindeer.flyTime)
 
+        // Distance is the product of the effective flying time and the reindeer's speed.
         return flyTime * reindeer.speed
     }
 }
