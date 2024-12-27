@@ -40,6 +40,12 @@ fun prettyPrintPartTwo(message: String? = null,lambda: () -> Any) {
     prettyPrint("Part two answer ${message ?: ""} :", measureTimedValue { lambda() })
 }
 
+
+/** Generate all possible combinations of a list of elements
+ * Combinations: The order of the items does not matter.
+ * For example, the combinations of the set {A, B, C} taken 2 at a time are AB, AC, and BC.
+ * Each selection is considered the same regardless of order (i.e., AB is the same as BA).
+ */
 fun <T> Iterable<T>.combinations(length: Int): Sequence<List<T>> {
     val pool = this.toList()
     val n = pool.size
