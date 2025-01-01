@@ -78,8 +78,8 @@ class SimpleGrid<T>(
     operator fun contains(point: Point) = point.y in rows && point.x in columns
 
     override fun toString(): String {
-        return data.keys.chunked(width).joinToString("\n") {
-            it.map(::get).joinToString("")
+        return data.keys.chunked(width).joinToString("\n") { row ->
+            row.map(::get).joinToString("")
         }
     }
 
