@@ -4,6 +4,11 @@ import kotlin.math.abs
 
 data class Point(val x: Int, val y: Int) : Comparable<Point> {
 
+    val up by lazy { Point(x, y - 1) }
+    val down by lazy { Point(x, y + 1) }
+    val left by lazy { Point(x - 1, y) }
+    val right by lazy { Point(x + 1, y) }
+
     constructor(pair: Pair<Int, Int>) : this(pair.first, pair.second)
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)

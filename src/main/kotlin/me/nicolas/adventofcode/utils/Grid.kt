@@ -159,26 +159,6 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     /** Count the number of occurrences of a specific value in the grid */
     fun count(value: T): Int = map.values.count { it == value }
 
-    /** Flood fill the grid with a new value starting from a specific point */
-    fun floodFill(startPoint: Pair<Int, Int>, newValue: T): Grid<T> {
-        val originalValue = get(startPoint) ?: return this
-        val visited = mutableSetOf<Pair<Int, Int>>()
-        val queue = ArrayDeque<Pair<Int, Int>>()
-        queue.add(startPoint)
-
-        while (queue.isNotEmpty()) {
-            val current = queue.removeFirst()
-            if (current in visited || get(current) != originalValue) {
-                continue
-            }
-            this[current] = newValue
-            visited.add(current)
-            queue.addAll(getCardinalNeighbors(current))
-        }
-
-        return this
-    }
-
     /**
      * Display the grid (Debug purpose)
      * This function prints the grid to the console for debugging purposes.

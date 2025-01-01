@@ -1,17 +1,12 @@
 package me.nicolas.adventofcode.year2018
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-import kotlin.test.Ignore
-
 class Day17Test {
-    private val day = Day17(2018, 17, "Reservoir Research")
+    private val day = Day17(2018, 17)
 
-    @Ignore
-    @Test
-    fun `part one training`() {
-        val data = """
+    private val data = """
             x=495, y=2..7
             y=7, x=495..501
             x=501, y=3..7
@@ -21,6 +16,14 @@ class Day17Test {
             x=504, y=10..13
             y=13, x=498..504
         """.trimIndent()
+
+    @Test
+    fun partOne() {
         assertEquals(57, day.partOne(data))
+    }
+
+    @Test
+    fun partTwo() {
+        assertEquals(29, day.partTwo(data))
     }
 }

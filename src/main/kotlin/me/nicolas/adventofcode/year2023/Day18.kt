@@ -80,7 +80,6 @@ class Day18(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         return interiorSum + sumLengths
     }
 
-
     private fun parseDataPartOne(data: String): List<Pair<Direction, Long>> {
         return data.lines().map { line ->
             val parts = line.trim().split(" ")
@@ -118,6 +117,26 @@ class Day18(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         fun nextPoint(point: Pair<Int, Int>): Pair<Int, Int> {
             return Pair(point.first + dx, point.second + dy)
         }
+    }
+
+    /** Flood fill the grid with a new value starting from a specific point */
+    private fun Grid<Char>.floodFill(startPoint: Pair<Int, Int>, newValue: Char): Grid<Char> {
+        val originalValue = get(startPoint) ?: return this
+        val visited = mutableSetOf<Pair<Int, Int>>()
+        val queue = ArrayDeque<Pair<Int, Int>>()
+        queue.add(startPoint)
+
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+            if (current in visited || get(current) != originalValue) {
+                continue
+            }
+            this[current] = newValue
+            visited.add(current)
+            queue.addAll(getCardinalNeighbors(current))
+        }
+
+        return this
     }
 }
 
