@@ -12,11 +12,11 @@ class SimpleGrid<T>(
     companion object {
         // Create a SimpleGrid (SimpleGrid<Char>) from the data string (each line is a row)
         fun of(data: String): SimpleGrid<Char> {
-            return SimpleGrid(data.lines().map { it.toList().toTypedArray() }.toTypedArray())
+            return SimpleGrid(data.lines().map { line -> line.trim().toList().toTypedArray() }.toTypedArray())
         }
 
         fun intGrid(data: String): SimpleGrid<Int> {
-            return SimpleGrid(data.lines().map { it.toList().map { c -> c.toString().toInt() }.toTypedArray() }
+            return SimpleGrid(data.lines().map { line -> line.trim().toList().map { char -> char.toString().toInt() }.toTypedArray() }
                 .toTypedArray())
         }
     }
