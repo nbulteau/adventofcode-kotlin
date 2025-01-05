@@ -60,6 +60,8 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
         return map[Pair(x, y)]
     }
 
+    fun getOrDefault(pair: Pair<Int, Int>, defaultValue: Int): T = map.getOrDefault(pair, defaultValue) as T
+
     operator fun set(x: Int, y: Int, value: T) {
         map[Pair(x, y)] = value
     }
@@ -67,6 +69,7 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
     operator fun set(point: Pair<Int, Int>, value: T) {
         map[Pair(point.first, point.second)] = value
     }
+
 
     fun getRow(row: Int) = map.filter { it.key.first == row }.values.toList()
 
@@ -177,6 +180,7 @@ class Grid<T>(private val map: MutableMap<Pair<Int, Int>, T> = mutableMapOf()) {
         }
         println()
     }
+
 }
 
 
