@@ -33,12 +33,12 @@ class Day16(year: Int, day: Int, title: String = "Aunt Sue") : AdventOfCodeDay(y
 
     fun partOne(data: String): Int {
         val aunts = data.lines().map { line -> line.parseAunt() }
-        return aunts.first { matchesTickerTape(it) }.number
+        return aunts.first { aunt -> matchesTickerTape(aunt) }.number
     }
 
     fun partTwo(data: String): Int {
         val aunts = data.lines().map { line -> line.parseAunt() }
-        return aunts.first { matchesTickerTapeWithRanges(it) }.number
+        return aunts.first { aunt -> matchesTickerTapeWithRanges(aunt) }.number
     }
 
     private fun String.parseAunt(): Aunt {
