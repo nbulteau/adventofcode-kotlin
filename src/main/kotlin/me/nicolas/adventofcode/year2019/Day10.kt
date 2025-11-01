@@ -38,64 +38,95 @@ class Day10(year: Int, day: Int, title: String = "Monitoring Station") : AdventO
         val asteroids = grid.findAll('#')
 
         // Find the asteroid with the maximum number of visible asteroids
-        val (bestLocation, visibleCount) = asteroids.findBestLocation()
-        println("Best location: $bestLocation can detect $visibleCount asteroids")
+        val (_, visibleCount) = asteroids.findBestLocation()
 
         return visibleCount
     }
 
+    /**
+     * Part Two: Find the 200th asteroid to be vaporized by the rotating laser.
+     *
+     * The laser starts pointing up and rotates clockwise, vaporizing one asteroid per direction
+     * per rotation. If multiple asteroids are in the same direction, only the closest is vaporized
+     * in each rotation, then the laser continues to the next direction.
+     *
+     * Strategy:
+     * 1. Find the best monitoring station location (from Part One)
+     * 2. Group all other asteroids by their direction from the station
+     * 3. Sort asteroids within each direction by distance (closest first)
+     * 4. Sort all directions by angle (starting from up = 0°, going clockwise)
+     * 5. Simulate the laser rotation, vaporizing one asteroid per direction per rotation
+     * 6. Return the coordinate encoding (X*100 + Y) of the 200th vaporized asteroid
+     *
+     * @return X*100 + Y coordinate encoding of the 200th vaporized asteroid
+     */
     fun partTwo(data: String): Int {
         val grid = SimpleGrid.of(data)
         val asteroids = grid.findAll('#')
 
-        // Find the best location for the monitoring station
+        // Step 1: Find the best location for the monitoring station (same as Part One)
         val (station, _) = asteroids.findBestLocation()
-        println("Station location: $station")
 
-        // Get all asteroids except the station
+        // Step 2: Get all asteroids except the station itself (these are our targets)
         val targets = asteroids.filter { it != station }
 
-        // Group asteroids by their direction from the station
+        // Step 3: Group asteroids by their normalized direction vector from the station
+        // Asteroids in the same direction (collinear) will be in the same group
+        // Example: From station at (5,5), asteroids at (3,5) and (1,5) both have direction (-1,0)
         val asteroidsByDirection = targets.groupBy { asteroid ->
             getDirection(station, asteroid)
         }
 
-        // Sort asteroids in each direction by distance (closest first)
+        // Step 4: Within each direction, sort asteroids by distance from station (closest first)
+        // This ensures we vaporize the closest asteroid first in each direction
+        // We use mutableList so we can remove asteroids as they're vaporized
         val sortedByDirection = asteroidsByDirection.mapValues { (_, asteroidList) ->
             asteroidList.sortedBy { asteroid ->
                 distance(station, asteroid)
             }.toMutableList()
         }
 
-        // Calculate angles for each direction and sort them clockwise from up
-        // up = angle 0, right = 90, down = 180, left = 270
+        // Step 5: Sort all directions by their angle from "up", going clockwise
+        // The laser starts pointing up (angle 0°) and rotates clockwise
+        // up = 0°, right = 90°, down = 180°, left = 270°
         val directionsByAngle = sortedByDirection.keys.sortedBy { direction ->
             calculateAngle(direction)
         }
 
-        // Vaporize asteroids in order
+        // Step 6: Simulate the laser vaporization process
         val vaporized = mutableListOf<Point>()
 
+        // Continue rotating until all asteroids are vaporized
         while (vaporized.size < targets.size) {
-            // One full rotation
+            // One full rotation: visit each direction once
             for (direction in directionsByAngle) {
                 val asteroidList = sortedByDirection[direction]!!
+
+                // If there are still asteroids in this direction
                 if (asteroidList.isNotEmpty()) {
-                    // Vaporize the closest asteroid in this direction
+                    // Vaporize the closest asteroid (first in the sorted list)
                     val asteroid = asteroidList.removeAt(0)
                     vaporized.add(asteroid)
 
+                    // Check if this is the 200th asteroid
                     if (vaporized.size == 200) {
                         println("200th vaporized asteroid at problem coords: (${asteroid.y}, ${asteroid.x})")
-                        // SimpleGrid stores coordinates with swapped convention:
-                        // Problem coordinates (X, Y) = (col, row) map to Point(x=row, y=col)
-                        // So to convert back: problem X = asteroid.y, problem Y = asteroid.x
+
+                        // Convert Point coordinates back to problem coordinates:
+                        // SimpleGrid stores Point(x=row, y=col), but problem uses (X=col, Y=row)
+                        // So: problem X = asteroid.y, problem Y = asteroid.x
+                        // Answer format: X * 100 + Y
                         return asteroid.y * 100 + asteroid.x
                     }
                 }
+                // If the list is empty, the laser just passes through this direction
+                // and continues to the next direction
             }
+            // After one full rotation, loop back to start another rotation
+            // (Some directions may now be empty if all asteroids in that direction were vaporized)
         }
 
+        // Should never reach here if there are at least 200 asteroids
         return 0
     }
 
