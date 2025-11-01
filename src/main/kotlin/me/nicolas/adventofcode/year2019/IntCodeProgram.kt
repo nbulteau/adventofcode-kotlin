@@ -5,6 +5,8 @@ class IntCodeProgram(program: List<Long>) {
     // Use a map for sparse memory to support large memory with default 0 values
     private val memory = mutableMapOf<Long, Long>()
     private var relativeBase = 0L
+    private var index = 0L
+    private var halted = false
 
     init {
         program.forEachIndexed { index, value ->
@@ -13,7 +15,6 @@ class IntCodeProgram(program: List<Long>) {
     }
 
     fun execute(inputs: MutableList<Long>): List<Long> {
-        var index = 0L
         val output = mutableListOf<Long>()
 
         var instruction = getMemory(index)
@@ -29,7 +30,10 @@ class IntCodeProgram(program: List<Long>) {
                 7 -> lessThanOperation(index, instruction)
                 8 -> equalsOperation(index, instruction)
                 9 -> adjustRelativeBaseOperation(index, instruction)
-                99 -> break
+                99 -> {
+                    halted = true
+                    break
+                }
                 else -> throw IllegalArgumentException("Unknown operation: $operation")
             }
             instruction = getMemory(index)
@@ -37,6 +41,37 @@ class IntCodeProgram(program: List<Long>) {
 
         return output
     }
+
+    fun executeUntilOutput(inputs: MutableList<Long>): Long? {
+        var instruction = getMemory(index)
+        while (true) {
+            val operation = (instruction % 100).toInt()
+            when (operation) {
+                1 -> index = addOperation(index, instruction)
+                2 -> index = multiplyOperation(index, instruction)
+                3 -> index = inputOperation(index, instruction, inputs)
+                4 -> {
+                    val parameterMode = (instruction / 100 % 10).toInt()
+                    val output = getValue(parameterMode, index + 1)
+                    index += 2
+                    return output
+                }
+                5 -> index = jumpIfTrueOperation(index, instruction)
+                6 -> index = jumpIfFalseOperation(index, instruction)
+                7 -> index = lessThanOperation(index, instruction)
+                8 -> index = equalsOperation(index, instruction)
+                9 -> index = adjustRelativeBaseOperation(index, instruction)
+                99 -> {
+                    halted = true
+                    return null
+                }
+                else -> throw IllegalArgumentException("Unknown operation: $operation")
+            }
+            instruction = getMemory(index)
+        }
+    }
+
+    fun isHalted(): Boolean = halted
 
     private fun adjustRelativeBaseOperation(index: Long, instruction: Long): Long {
         val parameterMode = (instruction / 100 % 10).toInt()
