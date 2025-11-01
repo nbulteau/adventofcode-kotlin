@@ -14,12 +14,12 @@ import kotlin.time.ExperimentalTime
 fun main() {
     val data = readFileDirectlyAsText("/year2019/day10/data.txt")
 
-    val day = Day10(2019, 10, "Monitoring Station")
+    val day = Day10(2019, 10)
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day10(year: Int, day: Int, title: String = "Monitoring Station") : AdventOfCodeDay(year, day, title) {
 
     /**
      * Part One: Find the best location for a monitoring station.
@@ -142,7 +142,7 @@ class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
      *
      * @return Pair of ( the best asteroid location, number of visible asteroids from that location)
      */
-    private fun  List<Point>.findBestLocation(): Pair<Point, Int> {
+    private fun List<Point>.findBestLocation(): Pair<Point, Int> {
         return this.maxByOrNull { asteroid ->
             countVisibleAsteroids(asteroid)
         }?.let { point -> point to countVisibleAsteroids(point) } ?: (Point(0, 0) to 0)
@@ -161,7 +161,7 @@ class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
      * @param station The point from which we're observing
      * @return The number of unique directions, which equals the number of visible asteroids
      */
-    private fun  List<Point>.countVisibleAsteroids(station: Point): Int {
+    private fun List<Point>.countVisibleAsteroids(station: Point): Int {
         // For each other asteroid, calculate the direction vector (reduced by GCD)
         // Count unique directions - each direction means we can see at least one asteroid
         return this
