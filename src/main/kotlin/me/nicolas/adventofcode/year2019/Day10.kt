@@ -14,7 +14,7 @@ import kotlin.time.ExperimentalTime
 fun main() {
     val data = readFileDirectlyAsText("/year2019/day10/data.txt")
 
-    val day = Day10(2019, 11, "Space Police")
+    val day = Day10(2019, 10, "Monitoring Station")
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
