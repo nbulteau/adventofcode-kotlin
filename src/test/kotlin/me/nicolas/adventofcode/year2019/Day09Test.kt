@@ -43,7 +43,7 @@ class Day09Test {
     fun `solve part 1`() {
         val data = readFileDirectlyAsText("/year2019/day09/data.txt")
         val day09 = Day09(data)
-        val result = day09.part1()
+        val result = day09.partOne()
         println("Part 1 BOOST keycode: $result")
         assertTrue(result > 0)
     }
@@ -52,7 +52,7 @@ class Day09Test {
     fun `solve part 2`() {
         val data = readFileDirectlyAsText("/year2019/day09/data.txt")
         val day09 = Day09(data)
-        val result = day09.part2()
+        val result = day09.partTwo()
         println("Part 2 coordinates: $result")
         assertTrue(result > 0)
     }
