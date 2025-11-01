@@ -17,9 +17,7 @@ fun main() {
 
 class Day09(private val input: String) {
 
-    private fun parseProgram(): List<Long> {
-        return input.trim().split(",").map { it.toLong() }
-    }
+    private fun parseProgram() = input.trim().split(",").map { it.toLong() }
 
     /**
      * Part 1: Run the BOOST program in test mode
