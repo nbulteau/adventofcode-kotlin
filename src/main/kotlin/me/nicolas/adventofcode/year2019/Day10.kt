@@ -1,5 +1,6 @@
 package me.nicolas.adventofcode.year2019
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.Point
 import me.nicolas.adventofcode.utils.SimpleGrid
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
@@ -13,15 +14,12 @@ import kotlin.time.ExperimentalTime
 fun main() {
     val data = readFileDirectlyAsText("/year2019/day10/data.txt")
 
-    val day = Day10(data)
-    prettyPrintPartOne { day.partOne() }
-    prettyPrintPartTwo { day.partTwo() }
+    val day = Day10(2019, 11, "Space Police")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-internal class Day10(data: String) {
-
-    private val grid = SimpleGrid.of(data)
-    private val asteroids = grid.findAll('#')
+class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
 
     /**
      * Part One: Find the best location for a monitoring station.
@@ -35,17 +33,23 @@ internal class Day10(data: String) {
      *
      * @return The number of asteroids visible from the best location
      */
-    fun partOne(): Int {
+    fun partOne(data: String): Int {
+        val grid = SimpleGrid.of(data)
+        val asteroids = grid.findAll('#')
+
         // Find the asteroid with the maximum number of visible asteroids
-        val (bestLocation, visibleCount) = findBestLocation()
+        val (bestLocation, visibleCount) = asteroids.findBestLocation()
         println("Best location: $bestLocation can detect $visibleCount asteroids")
 
         return visibleCount
     }
 
-    fun partTwo(): Int {
+    fun partTwo(data: String): Int {
+        val grid = SimpleGrid.of(data)
+        val asteroids = grid.findAll('#')
+
         // Find the best location for the monitoring station
-        val (station, _) = findBestLocation()
+        val (station, _) = asteroids.findBestLocation()
         println("Station location: $station")
 
         // Get all asteroids except the station
@@ -138,8 +142,8 @@ internal class Day10(data: String) {
      *
      * @return Pair of ( the best asteroid location, number of visible asteroids from that location)
      */
-    private fun findBestLocation(): Pair<Point, Int> {
-        return asteroids.maxByOrNull { asteroid ->
+    private fun  List<Point>.findBestLocation(): Pair<Point, Int> {
+        return this.maxByOrNull { asteroid ->
             countVisibleAsteroids(asteroid)
         }?.let { point -> point to countVisibleAsteroids(point) } ?: (Point(0, 0) to 0)
     }
@@ -157,10 +161,10 @@ internal class Day10(data: String) {
      * @param station The point from which we're observing
      * @return The number of unique directions, which equals the number of visible asteroids
      */
-    private fun countVisibleAsteroids(station: Point): Int {
+    private fun  List<Point>.countVisibleAsteroids(station: Point): Int {
         // For each other asteroid, calculate the direction vector (reduced by GCD)
         // Count unique directions - each direction means we can see at least one asteroid
-        return asteroids
+        return this
             .filter { point -> point != station }  // Exclude the station itself
             .map { asteroid -> getDirection(station, asteroid) }  // Get normalized direction to each asteroid
             .toSet()  // Keep only unique directions (removes duplicates)
