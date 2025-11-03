@@ -5,7 +5,7 @@ import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 13: ---
+// --- Day 13: Care Package ---
 // https://adventofcode.com/2019/day/13
 fun main() {
     val data = readFileDirectlyAsText("/year2019/day13/data.txt")
@@ -14,7 +14,7 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day13(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day13(year: Int, day: Int, title: String = "Care Package") : AdventOfCodeDay(year, day, title) {
     /**
      * Part One: Count the number of block tiles on the screen when the game exits.
      *
