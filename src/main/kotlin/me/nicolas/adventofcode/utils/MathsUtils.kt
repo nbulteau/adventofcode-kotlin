@@ -3,15 +3,25 @@ package me.nicolas.adventofcode.utils
 import kotlin.math.abs
 
 /**
- * GCD (Greatest Common Divisor) or HCF (Highest Common Factor) of two numbers is the largest number that divides both of them.
+ * Calculate the Greatest Common Divisor using Euclidean algorithm.
+ *
+ * The GCD is the largest positive integer that divides both numbers without a remainder.
+ * This is used as a helper for calculating the LCM.
+ *
+ * @return The GCD of a and b
  */
 tailrec fun Long.gcd(other: Long): Long =
     if (other == 0L) this
     else other.gcd(this % other)
 
 /**
- * LCM (Least Common Multiple) of two numbers is the smallest number that is divisible by both.
- * The formula to find the LCM of some numbers a and b is (a*b) / gcd(a, b) where GCD is the Greatest Common Divisor.
+ * Calculate the Least Common Multiple.
+ *
+ * The LCM is the smallest positive integer that is divisible by both numbers.
+ * When three cycles of lengths A, B, and C run simultaneously, they all align
+ * at time LCM(LCM(A, B), C).
+ *
+ * @return The LCM of a and b
  */
 fun Long.lcm(other: Long): Long =
     (this * other) / this.gcd(other)
@@ -20,7 +30,7 @@ fun Long.lcm(other: Long): Long =
  * LCM (Least Common Multiple) for a list of numbers
  */
 fun List<Long>.lcm(): Long {
-    return this.reduce { acc, i -> (acc * i) / acc.gcd(i) }.toLong()
+    return this.reduce { acc, i -> (acc * i) / acc.gcd(i) }
 }
 
 /**
