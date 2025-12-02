@@ -22,6 +22,10 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.6")
 }
 
+tasks.withType<Test>().configureEach {
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+}
+
 tasks.test {
     useJUnitPlatform()
     testLogging {
