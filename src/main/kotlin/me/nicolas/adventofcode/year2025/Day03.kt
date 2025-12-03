@@ -18,7 +18,7 @@ fun main() {
 class Day03(year: Int, day: Int, title: String = "Lobby") : AdventOfCodeDay(year, day, title) {
 
     /**
-     * Part One: Find the max joltage from each battery bank by selecting exactly 2 batteries.
+     * Find the max joltage from each battery bank by selecting exactly 2 batteries.
      *
      * We try all possible pairs and concatenate their digits to form a number.
      * For example, in "987654321111111", picking batteries at positions 0 and 1 gives us 98.
@@ -30,6 +30,13 @@ class Day03(year: Int, day: Int, title: String = "Lobby") : AdventOfCodeDay(year
             .sumOf { bank -> findMaxJoltage(bank) }
     }
 
+    /**
+     * Alternative implementation of partOne using the generic n-batteries approach.
+     * Finds the max joltage from each battery bank by selecting exactly 2 batteries.
+     *
+     * This version uses the stack-based algorithm (findMaxJoltageWithNBatteries)
+     * instead of brute force enumeration, which is more efficient.
+     */
     fun partOneBis(data: String): Long {
         return data.lines()
             .filter { bank -> bank.isNotBlank() }
@@ -37,7 +44,7 @@ class Day03(year: Int, day: Int, title: String = "Lobby") : AdventOfCodeDay(year
     }
 
     /**
-     * Part Two: Same goal but now we need to select exactly 12 batteries from each bank.
+     * Same goal but now we need to select exactly 12 batteries from each bank.
      *
      * Since each bank has 15 batteries, we need to skip 3 of them.
      * The trick is to remove the smallest digits that hurt our number the least.
