@@ -30,6 +30,14 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
             Point(x, y + 1)
         ).filter { it.x >= 0 && it.y >= 0 }
 
+    fun neighbors(): List<Point> =
+        // Note: Generate in reading order!
+        listOf(
+            Point(x-1, y-1), Point(x-1 to y), Point(x-1 to y+1),
+            Point(x to y-1),                        Point(x to y+1),
+            Point(x+1 to y-1),  Point(x+1 to y),  Point(x+1 to y+1)
+        ).filter { it.x >= 0 && it.y >= 0 }
+
     fun isNeighbourWith(other: Point): Boolean {
         return other in this.cardinalNeighbors()
     }
