@@ -14,7 +14,7 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day01(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day01(year: Int, day: Int, title: String = "Secret Entrance") : AdventOfCodeDay(year, day, title) {
 
     private data class Rotation(val direction: Char, val distance: Long)
 

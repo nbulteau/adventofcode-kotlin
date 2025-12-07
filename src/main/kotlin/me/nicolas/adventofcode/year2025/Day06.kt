@@ -16,7 +16,7 @@ fun main() {
 }
 
 
-class Day06(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day06(year: Int, day: Int, title: String = "Trash Compactor") : AdventOfCodeDay(year, day, title) {
 
     /**
      * Solves the math worksheet by reading problems left-to-right in columns.
