@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class Day25Test {
-    private val day = Day25(2021, 25, "Sea Cucumber")
+    private val day = Day25(2021, 25)
 
     val test = """
         v...>>.vv>
@@ -12,7 +12,7 @@ class Day25Test {
         >>.>v>...v
         >>v>>.>.v.
         v>v.vv.v..
-        >.>>..v.v.
+        >.>>..v...
         .vv..>.>v.
         v.v..>>v.v
         ....v..v.>
@@ -20,6 +20,6 @@ class Day25Test {
 
     @Test
     fun partOne() {
-        assertEquals(58, day.partOne(test.split("\n")))
+        assertEquals(58, day.partOne(test))
     }
 }

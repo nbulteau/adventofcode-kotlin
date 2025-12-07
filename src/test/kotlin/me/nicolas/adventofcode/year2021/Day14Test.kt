@@ -8,7 +8,7 @@ class Day14Test {
 
     val test = """
         NNCB
-
+        
         CH -> B
         HH -> N
         CB -> H
@@ -17,7 +17,7 @@ class Day14Test {
         HC -> B
         HN -> C
         NN -> C
-        BH -> B
+        BH -> H
         NC -> B
         NB -> B
         BN -> B
@@ -29,19 +29,11 @@ class Day14Test {
 
     @Test
     fun partOne() {
-        val parts = test.split("\n\n")
-        val template = parts[0]
-        val rulesPart = parts[1]
-        val rules = rulesPart.split("\n").filter { it.isNotEmpty() }.flatMap { it.split(" -> ") }.zipWithNext().toMap()
-        assertEquals(1588, day.partOne(test))
+         assertEquals(1588, day.partOne(test))
     }
 
     @Test
     fun partTwo() {
-        val parts = test.split("\n\n")
-        val template = parts[0]
-        val rulesPart = parts[1]
-        val rules = rulesPart.split("\n").filter { it.isNotEmpty() }.flatMap { it.split(" -> ") }.zipWithNext().toMap()
-        assertEquals(2188189693529, day.partTwo(test))
+         assertEquals(2188189693529, day.partTwo(test))
     }
 }

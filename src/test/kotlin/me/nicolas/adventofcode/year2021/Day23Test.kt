@@ -14,6 +14,16 @@ class Day23Test {
           #########
     """.trimIndent()
 
+    val testPartTwo = """
+        #############
+        #...........#
+        ###B#C#B#D###
+          #D#C#B#A#
+          #D#B#A#C#
+          #A#D#C#A#
+          #########
+    """.trimIndent()
+
     @Test
     fun partOne() {
         assertEquals(12521, day.partOne(test))
@@ -21,6 +31,6 @@ class Day23Test {
 
     @Test
     fun partTwo() {
-        assertEquals(44169, day.partTwo(test))
+        assertEquals(44169, day.partTwo(testPartTwo))
     }
 }

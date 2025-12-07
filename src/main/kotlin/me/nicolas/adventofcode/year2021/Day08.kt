@@ -9,8 +9,7 @@ import java.util.*
 // https://adventofcode.com/2021/day/8
 fun main() {
     val data = readFileDirectlyAsText("/year2021/day08/data.txt")
-    val day = Day08(2021, 8, )
-    val lines = data.split("\n")
+    val day = Day08(2021, 8)
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
@@ -37,7 +36,8 @@ class Day08(year: Int, day: Int, title: String = "Seven Segment Search") : Adven
 
             fourDigitOutputValue.split(" ")
                 .map { str -> signalPatterns[str.toSortedSet()] }
-                .joinToString("").toInt()
+                .joinToString("")
+                .toInt()
         }
     }
 

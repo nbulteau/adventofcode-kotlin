@@ -13,20 +13,24 @@ import kotlin.math.floor
 
 fun main() {
     val data = readFileDirectlyAsText("/year2019/day01/data.txt")
-    val day = Day01(2019, 1, "The Tyranny of the Rocket Equation", data)
-    prettyPrintPartOne { day.partOne() }
-    prettyPrintPartTwo { day.partTwo() }
+    val day = Day01(2019, 1)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day01(year: Int, day: Int, title: String, data: String) : AdventOfCodeDay(year, day, title) {
+class Day01(year: Int, day: Int, title: String = "The Tyranny of the Rocket Equation") :
+    AdventOfCodeDay(year, day, title) {
 
-    private val masses = data.lines().map { string -> string.toInt() }
 
-     fun partOne(): Int {
+    fun partOne(data: String): Int {
+        val masses = data.lines().map { string -> string.toInt() }
+
         return masses.sumOf { floor(it.div(3.0)) - 2 }.toInt()
-     }
+    }
 
-     fun partTwo(): Int {
+    fun partTwo(data: String): Int {
+        val masses = data.lines().map { string -> string.toInt() }
+
         return masses.sumOf { recurse(it) }
     }
 

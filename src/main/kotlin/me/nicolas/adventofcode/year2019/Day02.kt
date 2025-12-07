@@ -1,33 +1,24 @@
 package me.nicolas.adventofcode.year2019
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // --- Day 2: 1202 Program Alarm ---
 // https://adventofcode.com/2019/day/2
 fun main() {
-
-    println("--- Day 2: 1202 Program Alarm ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2019/day02/training.txt")
     val data = readFileDirectlyAsText("/year2019/day02/data.txt")
-
-    val intCodeProgram: IntArray = data.split(",").map { it.toInt() }.toIntArray()
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day02().partOne(intCodeProgram.clone()) })
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day02().partTwo(intCodeProgram.clone()) })
+    val day = Day02(2019, 1)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day02 {
-    fun partOne(program: IntArray): Int {
+class Day02(year: Int, day: Int, title: String = "1202 Program Alarm") : AdventOfCodeDay(year, day, title) {
+
+    fun partOne(data: String): Int {
+        val program: IntArray = data.split(",").map { it.toInt() }.toIntArray()
+
         program[1] = 12
         program[2] = 2
         program.execute()
@@ -35,7 +26,9 @@ private class Day02 {
         return program[0]
     }
 
-    fun partTwo(program: IntArray): Int {
+    fun partTwo(data: String): Int {
+        val program: IntArray = data.split(",").map { it.toInt() }.toIntArray()
+
         val expected = 19690720
 
         for (noun in 0..99) {

@@ -7,14 +7,15 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 // https://adventofcode.com/2021/day/25
 fun main() {
     val data = readFileDirectlyAsText("/year2021/day25/data.txt")
-    val day = Day25(2021, 25, "Sea Cucumber")
-    val inputs = data.split("\n")
-    prettyPrintPartOne { day.partOne(inputs) }
+    val day = Day25(2021, 25)
+    prettyPrintPartOne { day.partOne(data) }
 }
 
 class Day25(year: Int, day: Int, title: String = "Sea Cucumber") : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(inputs: List<String>): Int {
+    fun partOne(data: String): Int {
+        val inputs = data.split("\n")
+
         val region = Region(parseInputs(inputs))
 
         var step = 0
