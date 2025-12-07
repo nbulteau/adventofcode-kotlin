@@ -15,7 +15,7 @@ fun main() {
 }
 
 /**
- * Day 15: Oxygen System
+ * Oxygen System
  *
  * Problem: Control a repair droid using an IntCode program to explore an unknown grid.
  * The droid can move in 4 directions (N/S/E/W) and reports back status codes.
@@ -25,7 +25,7 @@ fun main() {
  *
  * Solution approach:
  * 1. Use DFS to explore and map the entire accessible area
- * 2. Use BFS to find shortest paths (guaranteed shortest in unweighted grid)
+ * 2. Use BFS to find the shortest paths (guaranteed shortest in unweighted grid)
  */
 class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
 
@@ -66,12 +66,13 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         OXYGEN(2);
 
         companion object {
-            fun fromCode(code: Long): Status = entries.first { it.code == code }
+            fun fromCode(code: Long): Status = entries.firstOrNull { it.code == code }
+                ?: throw IllegalArgumentException("Unknown status code: $code")
         }
     }
 
     /**
-     * Part One: Find the shortest path from start to oxygen system.
+     * Find the shortest path from start to oxygen system.
      *
      * Algorithm:
      * 1. Explore the entire grid using DFS to build a complete map
@@ -88,7 +89,7 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
     }
 
     /**
-     * Part Two: Calculate time for oxygen to fill all accessible spaces.
+     * Calculate time for oxygen to fill all accessible spaces.
      *
      * Simulates oxygen spreading from the oxygen system to all reachable cells.
      * Oxygen spreads to adjacent cells each minute (like a flood fill).
@@ -139,7 +140,9 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
                 if (nextPos in map) continue
 
                 // Send movement command to droid and get status response
-                val status = Status.fromCode(intCode.executeUntilOutput(mutableListOf(direction.code))!!)
+                val output = intCode.executeUntilOutput(mutableListOf(direction.code))
+                requireNotNull(output) { "IntCode program terminated without producing status output when moving $direction from $pos to $nextPos" }
+                val status = Status.fromCode(output)
                 map[nextPos] = status
 
                 when (status) {
@@ -162,7 +165,8 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
                         // CRITICAL: Backtrack to previous position
                         // The IntCode program tracks actual droid position, so we must
                         // physically move back to continue exploring other branches
-                        intCode.executeUntilOutput(mutableListOf(direction.reverse().code))
+                        val back = intCode.executeUntilOutput(mutableListOf(direction.reverse().code))
+                        requireNotNull(back) { "IntCode program terminated while backtracking from $nextPos to $pos" }
                         currentPos = pos
                     }
                 }
@@ -171,7 +175,7 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
 
         // Start exploration from origin
         explore(currentPos)
-        return Pair(map, oxygenPosition!!)
+        return Pair(map, requireNotNull(oxygenPosition) { "Oxygen system not found during exploration" })
     }
 
     /**
@@ -212,8 +216,8 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
             for (direction in Direction.entries) {
                 val nextPos = Point(pos.x + direction.dx, pos.y + direction.dy)
 
-                // Add to queue if: not visited, not a wall, and exists in map
-                if (nextPos !in visited && map[nextPos] != Status.WALL && nextPos in map) {
+                // Add to queue if: not visited, exists in map, and not a wall
+                if (nextPos !in visited && nextPos in map && map[nextPos] != Status.WALL) {
                     visited.add(nextPos)
                     queue.add(Pair(nextPos, distance + 1))
                 }
@@ -261,8 +265,8 @@ class Day15(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
             for (direction in Direction.entries) {
                 val nextPos = Point(pos.x + direction.dx, pos.y + direction.dy)
 
-                // Spread to unfilled, non-wall cells
-                if (nextPos !in filled && map[nextPos] != Status.WALL && nextPos in map) {
+                // Spread to unfilled, exists in map, non-wall cells
+                if (nextPos !in filled && nextPos in map && map[nextPos] != Status.WALL) {
                     filled.add(nextPos)
                     // Oxygen reaches this cell at time + 1
                     queue.add(Pair(nextPos, time + 1))
