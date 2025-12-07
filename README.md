@@ -13,3 +13,4 @@ Kotlin programming language.
 * [2022](https://github.com/nbulteau/adventofcode-kotlin/blob/main/doc/adventofcode-2022.md)
 * [2023](https://github.com/nbulteau/adventofcode-kotlin/blob/main/doc/adventofcode-2023.md)
 * [2024](https://github.com/nbulteau/adventofcode-kotlin/blob/main/doc/adventofcode-2024.md)
+* [2025](https://github.com/nbulteau/adventofcode-kotlin/blob/main/doc/adventofcode-2025.md)
