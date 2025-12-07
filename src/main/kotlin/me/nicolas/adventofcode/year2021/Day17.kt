@@ -1,29 +1,20 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import kotlin.math.absoluteValue
 import kotlin.math.max
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/17
-@ExperimentalTime
 fun main() {
-
-    val training = "target area: x=20..30, y=-10..-5"
     val data = "target area: x=60..94, y=-171..-136"
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day17().partOne(data) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day17().partTwo(data) })
+    val day = Day17(2021, 17, "Trick Shot")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day17 {
+class Day17(year: Int, day: Int, title: String = "Trick Shot") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(input: String): Int {
         val (rangeX: IntRange, rangeY: IntRange) = parseInput(input)

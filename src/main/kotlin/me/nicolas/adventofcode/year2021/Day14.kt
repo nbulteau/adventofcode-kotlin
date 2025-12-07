@@ -1,6 +1,9 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -12,25 +15,19 @@ fun main() {
     val training = readFileDirectlyAsText("/year2021/day14/training.txt")
     val data = readFileDirectlyAsText("/year2021/day14/data.txt")
 
-    val (template, list) = data.split("\n\n")
-    val insertions = list.split("\n").flatMap { it.split(" -> ") }.zipWithNext().toMap()
 
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day14().partOne(template, insertions) })
 
-    prettyPrint(
-        message = "Part one bis answer",
-        measureTimedValue { Day14().partOneBis(template, insertions) })
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day14().partTwo(template, insertions) })
+    val day = Day14(2021, 1)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartOne { day.partOneBis(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day14 {
+class Day14(year: Int, day: Int, title: String = "Extended Polymerization") : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(template: String, insertions: Map<String, String>): Int {
+    fun partOne(data: String): Int {
+        val (template, list) = data.split("\n\n")
+        val insertions = list.split("\n").flatMap { it.split(" -> ") }.zipWithNext().toMap()
         var result = template.toCharArray()
         repeat(10) {
             result = processStep(result, insertions)
@@ -44,11 +41,15 @@ private class Day14 {
         return filtered.values.maxOf { it } - filtered.values.minOf { it }
     }
 
-    fun partOneBis(template: String, insertionsRules: Map<String, String>): Long {
+    fun partOneBis(data: String): Long {
+        val (template, list) = data.split("\n\n")
+        val insertionsRules = list.split("\n").flatMap { it.split(" -> ") }.zipWithNext().toMap()
         return processSteps(10, template, insertionsRules)
     }
 
-    fun partTwo(template: String, insertionsRules: Map<String, String>): Long {
+    fun partTwo(data: String): Long {
+        val (template, list) = data.split("\n\n")
+        val insertionsRules = list.split("\n").flatMap { it.split(" -> ") }.zipWithNext().toMap()
         return processSteps(40, template, insertionsRules)
     }
 

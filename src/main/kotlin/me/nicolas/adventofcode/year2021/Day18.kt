@@ -1,31 +1,21 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.max
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/18
-@ExperimentalTime
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day18/training.txt")
     val data = readFileDirectlyAsText("/year2021/day18/data.txt")
-
+    val day = Day18(2021, 18, "Snailfish")
     val lines = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day18().partOne(lines) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day18().partTwo(lines) })
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day18 {
+class Day18(year: Int, day: Int, title: String = "Snailfish") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(lines: List<String>): Int {
         val sNumbers = lines.map { line -> parseLine(line) }
@@ -193,4 +183,3 @@ class Day18 {
     }
 
 }
-

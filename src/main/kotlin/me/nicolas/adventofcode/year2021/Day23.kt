@@ -23,7 +23,7 @@ fun main() {
 private typealias Room = List<Int>
 private typealias Hallway = List<Int?>
 
-class Day23(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
+class Day23(year: Int, day: Int, title: String = "Amphipod") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(data: String) = organizeAmphipods(loadList(data.lines()), 2)
 

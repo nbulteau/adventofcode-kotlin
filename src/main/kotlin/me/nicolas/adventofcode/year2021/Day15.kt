@@ -1,45 +1,32 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.util.*
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://en.wikipedia.org/wiki/Dijkstra's_algorithm
-
 // https://adventofcode.com/2021/day/15
-@ExperimentalTime
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day15/training.txt")
     val data = readFileDirectlyAsText("/year2021/day15/data.txt")
-
-    val lines = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day15().partOne(lines) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day15().partTwo(lines) })
+    val day = Day15(2021, 15)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-// https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+class Day15(year: Int, day: Int, title: String = "Chiton") : AdventOfCodeDay(year, day, title) {
 
-private class Day15 {
-
-    fun partOne(lines: List<String>): Int {
-        val map = arrayOfIntArrays(lines)
+    fun partOne(data: String): Int {
+        val map = arrayOfIntArrays(data.split("\n"))
 
         val caveMap = CaveMap(map)
 
         return caveMap.dijkstra()
     }
 
-    fun partTwo(lines: List<String>): Int {
-        val map = arrayOfIntArrays(lines)
+    fun partTwo(data: String): Int {
+        val map = arrayOfIntArrays(data.split("\n"))
         val bigMap = map.enlarge5Times()
 
         val caveMap = CaveMap(bigMap)

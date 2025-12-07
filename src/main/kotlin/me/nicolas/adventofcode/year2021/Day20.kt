@@ -1,34 +1,22 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/20
-@ExperimentalTime
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day20/training.txt")
     val data = readFileDirectlyAsText("/year2021/day20/data.txt")
-
+    val day = Day20(2021, 20, "Trench Map")
     val lines = data.split("\n\n")
     val algorithm = lines.first()
     val image = lines.last()
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day20().partOne(algorithm.toCharArray(), image) })
-
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day20().partTwo(algorithm.toCharArray(), image) })
-
+    prettyPrintPartOne { day.partOne(algorithm.toCharArray(), image) }
+    prettyPrintPartTwo { day.partTwo(algorithm.toCharArray(), image) }
 }
 
-private class Day20 {
+class Day20(year: Int, day: Int, title: String = "Trench Map") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(algorithm: CharArray, inputImage: String): Int {
 
@@ -100,6 +88,3 @@ private class Day20 {
         this.forEach { string -> println(string) }
     }
 }
-
-
-
