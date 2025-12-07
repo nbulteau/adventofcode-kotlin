@@ -1,31 +1,18 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.blue
-import me.nicolas.adventofcode.utils.green
-import me.nicolas.adventofcode.utils.prettyPrint
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
+import me.nicolas.adventofcode.utils.*
 
 // https://adventofcode.com/2021/day/11
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day11/training.txt")
     val data = readFileDirectlyAsText("/year2021/day11/data.txt")
-
+    val day = Day11(2021, 11, )
     val inputs = data.split("\n")
     val lines = inputs.map { line -> line.toList().map { point -> point.toString().toInt() } }
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day11().partOne(lines) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day11().partTwo(lines) })
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-class Day11 {
+class Day11(year: Int, day: Int, title: String = "Dumbo Octopus") : AdventOfCodeDay(year, day, title) {
 
     companion object {
         private const val gridSize = 10

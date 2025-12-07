@@ -1,39 +1,31 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/19
-@ExperimentalTime
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day19/training.txt")
     val data = readFileDirectlyAsText("/year2021/day19/data.txt")
-
-    val inputs = data.split("\n\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day19Bis().partOne(inputs) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day19Bis().partTwo(inputs) })
+    val day = Day19(2021, 19)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day19Bis {
-    fun partOne(inputs: List<String>): Int {
+class Day19(year: Int, day: Int, title: String = "Beacon Scanner") : AdventOfCodeDay(year, day, title) {
+    fun partOne(data: String): Int {
+        val inputs = data.split("\n\n")
+
         val reports = parseReports(inputs)
         val solvedScanners = solve(reports)
-
         return solvedScanners.flatMap { it.beacons }.toSet().size
     }
 
-    fun partTwo(inputs: List<String>): Int {
+    fun partTwo(data: String): Int {
+        val inputs = data.split("\n\n")
+
         val reports = parseReports(inputs)
         val solvedScanners = solve(reports)
         val positions = solvedScanners.map { it.position }

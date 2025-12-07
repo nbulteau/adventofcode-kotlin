@@ -1,31 +1,21 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.util.*
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/10
-@ExperimentalTime
 fun main() {
-
-
-    val training = readFileDirectlyAsText("/year2021/day10/training.txt")
     val data = readFileDirectlyAsText("/year2021/day10/data.txt")
-
+    val day = Day10(2021, 10, )
     val lines = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day10().partOne(lines) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day10().partTwo(lines) })
+    prettyPrintPartOne { day.partOne(lines) }
+    prettyPrintPartTwo { day.partTwo(lines) }
 }
 
-private class Day10 {
+class Day10(year: Int, day: Int, title: String = "Syntax Scoring") : AdventOfCodeDay(year, day, title) {
 
     companion object {
         val IN_CHUNK = listOf('(', '[', '{', '<')

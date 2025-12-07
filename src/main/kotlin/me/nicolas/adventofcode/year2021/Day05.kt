@@ -1,24 +1,23 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/5
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day05/training.txt")
     val data = readFileDirectlyAsText("/year2021/day05/data.txt")
-
+    val day = Day05(2021, 5)
     val input = data.split("\n")
-
-    Day05().solve(1000, input)
+    val lines = day.parseLines(input)
+    prettyPrintPartOne { day.partOne(1000, lines) }
+    prettyPrintPartTwo { day.partTwo(1000, lines) }
 }
 
-private class Day05 {
+class Day05(year: Int, day: Int, title: String = "Hydrothermal Venture") : AdventOfCodeDay(year, day, title) {
 
     data class Point(val x: Int, val y: Int)
 
@@ -68,42 +67,32 @@ private class Day05 {
                 intArray.count { value -> value >= 2 }
             }
         }
-
-        fun display() {
-            values.forEach { row -> println(row.joinToString(separator = ":")) }
-        }
     }
 
-    fun solve(gridSize: Int, input: List<String>) {
-
-        val lines = input.map { line ->
+    fun parseLines(input: List<String>): List<Line> {
+        return input.map { line ->
             val (start, end) = line.split(" -> ").map { point ->
                 val (x, y) = point.split(",")
                 Point(x.toInt(), y.toInt())
             }
             Line(start, end)
         }
-
-        prettyPrint("Part one answer", measureTimedValue { partOne(gridSize, lines) })
-
-        prettyPrint("Part two answer", measureTimedValue { partTwo(gridSize, lines) })
     }
 
-    private fun partOne(gridSize: Int, lines: List<Line>): Int {
+    fun partOne(gridSize: Int, lines: List<Line>): Int {
         val grid = Grid(gridSize)
         lines.forEach { line ->
             grid.addLine(line, includeDiagonalLines = false)
         }
-        //grid.display()
         return grid.getNumberOfPointsToAvoid()
     }
 
-    private fun partTwo(gridSize: Int, lines: List<Line>): Int {
+    fun partTwo(gridSize: Int, lines: List<Line>): Int {
         val grid = Grid(gridSize)
         lines.forEach { line ->
             grid.addLine(line, includeDiagonalLines = true)
         }
-        //grid.display()
         return grid.getNumberOfPointsToAvoid()
     }
 }
+

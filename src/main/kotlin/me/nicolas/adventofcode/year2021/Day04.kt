@@ -1,22 +1,22 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/4
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day04/training.txt")
     val data = readFileDirectlyAsText("/year2021/day04/data.txt")
-
+    val day = Day04(2021, 4, )
     val input = data.split("\n")
-
-    Day04().solve(input)
+    val drawnNumbers = input[0].split(",").map { str -> str.toInt() }
+    val boards = day.buildBoards(input.subList(2, input.size))
+    prettyPrintPartOne { day.partOne(drawnNumbers, boards) }
+    prettyPrintPartTwo { day.partTwo(drawnNumbers, day.buildBoards(input.subList(2, input.size))) }
 }
 
-class Day04 {
+class Day04(year: Int, day: Int, title: String = "Giant Squid") : AdventOfCodeDay(year, day, title) {
 
     data class Tile(val value: Int, var isMarked: Boolean = false)
     data class Board(val tiles: List<List<Tile>>) {
@@ -52,16 +52,7 @@ class Day04 {
         }
     }
 
-    fun solve(input: List<String>) {
-
-        val drawnNumbers = input[0].split(",").map { str -> str.toInt() }
-        val boards = buildBoards(input.subList(2, input.size))
-
-        prettyPrint("Part one answer", measureTimedValue { partOne(drawnNumbers, boards) })
-        prettyPrint("Part Two answer", measureTimedValue { partTwo(drawnNumbers, boards) })
-    }
-
-    private fun partOne(drawnNumbers: List<Int>, boards: List<Board>): Int {
+    fun partOne(drawnNumbers: List<Int>, boards: List<Board>): Int {
         drawnNumbers.forEach { drawnNumber ->
             for (board in boards) {
                 board.markNumber(drawnNumber)
@@ -73,7 +64,7 @@ class Day04 {
         return 0
     }
 
-    private fun partTwo(drawnNumbers: List<Int>, boards: List<Board>): Int {
+    fun partTwo(drawnNumbers: List<Int>, boards: List<Board>): Int {
         drawnNumbers.forEach { drawnNumber ->
             for (board in boards) {
                 board.markNumber(drawnNumber)
@@ -85,7 +76,7 @@ class Day04 {
         return 0
     }
 
-    private fun buildBoards(lines: List<String>): List<Board> {
+    fun buildBoards(lines: List<String>): List<Board> {
         val boards = mutableListOf<Board>()
 
         var index = 0

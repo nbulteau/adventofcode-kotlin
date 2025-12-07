@@ -1,37 +1,43 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/12
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day12/training.txt")
-    val slightlyLargerTraining = readFileDirectlyAsText("/year2021/day12/slightly-larger-training.txt")
-    val largerTraining = readFileDirectlyAsText("/year2021/day12/larger-training.txt")
-
     val data = readFileDirectlyAsText("/year2021/day12/data.txt")
+    val day = Day12(2021, 12)
     val inputs = data.split("\n")
-
-    Day12().solve(inputs)
+    prettyPrintPartOne { day.partOne(inputs) }
+    prettyPrintPartTwo { day.partTwo(inputs) }
 }
 
-private class Day12 {
+class Day12(year: Int, day: Int, title: String = "Passage Pathing") : AdventOfCodeDay(year, day, title) {
 
-    fun solve(inputs: List<String>) {
+    fun partOne(inputs: List<String>): Int {
         val graph = initCavesGraph(inputs)
         val cavesAllowedVisits = initCavesAllowedVisits(graph)
         val distinctPaths = mutableSetOf<List<String>>()
+        recurseFindPaths("start", graph, mutableListOf(), distinctPaths, cavesAllowedVisits)
+        return distinctPaths.size
+    }
 
-        prettyPrint(
-            message = "Part one answer",
-            measureTimedValue { Day12().partOne(graph, cavesAllowedVisits, distinctPaths) })
-
-        prettyPrint(
-            message = "Part two answer",
-            measureTimedValue { Day12().partTwo(graph, cavesAllowedVisits, distinctPaths) })
+    fun partTwo(inputs: List<String>): Int {
+        val graph = initCavesGraph(inputs)
+        val cavesAllowedVisits = initCavesAllowedVisits(graph)
+        val distinctPaths = mutableSetOf<List<String>>()
+        cavesAllowedVisits
+            .filter { node ->
+                node.key != "start" && node.key != "end" && node.key.all { it.isLowerCase() }
+            }
+            .forEach { (key, _) ->
+                val allowedVisitsCopy = cavesAllowedVisits.toMutableMap()
+                allowedVisitsCopy[key] = 2
+                recurseFindPaths("start", graph, mutableListOf(), distinctPaths, allowedVisitsCopy)
+            }
+        return distinctPaths.size
     }
 
     fun partOne(
@@ -109,5 +115,3 @@ private class Day12 {
         return map
     }
 }
-
-

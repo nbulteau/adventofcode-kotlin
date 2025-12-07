@@ -1,51 +1,33 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/13
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day13/training.txt")
-    val davidTraining = readFileDirectlyAsText("/year2021/day13/david-training.txt")
-
     val data = readFileDirectlyAsText("/year2021/day13/data.txt")
-
-    val (dotsPart, foldInstructionsPart) = data.split("\n\n")
-
-    val dots: Set<Pair<Int, Int>> = dotsPart
-        .split("\n")
-        .flatMap { line ->
-            line
-                .split(",")
-                .map { str -> str.toInt() }
-                .zipWithNext { a, b -> Pair(a, b) }
-        }
-        .toSet()
-    val foldInstructions = foldInstructionsPart.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day13().partOne(dots, foldInstructions) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day13().partTwo(dots, foldInstructions) })
+    val day = Day13(2021, 13)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day13 {
 
-    fun partOne(dots: Set<Pair<Int, Int>>, foldInstructions: List<String>): Int {
+class Day13(year: Int, day: Int, title: String = "Transparent Origami") : AdventOfCodeDay(year, day, title) {
+
+    fun partOne(data: String): Int {
+        val (dots: Set<Pair<Int, Int>>, foldInstructions) = parseInput(data)
+
         val paper = Paper(dots)
         processInstruction(paper, foldInstructions.first())
 
         return paper.dots.size
     }
 
-    fun partTwo(dots: Set<Pair<Int, Int>>, foldInstructions: List<String>): Int {
+    fun partTwo(data: String): Int {
+        val (dots: Set<Pair<Int, Int>>, foldInstructions) = parseInput(data)
+
         val paper = Paper(dots)
         foldInstructions.forEach { instruction ->
             processInstruction(paper, instruction)
@@ -54,6 +36,22 @@ private class Day13 {
 
         return paper.dots.size
     }
+
+    private fun parseInput(data: String): Pair<Set<Pair<Int, Int>>, List<String>> {
+        val (dotsPart, foldInstructionsPart) = data.split("\n\n")
+        val dots: Set<Pair<Int, Int>> = dotsPart
+            .split("\n")
+            .flatMap { line ->
+                line
+                    .split(",")
+                    .map { str -> str.toInt() }
+                    .zipWithNext { a, b -> Pair(a, b) }
+            }
+            .toSet()
+        val foldInstructions = foldInstructionsPart.split("\n")
+        return Pair(dots, foldInstructions)
+    }
+
 
     private class Paper(dots: Set<Pair<Int, Int>>) {
 

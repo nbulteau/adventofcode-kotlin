@@ -1,32 +1,26 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/7
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day07/training.txt")
     val data = readFileDirectlyAsText("/year2021/day07/data.txt")
+    val day = Day07(2021, 7)
     val positions = data.split(",").map { it.toInt() }
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day07().solve(positions) { position -> position } })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day07().solve(positions) { position -> (1..position).sumOf { it } } })
-
-    prettyPrint(
-        message = "Part two bis answer",
-        measureTimedValue { Day07().solve(positions) { position -> (position * (position + 1) / 2) } })
+    prettyPrintPartOne { day.partOne(positions) }
+    prettyPrintPartTwo { day.partTwo(positions) }
 }
 
-private class Day07 {
+class Day07(year: Int, day: Int, title: String = "The Treachery of Whales") : AdventOfCodeDay(year, day, title) {
+
+    fun partOne(positions: List<Int>): Int = solve(positions) { position -> position }
+
+    fun partTwo(positions: List<Int>): Int = solve(positions) { position -> (position * (position + 1) / 2) }
+
 
     fun solve(positions: List<Int>, computeFuelConsumption: (position: Int) -> Int): Int {
 
@@ -37,5 +31,3 @@ private class Day07 {
         return fuelConsumptions.values.minOf { it }
     }
 }
-
-

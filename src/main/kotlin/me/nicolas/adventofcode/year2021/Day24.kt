@@ -1,6 +1,9 @@
 package me.nicolas.adventofcode.year2021
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.pow
 import kotlin.time.ExperimentalTime
@@ -57,24 +60,15 @@ import kotlin.time.measureTimedValue
  */
 
 // https://adventofcode.com/2021/day/24
-@ExperimentalTime
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day24/training.txt")
     val data = readFileDirectlyAsText("/year2021/day24/data.txt")
-
+    val day = Day24(2021, 24, "Arithmetic Logic Unit")
     val inputs = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day24().partOne(inputs) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day24().partTwo(inputs) })
+    prettyPrintPartOne { day.partOne(inputs) }
+    prettyPrintPartTwo { day.partTwo(inputs) }
 }
 
-private class Day24 {
+class Day24(year: Int, day: Int, title: String = "Arithmetic Logic Unit") : AdventOfCodeDay(year, day, title) {
     companion object {
         private const val blockSize = 18
         private const val nbDigits = 14

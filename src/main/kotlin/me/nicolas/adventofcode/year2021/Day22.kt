@@ -1,42 +1,32 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/22
-@ExperimentalTime
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day22/training.txt")
-    val largerTraining = readFileDirectlyAsText("/year2021/day22/larger-training.txt")
     val data = readFileDirectlyAsText("/year2021/day22/data.txt")
-    val part2Training = readFileDirectlyAsText("/year2021/day22/part2-data.txt")
-
-    val input = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day22().partOne(input) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day22().partTwo(input) })
+    val day = Day22(2021, 22, "Reactor Reboot")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
+class Day22(year: Int, day: Int, title: String = "Reactor Reboot") : AdventOfCodeDay(year, day, title) {
+    fun partOne(data: String): Int {
+        val input = data.split("\n")
 
-private class Day22 {
-    fun partOne(input: List<String>): Int {
         val steps = parseInput(input)
 
         return GridPartOne().reboot(steps)
     }
 
-    fun partTwo(input: List<String>): Long {
+    fun partTwo(data: String): Long {
+        val input = data.split("\n").filter { it.isNotEmpty() }
+
         val steps = parseInput(input)
 
         return GridPartTwo().reboot(steps)
@@ -139,7 +129,3 @@ private class Day22 {
         return cubes
     }
 }
-
-
-
-

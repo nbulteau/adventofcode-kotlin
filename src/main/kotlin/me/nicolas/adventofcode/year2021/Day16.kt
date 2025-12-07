@@ -1,37 +1,19 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
-
 
 // https://adventofcode.com/2021/day/16
-@ExperimentalTime
 fun main() {
-
-    val literalPacket = "D2FE28"
-    val operatorPacket1 = "38006F45291200"
-    val operatorPacket2 = "EE00D40C823060"
-    val operatorPacket3 = "8A004A801A8002F478"
-    val operatorPacket4 = "620080001611562C8802118E34"
-    val operatorPacket5 = "C0015000016115A2E0802F182340"
-    val operatorPacket6 = "A0016C880162017C3686B18A3D4780"
-
     val data = readFileDirectlyAsText("/year2021/day16/data.txt")
-
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day16().partOne(data) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day16().partTwo(data) })
-
+    val day = Day16(2021, 16, "Packet Decoder")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day16 {
+class Day16(year: Int, day: Int, title: String = "Packet Decoder") : AdventOfCodeDay(year, day, title) {
 
     fun partOne(input: String): Int {
         val binaryString = inputToBinaryString(input)
@@ -152,7 +134,3 @@ private class Day16 {
         }.joinToString("")
     }
 }
-
-
-
-

@@ -14,6 +14,11 @@ fun main() {
 }
 
 class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
+
+    /**
+     * For each line, find the first digit and the last digit (in that order) to form a single two-digit number.
+     * The calibration value is the sum of all of these two-digit numbers.
+     */
     fun partOne(lines: List<String>): Int {
         return lines.sumOf { line ->
             val firstDigit = line.first { it.isDigit() }.digitToInt()
@@ -48,6 +53,10 @@ class Day01(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         Digit(9, "nine"),
     )
 
+    /**
+     * It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits".
+     * The calibration value is the sum of all of these two-digit numbers.
+     */
     fun partTwo(lines: List<String>): Int {
         return lines.sumOf { line ->
             // 1. filter the digits that are in the line

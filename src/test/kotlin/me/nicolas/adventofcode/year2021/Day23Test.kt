@@ -1,38 +1,26 @@
 package me.nicolas.adventofcode.year2021
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class Day23Test {
+    private val day = Day23(2021, 23, "Amphipod")
 
-    private val day = Day23(2023, 23, "Amphipod")
-
-
-    @Test
-    fun `part one training`() {
-        val data = """
+    val test = """
         #############
         #...........#
         ###B#C#B#D###
           #A#D#C#A#
-          #########   
-        """.trimIndent()
+          #########
+    """.trimIndent()
 
-        assertEquals(12521, day.partOne(data))
+    @Test
+    fun partOne() {
+        assertEquals(12521, day.partOne(test))
     }
 
     @Test
-    fun `part two training`() {
-        val data = """
-        #############
-        #...........#
-        ###B#C#B#D###
-          #D#C#B#A#
-          #D#B#A#C#
-          #A#D#C#A#
-          #########
-        """.trimIndent()
-
-        assertEquals(44169, day.partTwo(data))
+    fun partTwo() {
+        assertEquals(44169, day.partTwo(test))
     }
 }

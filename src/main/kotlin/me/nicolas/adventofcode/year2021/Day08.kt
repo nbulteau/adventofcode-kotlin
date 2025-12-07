@@ -1,30 +1,25 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.util.*
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/8
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day08/training.txt")
     val data = readFileDirectlyAsText("/year2021/day08/data.txt")
+    val day = Day08(2021, 8, )
     val lines = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day08().partOne(lines) })
-
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day08().partTwo(lines) })
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day08 {
+class Day08(year: Int, day: Int, title: String = "Seven Segment Search") : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(lines: List<String>): Int {
+    fun partOne(data: String): Int {
+        val lines = data.split("\n")
+
         return lines.sumOf { line ->
             val fourDigitOutputValue = line.split(" | ")[1]
             fourDigitOutputValue.split(" ")
@@ -32,7 +27,9 @@ private class Day08 {
         }
     }
 
-    fun partTwo(lines: List<String>): Int {
+    fun partTwo(data: String): Int {
+        val lines = data.split("\n")
+
         return lines.sumOf { line ->
             val uniqueSignalPatterns = line.split(" | ")[0]
             val fourDigitOutputValue = line.split(" | ")[1]

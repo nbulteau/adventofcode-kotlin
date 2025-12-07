@@ -1,31 +1,24 @@
 package me.nicolas.adventofcode.year2021
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2021/day/2
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2021/day02/training.txt")
     val data = readFileDirectlyAsText("/year2021/day02/data.txt")
 
-    val lines = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day02().partOne(lines) })
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day02().partTwo(lines) })
+    val day = Day02(2021, 2)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day02 {
+class Day02(year: Int, day: Int, title: String = "Dive!") : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(lines: List<String>): Int {
+    fun partOne(data: String): Int {
+        val lines = data.split("\n")
         var horizontal = 0
         var depth = 0
 
@@ -40,8 +33,8 @@ class Day02 {
         return abs(horizontal) * abs(depth)
     }
 
-    fun partTwo(lines: List<String>): Int {
-
+    fun partTwo(data: String): Int {
+        val lines = data.split("\n")
         var horizontal = 0
         var depth = 0
         var aim = 0
