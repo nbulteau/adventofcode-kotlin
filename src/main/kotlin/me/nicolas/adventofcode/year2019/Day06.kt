@@ -1,9 +1,9 @@
 package me.nicolas.adventofcode.year2019
 
-import me.nicolas.adventofcode.utils.prettyPrint
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 // https://adventofcode.com/2019/day/6
 fun main() {
@@ -12,23 +12,17 @@ fun main() {
     val trainingPartTwo = readFileDirectlyAsText("/year2019/day06/trainingPartTwo.txt")
 
     val data = readFileDirectlyAsText("/year2019/day06/data.txt")
-
-    val inputs = data.split("\n")
-
-    prettyPrint(
-        message = "Part one answer",
-        measureTimedValue { Day06().partOne(inputs) })
-    prettyPrint(
-        message = "Part one bis answer",
-        measureTimedValue { Day06().partOneBis(inputs) })
-    prettyPrint(
-        message = "Part two answer",
-        measureTimedValue { Day06().partTwo(inputs) })
+    val day = Day06(2019, 6)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartOne { day.partOneBis(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day06 {
+class Day06(year: Int, day: Int, title: String = "Universal Orbit Map") : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(inputs: List<String>): Int {
+    fun partOne(data: String): Int {
+        val inputs = data.split("\n")
+
         var totalNumberOfOrbits = 0
 
         val graph = initGraph(inputs)
@@ -43,14 +37,17 @@ private class Day06 {
         return totalNumberOfOrbits
     }
 
-    fun partOneBis(inputs: List<String>): Int {
+    fun partOneBis(data: String): Int {
+        val inputs = data.split("\n")
 
         val graph = initGraph(inputs)
 
         return graph.keys.sumOf { graph.pathFrom(it, mutableListOf()).size }
     }
 
-    fun partTwo(inputs: List<String>): Int {
+    fun partTwo(data: String): Int {
+        val inputs = data.split("\n")
+
         val graph = initGraph(inputs)
 
         val youToRoot = graph.pathFrom("YOU")

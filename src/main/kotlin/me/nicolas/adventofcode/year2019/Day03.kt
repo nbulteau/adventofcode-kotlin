@@ -1,5 +1,8 @@
 package me.nicolas.adventofcode.year2019
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.abs
 
@@ -7,23 +10,14 @@ import kotlin.math.abs
 // --- Day 3: Crossed Wires ---
 // https://adventofcode.com/2019/day/3
 fun main() {
-
-    println("--- Day 3: Crossed Wires ---")
-    println()
-
     val training = readFileDirectlyAsText("/year2019/day03/training.txt")
     val data = readFileDirectlyAsText("/year2019/day03/data.txt")
-
-    val paths = data.split("\n").map { str: String -> str.split(",") }
-
-    // Part One
-    Day03().partOne(paths)
-
-    // Part Two
-    Day03().partTwo(paths)
+    val day = Day03(2019, 3)
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day03 {
+class Day03(year: Int, day: Int, title: String = "Crossed Wires") : AdventOfCodeDay(year, day, title) {
 
     private enum class Direction(val label: Char, val dx: Int, val dy: Int) {
 
@@ -39,19 +33,22 @@ private class Day03 {
 
     private data class Coord(var x: Int, var y: Int)
 
-    private fun buildWire(wire: List<String>): MutableSet<Coord> {
+    // Build the set of coordinates visited by the wire (excluding the origin)
+    private fun buildWire(wire: List<String>): Set<Coord> {
         val coords = mutableSetOf<Coord>()
-        var currentCoord = Coord(0, 0)
+        var x = 0
+        var y = 0
 
-        wire.forEach { move ->
+        for (move in wire) {
             val direction = Direction.byLabel(move[0])
-            val value = move.drop(1).toInt()
-            for (i in 1..value) {
-                val coord = Coord(currentCoord.x + direction.dx, currentCoord.y + direction.dy)
-                coords.add(coord)
-                currentCoord = coord
+            val steps = move.substring(1).toInt()
+            repeat(steps) {
+                x += direction.dx
+                y += direction.dy
+                coords.add(Coord(x, y))
             }
         }
+
         return coords
     }
 
@@ -59,47 +56,52 @@ private class Day03 {
      * The number of steps a wire takes is the total number of grid squares the wire has entered to get to that location
      */
     private fun getNumberOfStepsToTarget(wire: List<String>, target: Coord): Int {
-        var path = 0
-        var currentCoord = Coord(0, 0)
+        // Count steps until reaching the target coordinate
+        var steps = 0
+        var x = 0
+        var y = 0
+        val targetX = target.x
+        val targetY = target.y
 
-        wire.forEach { move ->
+        for (move in wire) {
             val direction = Direction.byLabel(move[0])
-            val value = move.drop(1).toInt()
-            for (i in 1..value) {
-                val coord = Coord(currentCoord.x + direction.dx, currentCoord.y + direction.dy)
-                path++
-                if (coord == target) {
-                    return path
-                } else {
-                    currentCoord = coord
+            val value = move.substring(1).toInt()
+            repeat(value) {
+                x += direction.dx
+                y += direction.dy
+                steps++
+                if (x == targetX && y == targetY) {
+                    return steps
                 }
             }
         }
-        throw RuntimeException()
+
+        throw IllegalStateException("Target not reached by the provided wire")
     }
 
 
-    fun partOne(paths: List<List<String>>) {
+    fun partOne(data: String): Int {
+        val paths = data.split("\n").map { str: String -> str.split(",") }
 
         val path1 = buildWire(paths[0])
         val path2 = buildWire(paths[1])
         val intersections = path1.intersect(path2)
-        val result = intersections
+
+        return intersections
             .map { coord -> abs(coord.x) + abs(coord.y) }
             .minOf { it }
-
-        println("Part one $result")
     }
 
-    fun partTwo(paths: List<List<String>>) {
+    fun partTwo(data: String): Int {
+        val paths = data.split("\n").map { str: String -> str.split(",") }
+
         val path1 = buildWire(paths[0])
         val path2 = buildWire(paths[1])
         val intersections = path1.intersect(path2)
-        val result = intersections
+
+        return intersections
             .map { coord -> getNumberOfStepsToTarget(paths[0], coord) + getNumberOfStepsToTarget(paths[1], coord) }
             .minOf { it }
-
-        println("Part two $result")
     }
 }
 
