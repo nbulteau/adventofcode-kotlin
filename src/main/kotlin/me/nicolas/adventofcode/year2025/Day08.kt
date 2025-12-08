@@ -46,8 +46,7 @@ class Day08(year: Int, day: Int, title: String = "Playground") : AdventOfCodeDay
      * Uses Union-Find (Disjoint Set Union) data structure with path compression and union by rank.
      * https://en.wikipedia.org/wiki/Disjoint-set_data_structure
      *
-     * When two junction boxes are connected by a light string, they can share electricity
-     * and become part of the same circuit.
+     * When a light string connects two junction boxes, they can share electricity and become part of the same circuit.
      */
     private class CircuitTracker(totalBoxes: Int) {
         // Parent array to track the root of each circuit (initially each box is its own circuit)
@@ -120,7 +119,7 @@ class Day08(year: Int, day: Int, title: String = "Playground") : AdventOfCodeDay
         val junctionBoxes = parseJunctionBoxes(data)
         val totalBoxes = junctionBoxes.size
 
-        // Build sorted list of all possible light string connections by distance
+        // Build a sorted list of all possible light string connections by distance
         val allPossibleConnections = junctionBoxes.buildAllPossibleConnections()
         val shortestConnections = allPossibleConnections.take(numberOfConnections)
 
@@ -156,7 +155,7 @@ class Day08(year: Int, day: Int, title: String = "Playground") : AdventOfCodeDay
      * Algorithm:
      * 1. Parse all junction box positions from input data
      * 2. Calculate all pairwise distances (sorted by increasing distance)
-     * 3. Use CircuitTracker to progressively connect closest pairs
+     * 3. Use CircuitTracker to progressively connect the closest pairs
      * 4. Track the number of separate circuits
      * 5. When the number of circuits drops to 1, we've found the final connection
      * 6. Return the product of the X coordinates of those two junction boxes
