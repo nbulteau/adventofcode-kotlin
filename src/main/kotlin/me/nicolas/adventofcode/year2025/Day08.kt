@@ -44,6 +44,7 @@ class Day08(year: Int, day: Int, title: String = "Playground") : AdventOfCodeDay
     /**
      * Tracks which junction boxes are connected into the same electrical circuit.
      * Uses Union-Find (Disjoint Set Union) data structure with path compression and union by rank.
+     * https://en.wikipedia.org/wiki/Disjoint-set_data_structure
      *
      * When two junction boxes are connected by a light string, they can share electricity
      * and become part of the same circuit.
