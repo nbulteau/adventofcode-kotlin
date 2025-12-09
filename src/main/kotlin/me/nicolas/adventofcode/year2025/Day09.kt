@@ -8,7 +8,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import me.nicolas.adventofcode.utils.isPointInsidePolygon
 
-// --- Day 9: ---
+// --- Day 9: Movie Theater ---
 // https://adventofcode.com/2025/day/9
 fun main() {
     val data = readFileDirectlyAsText("/year2025/day09/data.txt")
@@ -17,7 +17,7 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day09(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+class Day09(year: Int, day: Int, title: String = "Movie Theater") : AdventOfCodeDay(year, day, title) {
 
     /**
      * Part One: Find the largest rectangle using any two red tiles as opposite corners.
