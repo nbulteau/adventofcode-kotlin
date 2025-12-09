@@ -51,9 +51,44 @@ fun Pair<Int, Int>.manhattanDistance(other: Pair<Int, Int>): Long =
  */
 fun shoelaceArea(points: List<Pair<Long, Long>>): Long {
     val size = points.size
-    var a = 0L
+    var area = 0L
     for (i in 0 until size - 1) {
-        a += points[i].first * points[i + 1].second - points[i + 1].first * points[i].second
+        area += points[i].first * points[i + 1].second - points[i + 1].first * points[i].second
     }
-    return abs(a + points[size - 1].first * points[0].second - points[0].first * points[size - 1].second) / 2
+    return abs(area + points[size - 1].first * points[0].second - points[0].first * points[size - 1].second) / 2
+}
+
+/**
+ * Ray-casting algorithm to determine if a point is inside a polygon.
+ * https://en.wikipedia.org/wiki/Point_in_polygon
+ * https://rosettacode.org/wiki/Ray-casting_algorithm#Kotlin
+ *
+ * Cast a horizontal ray from the point to the right and count edge crossings:
+ * odd number of crossings = inside, even = outside.
+ *
+ * @param point The point to test (x, y coordinates)
+ * @param polygon The vertices of the polygon in order
+ * @return true if the point is inside the polygon, false otherwise
+ */
+fun isPointInsidePolygon(point: Pair<Double, Double>, polygon: List<Pair<Int, Int>>): Boolean {
+    val (x, y) = point
+    var isInside = false
+
+    var previousIndex = polygon.size - 1
+    for (currentIndex in polygon.indices) {
+        val (currentX, currentY) = polygon[currentIndex]
+        val (previousX, previousY) = polygon[previousIndex]
+
+        // For the ray to cross an edge, two conditions must be met:
+        // 1. The edge must straddle the y-coordinate: one endpoint above y, one below
+        // 2. The crossing point must be to the right of x (in the ray's path)
+        if ((currentY > y) != (previousY > y) &&
+            x < (previousX - currentX) * (y - currentY) / (previousY - currentY) + currentX
+        ) {
+            isInside = !isInside
+        }
+        previousIndex = currentIndex
+    }
+
+    return isInside
 }
