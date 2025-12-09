@@ -92,6 +92,7 @@ class Day09(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
 
     /**
      * Coordinate compression: instead of working with the full grid (which is huge)
+     * https://www.quora.com/What-is-coordinate-compression-and-what-is-it-used-for
      * we only work with the unique X and Y coordinates where red tiles exist.
      * This reduces the grid to ~500x500 cells.
      */
