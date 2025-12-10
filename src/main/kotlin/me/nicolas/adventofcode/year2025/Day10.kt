@@ -6,6 +6,7 @@ import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
+import java.util.concurrent.atomic.AtomicInteger
 
 // --- Day 10: Factory ---
 // https://adventofcode.com/2025/day/10
@@ -53,6 +54,8 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
     /**
      * Finds the minimum number of button presses required to achieve the target light configuration.
      * Each button can be pressed either 0 or 1 time (in GF(2)).
+     * https://en.wikipedia.org/wiki/GF(2)
+     *
      * Uses a brute-force approach by checking all possible combinations of button presses.
      * This is feasible for a small number of buttons due to the exponential growth of combinations.
      */
@@ -61,6 +64,7 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
         val numButtons = machine.buttons.size
 
         // This problem operates in GF(2) (Galois Field of order 2), also known as binary field or Z/2Z
+
         // In GF(2):
         // - All arithmetic is done modulo 2 (only values 0 and 1 exist)
         // - Addition is equivalent to XOR: 0+0=0, 0+1=1, 1+0=1, 1+1=0
@@ -275,6 +279,9 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
         }
     }
 
+    /**
+     * Part One using brute-force approach.
+     */
     fun partOne(data: String): Int {
         return data.lines()
             .filter { line -> line.isNotBlank() }
@@ -284,44 +291,60 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
             }
     }
 
+    /**
+     * Part Two using optimized backtracking with advanced pruning in parallel.
+     */
     fun partTwo(data: String): Int = runBlocking {
-        // Process each machine for joltage configuration in parallel using coroutines
-
         val machines = buildAllMachines(data)
         val totalMachines = machines.size
+        val processedCount = AtomicInteger(0)
 
         val availableProcessors = Runtime.getRuntime().availableProcessors()
+        val startTime = System.currentTimeMillis()
+
         println("Processing $totalMachines machines in parallel using $availableProcessors cores...")
 
         // Process machines in parallel using coroutines with optimized backtracking
         val results = machines.map { machine ->
             async(Dispatchers.Default) {
-                findMinPressesForJoltage(machine)
+                val result = findMinPressesForJoltage(machine)
+                val processed = processedCount.incrementAndGet()
+
+                // Display progress every 10 machines or at completion
+                if (processed % 10 == 0 || processed == totalMachines) {
+                    val elapsed = (System.currentTimeMillis() - startTime) / 1000.0
+                    val rate = if (elapsed > 0) processed / elapsed else 0.0
+                    val eta = if (rate > 0) ((totalMachines - processed) / rate).toInt() else 0
+                    println(
+                        "Progress: $processed/$totalMachines machines (${
+                            String.format("%.1f", processed * 100.0 / totalMachines)
+                        }%) - ${String.format("%.2f", rate)} machines/sec - ETA: ${eta}s"
+                    )
+                }
+
+                result
             }
         }.awaitAll()
+
+        val totalTime = (System.currentTimeMillis() - startTime) / 1000.0
+        println("All $totalMachines machines processed in ${String.format("%.2f", totalTime)}s!")
 
         // Sum all results
         results.sum()
     }
 
-    fun partTwoWithZ3(data: String): Int = runBlocking {
-        // Process each machine for joltage configuration in parallel using coroutines
-        // Use Z3 solver for efficient solving of the linear system
-
+    /**
+     * Part Two using Z3 solver for better performance on large inputs.
+     */
+    fun partTwoWithZ3(data: String): Int {
         val machines = buildAllMachines(data)
-        val totalMachines = machines.size
-
-        val availableProcessors = Runtime.getRuntime().availableProcessors()
-        println("Processing $totalMachines machines in parallel using Z3 solver on $availableProcessors cores...")
 
         // Process machines in parallel using coroutines with Z3 solver
         val results = machines.map { machine ->
-            async(Dispatchers.Default) {
-                findMinPressesForJoltageZ3(machine)
-            }
-        }.awaitAll()
+            findMinPressesForJoltageZ3(machine)
+        }
 
         // Sum all results
-        results.sum()
+        return results.sum()
     }
 }
