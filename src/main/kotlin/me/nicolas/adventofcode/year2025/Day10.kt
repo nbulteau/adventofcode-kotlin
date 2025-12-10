@@ -264,7 +264,6 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
         Context().use { context ->
             with(context) {
                 // Extension functions for Z3 API (similar to Day24 2023)
-                operator fun IntExpr.times(other: IntExpr): IntExpr = mkMul(this, other) as IntExpr
                 operator fun IntExpr.plus(other: IntExpr): IntExpr = mkAdd(this, other) as IntExpr
                 infix fun IntExpr.eq(other: IntExpr): BoolExpr = mkEq(this, other)
                 fun Int.int() = mkInt(this)
