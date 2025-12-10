@@ -33,7 +33,7 @@ class Day10Test {
     }
 
     @Test
-    fun partTwo() {
+    fun partTwoWithZ3BrutForce() {
         assertEquals(81, day.partTwo(test))
     }
 }

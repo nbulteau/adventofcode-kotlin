@@ -17,6 +17,7 @@ dependencies {
     implementation("net.sf.jung:jung-algorithms:2.1.1") // use JUNG to solve 2023 day25
     implementation("net.sf.jung:jung-graph-impl:2.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0") // to solve 2015 day 12
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1") // use coroutines for parallel processing
 
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.assertj:assertj-core:3.27.6")

@@ -11,7 +11,7 @@
 | 07  | Laboratories        | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day07.kt) [\[AoC\]](http://adventofcode.com/2025/day/7)     |
 | 08  | Playground          | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day08.kt) [\[AoC\]](http://adventofcode.com/2025/day/8)     |
 | 09  | Movie Theater       | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day09.kt) [\[AoC\]](http://adventofcode.com/2025/day/9)     |
-| 10  | TBD                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day10.kt) [\[AoC\]](http://adventofcode.com/2025/day/10)    |
+| 10  | Factory             | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day10.kt) [\[AoC\]](http://adventofcode.com/2025/day/10)    |
 | 11  | TBD                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day11.kt) [\[AoC\]](http://adventofcode.com/2025/day/11)    |
 | 12  | TBD                 | [\[Code\]](https://github.com/nbulteau/adventofcode-kotlin/blob/main/src/main/kotlin/me/nicolas/adventofcode/year2025/Day12.kt) [\[AoC\]](http://adventofcode.com/2025/day/12)    |
 

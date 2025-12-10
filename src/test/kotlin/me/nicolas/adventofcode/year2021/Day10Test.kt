@@ -25,7 +25,7 @@ class Day10Test {
     }
 
     @Test
-    fun partTwo() {
+    fun partTwoWithZ3BrutForce() {
         assertEquals(288957, day.partTwo(test.split("\n")))
     }
 }

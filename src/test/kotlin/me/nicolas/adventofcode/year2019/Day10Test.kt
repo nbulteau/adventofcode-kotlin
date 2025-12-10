@@ -117,7 +117,7 @@ class Day10Test {
     }
 
     @Test
-    fun testpartTwoLargestExample() {
+    fun testpartTwoWithZ3BrutForceLargestExample() {
         val input = """
             .#..##.###...#######
             ##.############..##.
