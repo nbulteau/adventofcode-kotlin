@@ -14,6 +14,7 @@ fun main() {
     val day = Day10(2025, 10)
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwoWithZ3(data) }
+    //prettyPrintPartTwo { day.partTwo(data) }
 }
 
 class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(year, day, title) {
@@ -290,9 +291,9 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
         val totalMachines = machines.size
 
         val availableProcessors = Runtime.getRuntime().availableProcessors()
-        println("Processing $totalMachines machines in parallel using Z3 solver on $availableProcessors cores...")
+        println("Processing $totalMachines machines in parallel using $availableProcessors cores...")
 
-        // Process machines in parallel using coroutines with Z3 solver
+        // Process machines in parallel using coroutines with optimized backtracking
         val results = machines.map { machine ->
             async(Dispatchers.Default) {
                 findMinPressesForJoltage(machine)
