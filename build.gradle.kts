@@ -13,8 +13,9 @@ repositories {
 }
 
 dependencies {
-    implementation("tools.aqua:z3-turnkey:4.14.1") // use Z3 to solve 2023 day24 part two
-    implementation("net.sf.jung:jung-algorithms:2.1.1") // use JUNG to solve 2023 day25
+    implementation("tools.aqua:z3-turnkey:4.14.1") // use Z3 to solve 2023 day 24 part two and 2025 day 10 part two
+    implementation("org.ojalgo:ojalgo:56.1.1") // use Ojalgo to solve 2025 day 10 part two
+    implementation("net.sf.jung:jung-algorithms:2.1.1") // use JUNG to solve 2023 day 25
     implementation("net.sf.jung:jung-graph-impl:2.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0") // to solve 2015 day 12
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1") // use coroutines for parallel processing

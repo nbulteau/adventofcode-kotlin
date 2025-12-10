@@ -1,12 +1,18 @@
 package me.nicolas.adventofcode.year2025
 
-import com.microsoft.z3.*
-import kotlinx.coroutines.*
+import com.microsoft.z3.BoolExpr
+import com.microsoft.z3.Context
+import com.microsoft.z3.IntExpr
+import com.microsoft.z3.IntNum
+import com.microsoft.z3.Status
 import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import java.util.concurrent.atomic.AtomicInteger
+import org.ojalgo.optimisation.ExpressionsBasedModel
+import java.util.*
+import kotlin.math.roundToInt
+import kotlin.use
 
 // --- Day 10: Factory ---
 // https://adventofcode.com/2025/day/10
@@ -14,8 +20,9 @@ fun main() {
     val data = readFileDirectlyAsText("/year2025/day10/data.txt")
     val day = Day10(2025, 10)
     prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwoWithLinearSolver(data) }
+    prettyPrintPartTwo { day.partTwoWithOjalgo(data) }
     prettyPrintPartTwo { day.partTwoWithZ3(data) }
-    //prettyPrintPartTwo { day.partTwo(data) }
 }
 
 class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(year, day, title) {
@@ -23,7 +30,7 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
     data class Machine(
         val targetLights: List<Boolean>,
         val buttons: List<List<Int>>,
-        val joltageRequirements: List<Int>
+        val joltageRequirements: List<Int>,
     )
 
     fun buildAllMachines(data: String): List<Machine> {
@@ -56,8 +63,8 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
      * Each button can be pressed either 0 or 1 time (in GF(2)).
      * https://en.wikipedia.org/wiki/GF(2)
      *
-     * Uses a brute-force approach by checking all possible combinations of button presses.
-     * This is feasible for a small number of buttons due to the exponential growth of combinations.
+     * Use a brute-force approach by checking all possible combinations of button presses.
+     * This is possible for a small number of buttons due to the exponential growth of combinations.
      */
     fun findMinPresses(machine: Machine): Int {
         val numLights = machine.targetLights.size
@@ -96,126 +103,157 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
         return if (minPresses == Int.MAX_VALUE) 0 else minPresses
     }
 
-    /**
-     * Finds the minimum number of button presses required to achieve the target joltage levels.
-     * This is a system of linear equations over integers (not GF(2)).
-     * We need to find non-negative integer values for each button press count that:
-     * 1. Satisfies all joltage requirements exactly
-     * 2. Minimizes the total number of button presses
-     *
-     * Algorithm: Optimized backtracking with advanced pruning
-     * - For each button, try all possible press counts from 0 to a calculated upper bound
-     * - Upper bound for a button = min remaining value among all counters it affects
-     * - Multiple pruning strategies:
-     *   1. Branch bound pruning: skip if current presses + lower bound >= best solution
-     *   2. Infeasibility detection: skip if remaining buttons can't satisfy remaining targets
-     *   3. Early termination: stop when optimal solution is found
-     */
     fun findMinPressesForJoltage(machine: Machine): Int {
         val numCounters = machine.joltageRequirements.size
-        val numButtons = machine.buttons.size
-        val target = machine.joltageRequirements.toIntArray()
+        val target = machine.joltageRequirements
 
-        // Track the minimum number of presses found so far
-        var minPresses = Int.MAX_VALUE
+        // Check for impossible cases: a counter has a non-zero target but no button affects it.
+        val coveredCounters = machine.buttons.flatten().toSet()
+        for (i in 0 until numCounters) {
+            if (i !in coveredCounters && target[i] > 0) {
+                return 0 // Impossible, but problem expects sum, so return 0 for this machine
+            }
+        }
 
-        // Precompute which buttons affect which counters (inverse mapping)
-        val counterToButtons = Array(numCounters) { mutableListOf<Int>() }
-        for (buttonIdx in 0 until numButtons) {
-            for (counterIdx in machine.buttons[buttonIdx]) {
-                if (counterIdx < numCounters) {
-                    counterToButtons[counterIdx].add(buttonIdx)
+        // Decompose the problem into independent subproblems (connected components)
+        val components = findConnectedComponents(numCounters, machine.buttons)
+        var totalPresses = 0L
+
+        for (comp in components) {
+            val compMap = comp.withIndex().associate { (idx, counter) -> counter to idx }
+            val k = comp.size
+            val subTarget = DoubleArray(k) { i -> target[comp[i]].toDouble() }
+
+            // Filter buttons relevant to this component
+            val relevantButtons = machine.buttons.withIndex()
+                .filter { (_, btn) -> btn.any { it in comp } }
+
+            val l = relevantButtons.size
+            val aMat = Array(k) { DoubleArray(l) }
+
+            relevantButtons.forEachIndexed { j, (_, btn) ->
+                for (counter in btn) {
+                    compMap[counter]?.let { compIdx ->
+                        aMat[compIdx][j] = 1.0
+                    }
+                }
+            }
+
+            val subResult = LinearSolver().solve(k, l, aMat, subTarget)
+            if (subResult == Long.MAX_VALUE) {
+                return 0 // Inconsistent subproblem, fail the entire machine
+            }
+            totalPresses += subResult
+        }
+
+        return totalPresses.toInt()
+    }
+
+    private fun findConnectedComponents(numCounters: Int, buttons: List<List<Int>>): List<List<Int>> {
+        val adj = Array(numCounters) { mutableListOf<Int>() }
+        for (btn in buttons) {
+            for (i in btn.indices) {
+                for (j in i + 1 until btn.size) {
+                    adj[btn[i]].add(btn[j])
+                    adj[btn[j]].add(btn[i])
                 }
             }
         }
 
-        /**
-         * Calculate a lower bound on remaining button presses needed
-         * This helps prune branches earlier
-         */
-        fun calculateLowerBound(counters: IntArray, startButtonIdx: Int): Int {
-            var lowerBound = 0
-            for (counterIdx in 0 until numCounters) {
-                val remaining = target[counterIdx] - counters[counterIdx]
-                if (remaining > 0) {
-                    // Find the button that affects this counter most efficiently among remaining buttons
-                    val availableButtons = counterToButtons[counterIdx].filter { it >= startButtonIdx }
-                    if (availableButtons.isEmpty()) {
-                        return Int.MAX_VALUE // Impossible to satisfy
-                    }
-                    // Optimistic lower bound: assume we can satisfy this counter with minimal presses
-                    lowerBound = maxOf(lowerBound, remaining)
-                }
-            }
-            return lowerBound
-        }
-
-        /**
-         * Recursive backtracking search with optimizations
-         */
-        fun search(buttonIdx: Int, currentTotal: Int, counters: IntArray) {
-            // Base case: all buttons have been considered
-            if (buttonIdx == numButtons) {
-                // Check if we've reached the target exactly
-                if (counters.contentEquals(target)) {
-                    minPresses = minOf(minPresses, currentTotal)
-                }
-                return
-            }
-
-            // Pruning 1: Branch bound with lower bound estimation
-            val lowerBound = calculateLowerBound(counters, buttonIdx)
-            if (currentTotal + lowerBound >= minPresses) return
-
-            // Calculate the upper bound for this button
-            // Don't press more than needed to reach any counter's remaining target
-            var maxForButton = target.maxOrNull() ?: 0
-            for (counterIdx in machine.buttons[buttonIdx]) {
-                if (counterIdx < numCounters) {
-                    val remaining = target[counterIdx] - counters[counterIdx]
-                    if (remaining < 0) {
-                        maxForButton = -1 // This counter is already exceeded
-                        break
-                    }
-                    maxForButton = minOf(maxForButton, remaining)
-                }
-            }
-
-            // Try pressing this button from 0 to maxForButton times
-            for (presses in 0..maxOf(0, maxForButton)) {
-                // Early pruning: skip if this would exceed our current best
-                if (currentTotal + presses >= minPresses) break
-
-                val newCounters = counters.copyOf()
-                var valid = true
-
-                // Update counters affected by this button
-                for (counterIdx in machine.buttons[buttonIdx]) {
-                    if (counterIdx < numCounters) {
-                        newCounters[counterIdx] += presses
-                        // Prune: if any counter exceeds its target, this branch is invalid
-                        if (newCounters[counterIdx] > target[counterIdx]) {
-                            valid = false
-                            break
+        val seen = BooleanArray(numCounters)
+        val components = mutableListOf<List<Int>>()
+        for (u in 0 until numCounters) {
+            if (!seen[u]) {
+                val component = mutableListOf<Int>()
+                val queue: Queue<Int> = LinkedList()
+                queue.add(u)
+                seen[u] = true
+                while (queue.isNotEmpty()) {
+                    val v = queue.poll()
+                    component.add(v)
+                    for (w in adj[v]) {
+                        if (!seen[w]) {
+                            seen[w] = true
+                            queue.add(w)
                         }
                     }
                 }
+                components.add(component.sorted())
+            }
+        }
+        return components
+    }
 
-                // Recurse to the next button if this configuration is valid
-                if (valid) {
-                    search(buttonIdx + 1, currentTotal + presses, newCounters)
+    /**
+     * Solves the joltage puzzle using the Ojalgo library, a pure Java library for mathematics,
+     * linear algebra, and optimization. This method models the problem as an Integer Linear
+     * Programming (ILP) problem.
+     *
+     * The ILP model is structured as follows:
+     * - **Variables**: `x_i` representing the number of presses for each button `i`. These are
+     *   defined as non-negative integer variables.
+     * - **Constraints**: For each counter `j`, a linear equality constraint is created to ensure
+     *   that the sum of presses of buttons affecting it equals the target requirement `t_j`.
+     *   `sum(x_i for all i affecting j) = t_j`.
+     * - **Objective Function**: The goal is to minimize the total number of button presses,
+     *   which is formulated as minimizing the sum of all variables: `minimize(sum(x_i))`.
+     *
+     * Ojalgo provides a high-level API to build and solve such optimization models.
+     * https://www.ojalgo.org/
+     * https://github.com/optimatika/ojAlgo
+     */
+    fun findMinPressesForJoltageOjalgo(machine: Machine): Int {
+        val numCounters = machine.joltageRequirements.size
+        val numButtons = machine.buttons.size
+        val targets = machine.joltageRequirements
+
+        if (numButtons == 0) {
+            return if (targets.all { it == 0 }) 0 else -1
+        }
+
+        val model = ExpressionsBasedModel()
+
+        // Create non-negative integer variables
+        val variables = (0 until numButtons).map { i ->
+            model.newVariable("x$i").lower(0).integer(true)
+        }
+
+        // Add equality constraints
+        for (c in 0 until numCounters) {
+            val constraint = model.newExpression("c$c").level(targets[c].toBigDecimal())
+            for (b in 0 until numButtons) {
+                if (c in machine.buttons[b]) {
+                    constraint.set(variables[b], 1)
                 }
             }
         }
 
-        search(0, 0, IntArray(numCounters))
-        return if (minPresses == Int.MAX_VALUE) 0 else minPresses
+        // Minimize sum of all variables
+        variables.forEach { it.weight(1) }
+
+        // Solve
+        val result = model.minimise()
+
+        return if (result.state.isOptimal || result.state.isFeasible) {
+            result.value.roundToInt()
+        } else {
+            0 // Should indicate an error or impossible case, returning 0 for sum
+        }
     }
 
     /**
-     * Finds the minimum number of button presses using Z3 solver.
-     * This is much faster than brute force for large problems.
-     * Z3 solves the system of linear equations and minimizes the objective function.
+     * Solves the joltage puzzle using the Z3 solver, an SMT (Satisfiability Modulo Theories) solver.
+     * This method models the problem as a system of linear integer equations and uses Z3 to find the
+     * optimal solution that minimizes the total number of button presses.
+     *
+     * The problem is defined as follows:
+     * - Let `x_i` be the number of times button `i` is pressed.
+     * - For each counter `j`, the sum of presses of buttons affecting it must equal the target `t_j`.
+     *   This gives a set of linear equations: `sum(x_i for all i affecting j) = t_j`.
+     * - The variables `x_i` must be non-negative integers.
+     * - The objective is to minimize `sum(x_i)`.
+     *
+     * Z3 is particularly powerful for such constraint satisfaction and optimization problems.
      */
     fun findMinPressesForJoltageZ3(machine: Machine): Int {
         val numCounters = machine.joltageRequirements.size
@@ -283,54 +321,24 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
      * Part One using brute-force approach.
      */
     fun partOne(data: String): Int {
-        return data.lines()
-            .filter { line -> line.isNotBlank() }
-            .sumOf { line ->
-                val machine = parseMachine(line)
-                findMinPresses(machine)
-            }
+        val machines = buildAllMachines(data)
+        return machines.sumOf { machine -> findMinPresses(machine) }
     }
 
     /**
-     * Part Two using optimized backtracking with advanced pruning in parallel.
+     * Part Two using the custom LinearSolver.
      */
-    fun partTwo(data: String): Int = runBlocking {
+    fun partTwoWithLinearSolver(data: String): Int {
         val machines = buildAllMachines(data)
-        val totalMachines = machines.size
-        val processedCount = AtomicInteger(0)
+        return machines.sumOf { machine -> findMinPressesForJoltage(machine) }
+    }
 
-        val availableProcessors = Runtime.getRuntime().availableProcessors()
-        val startTime = System.currentTimeMillis()
-
-        println("Processing $totalMachines machines in parallel using $availableProcessors cores...")
-
-        // Process machines in parallel using coroutines with optimized backtracking
-        val results = machines.map { machine ->
-            async(Dispatchers.Default) {
-                val result = findMinPressesForJoltage(machine)
-                val processed = processedCount.incrementAndGet()
-
-                // Display progress every 10 machines or at completion
-                if (processed % 10 == 0 || processed == totalMachines) {
-                    val elapsed = (System.currentTimeMillis() - startTime) / 1000.0
-                    val rate = if (elapsed > 0) processed / elapsed else 0.0
-                    val eta = if (rate > 0) ((totalMachines - processed) / rate).toInt() else 0
-                    println(
-                        "Progress: $processed/$totalMachines machines (${
-                            String.format("%.1f", processed * 100.0 / totalMachines)
-                        }%) - ${String.format("%.2f", rate)} machines/sec - ETA: ${eta}s"
-                    )
-                }
-
-                result
-            }
-        }.awaitAll()
-
-        val totalTime = (System.currentTimeMillis() - startTime) / 1000.0
-        println("All $totalMachines machines processed in ${String.format("%.2f", totalTime)}s!")
-
-        // Sum all results
-        results.sum()
+    /**
+     * Part Two using Ojalgo solver for better performance on large inputs.
+     */
+    fun partTwoWithOjalgo(data: String): Int {
+        val machines = buildAllMachines(data)
+        return machines.sumOf { machine -> findMinPressesForJoltageOjalgo(machine) }
     }
 
     /**
@@ -338,13 +346,6 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
      */
     fun partTwoWithZ3(data: String): Int {
         val machines = buildAllMachines(data)
-
-        // Process machines in parallel using coroutines with Z3 solver
-        val results = machines.map { machine ->
-            findMinPressesForJoltageZ3(machine)
-        }
-
-        // Sum all results
-        return results.sum()
+        return machines.sumOf { machine -> findMinPressesForJoltageZ3(machine) }
     }
 }

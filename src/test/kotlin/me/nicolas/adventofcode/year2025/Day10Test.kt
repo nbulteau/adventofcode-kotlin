@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 class Day10Test {
     private val day = Day10(2025, 10)
-    
+
     val test = """
         [.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
         [...#.] (0,2,3,4) (2,3) (0,4) (0,1,2) (1,2,3,4) {7,5,12,7,2}
@@ -15,6 +15,16 @@ class Day10Test {
     @Test
     fun partOne() {
         assertEquals(7, day.partOne(test))
+    }
+
+    @Test
+    fun partTwoWithLinearSolver() {
+        assertEquals(33, day.partTwoWithLinearSolver(test))
+    }
+
+    @Test
+    fun partTwoWithOjalgo() {
+        assertEquals(33, day.partTwoWithOjalgo(test))
     }
 
     @Test
