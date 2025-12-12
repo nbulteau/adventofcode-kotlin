@@ -1,8 +1,6 @@
 package me.nicolas.adventofcode.year2025
 
 import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.Point
-import me.nicolas.adventofcode.utils.SimpleGrid
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
@@ -11,20 +9,24 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 // https://adventofcode.com/2025/day/12
 fun main() {
     val data = readFileDirectlyAsText("/year2025/day12/data.txt")
-    val day = Day12()
+    val day = Day12WithOptimisedGrid()
     prettyPrintPartOne { day.partOne(data) }
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Farm") :
+/**
+ * Solution for 2025 Day 12: Christmas Tree Farm
+ * Optimised version using a flat array for the grid: found the 1D boolean array idea on Reddit
+ */
+
+class Day12WithOptimisedGrid(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Farm") :
     AdventOfCodeDay(year, day, title) {
 
-    private data class Shape(val id: Int, val points: List<Point>, val width: Int, val height: Int)
+    private data class Shape(val id: Int, val points: List<Pair<Int, Int>>, val width: Int, val height: Int)
 
     private data class Region(val width: Int, val height: Int, val presentCounts: Map<Int, Int>)
 
     private data class Present(val shapeIndex: Int, val cellCount: Int)
-
 
     /**
      * Part 1: Count how many regions can fit all their required presents
@@ -39,7 +41,7 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
      * 1. Early rejection: If total present area > region area, impossible
      * 2. Lexicographic ordering: When placing multiple identical shapes, enforce
      *    placement order to avoid exploring symmetric duplicate solutions
-     * 3. SimpleGrid: Use 2D grid abstraction for cleaner coordinate handling
+     * 3. Flat array grid: Use 1D boolean array instead of 2D
      *
      * Time Complexity: O(R × P! × V × W × H) worst case, heavily pruned in practice
      *   where R = regions, P = presents per region, V = variants (≤8), W/H = dimensions
@@ -51,8 +53,8 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         // Precompute all rotation/flip variants for each shape
         val allShapeVariants = baseShapes.map { shape ->
             generateOrientations(shape.points).map { points ->
-                val maxX = points.maxOfOrNull { it.x } ?: 0
-                val maxY = points.maxOfOrNull { it.y } ?: 0
+                val maxX = points.maxOfOrNull { it.first } ?: 0
+                val maxY = points.maxOfOrNull { it.second } ?: 0
                 Shape(shape.id, points, maxX + 1, maxY + 1)
             }
         }
@@ -66,12 +68,7 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         return 0
     }
 
-    /**
-     * Check if all presents can fit in the given region using backtracking
-     * with optimizations:
-     * - Early rejection based on area
-     * - Lexicographic ordering for identical shapes
-     */
+
     private fun canFitAllPresents(region: Region, shapeVariants: List<List<Shape>>): Boolean {
         // Expand present counts into individual presents to place
         val presentsToPlace = mutableListOf<Present>()
@@ -102,12 +99,13 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         // This enables lexicographic ordering optimization in backtracking
         presentsToPlace.sortBy { it.shapeIndex }
 
-        // Use SimpleGrid with Boolean values (false = empty, true = occupied)
-        val matrix = Array(region.height) { Array(region.width) { false } }
-        val grid = SimpleGrid(matrix)
+        // Use flat 1D boolean array as grid (better cache locality than 2D)
+        val grid = BooleanArray(region.width * region.height)
 
         return tryPlacingPresents(
             grid = grid,
+            width = region.width,
+            height = region.height,
             presentsToPlace = presentsToPlace.toList(),
             currentPresentIndex = 0,
             shapeVariants = shapeVariants,
@@ -119,11 +117,15 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
     /**
      * Recursive backtracking to place presents one at a time
      *
-     * Key Optimization - Lexicographic Ordering: When placing multiple identical shapes, we enforce that each subsequent
-     * identical shape must be placed at a position >= the previous one (in row-major order). This prevents exploring symmetric duplicate solutions.
+     * Key Optimization - Lexicographic Ordering:
+     * When placing multiple identical shapes, we enforce that each subsequent
+     * identical shape must be placed at a position >= the previous one (in
+     * row-major order). This prevents exploring symmetric duplicate solutions.
      */
     private fun tryPlacingPresents(
-        grid: SimpleGrid<Boolean>,
+        grid: BooleanArray,
+        width: Int,
+        height: Int,
         presentsToPlace: List<Present>,
         currentPresentIndex: Int,
         shapeVariants: List<List<Shape>>,
@@ -141,13 +143,13 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         // Try each orientation of the current shape
         for (variant in variants) {
             // Try placing at each valid position in row-major order
-            for (y in minPlacementY until grid.height) {
+            for (y in minPlacementY until height) {
                 val xStart = if (y == minPlacementY) minPlacementX else 0
 
-                for (x in xStart until grid.width) {
-                    if (canPlaceShape(variant, x, y, grid)) {
+                for (x in xStart until width) {
+                    if (canPlaceShape(variant, x, y, grid, width, height)) {
                         // Place the shape on the grid
-                        placeShape(variant, x, y, grid, true)
+                        placeShape(variant, x, y, grid, width, true)
 
                         // Determine minimum position for next present
                         val nextMinX: Int
@@ -168,6 +170,8 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
                         // Recursively try to place remaining presents
                         if (tryPlacingPresents(
                                 grid = grid,
+                                width = width,
+                                height = height,
                                 presentsToPlace = presentsToPlace,
                                 currentPresentIndex = currentPresentIndex + 1,
                                 shapeVariants = shapeVariants,
@@ -179,7 +183,7 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
                         }
 
                         // Backtrack: remove the shape and try next position
-                        placeShape(variant, x, y, grid, false)
+                        placeShape(variant, x, y, grid, width, false)
                     }
                 }
             }
@@ -188,11 +192,12 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         return false // No valid placement found for this present
     }
 
+
     private fun parseInput(data: String): Pair<List<Shape>, List<Region>> {
         val lines = data.lines()
 
         // Find the line where regions start (contains 'x' like "4x4:")
-        val regionStartIndex = lines.indexOfFirst { line -> line.contains(Regex("\\d+x\\d+:")) }
+        val regionStartIndex = lines.indexOfFirst { it.contains(Regex("\\d+x\\d+:")) }
 
         val shapesStr = lines.subList(0, regionStartIndex).joinToString("\n")
         val regionsStr = lines.subList(regionStartIndex, lines.size).joinToString("\n")
@@ -211,20 +216,20 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         while (i < lines.size) {
             if (lines[i].contains(':')) {
                 val id = lines[i].substringBefore(':').toInt()
-                val points = mutableListOf<Point>()
+                val points = mutableListOf<Pair<Int, Int>>()
                 i++
                 var y = 0
                 while (i < lines.size && !lines[i].contains(':')) {
                     lines[i].forEachIndexed { x, char ->
                         if (char == '#') {
-                            points.add(Point(x, y))
+                            points.add(x to y)
                         }
                     }
                     y++
                     i++
                 }
-                val maxX = points.maxOfOrNull { point -> point.x } ?: 0
-                val maxY = points.maxOfOrNull { point -> point.y } ?: 0
+                val maxX = points.maxOfOrNull { it.first } ?: 0
+                val maxY = points.maxOfOrNull { it.second } ?: 0
                 shapes.add(Shape(id, points, maxX + 1, maxY + 1))
             } else {
                 i++
@@ -234,52 +239,53 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
     }
 
     private fun parseRegions(regionsStr: String): List<Region> {
-        return regionsStr.lines().filter { line -> line.isNotBlank() }
-            .map { line ->
-                val parts = line.split(": ")
-                val (width, height) = parts[0].split("x").map { it.toInt() }
-                val counts = parts[1].split(" ").map { it.toInt() }
-                val presentCounts =
-                    counts.mapIndexed { index, count -> index to count }.filter { it.second > 0 }.toMap()
-
-                Region(width, height, presentCounts)
-            }
+        return regionsStr.lines().filter { it.isNotBlank() }.map { line ->
+            val parts = line.split(": ")
+            val (width, height) = parts[0].split("x").map { it.toInt() }
+            val counts = parts[1].split(" ").map { it.toInt() }
+            val presentCounts = counts.mapIndexed { index, count -> index to count }.filter { it.second > 0 }.toMap()
+            Region(width, height, presentCounts)
+        }
     }
 
-    /**
-     * Generate all unique orientations (rotations and flips) of a shape (up to 8 variants).
-     */
-    private fun generateOrientations(points: List<Point>): Set<List<Point>> {
-        val orientations = mutableSetOf<List<Point>>()
+    private fun generateOrientations(points: List<Pair<Int, Int>>): List<List<Pair<Int, Int>>> {
+        val orientations = mutableSetOf<List<Pair<Int, Int>>>()
         var currentPoints = points
 
-        // 2 flips × 4 rotations = 8 orientations
         repeat(2) {
-            // 4 rotations (0°, 90°, 180°, 270°)
             repeat(4) {
                 orientations.add(currentPoints)
-                currentPoints = currentPoints.map { point -> Point(point.y, -point.x) } // Rotate 90 degrees
-                val minX = currentPoints.minOfOrNull { point -> point.x } ?: 0
-                val minY = currentPoints.minOfOrNull { point -> point.y } ?: 0
-                currentPoints = currentPoints.map { point -> Point(point.x - minX, point.y - minY) }
+                currentPoints = currentPoints.map { (x, y) -> y to -x } // Rotate 90 degrees
+                val minX = currentPoints.minOfOrNull { it.first } ?: 0
+                val minY = currentPoints.minOfOrNull { it.second } ?: 0
+                currentPoints = currentPoints.map { (it.first - minX) to (it.second - minY) }
             }
-            currentPoints = points.map { point -> Point(-point.x, point.y) } // Flip
-            val minX = currentPoints.minOfOrNull { point -> point.x } ?: 0
-            val minY = currentPoints.minOfOrNull { point -> point.y } ?: 0
-            currentPoints = currentPoints.map { point -> Point(point.x - minX, point.y - minY) }
+            currentPoints = points.map { (x, y) -> -x to y } // Flip
+            val minX = currentPoints.minOfOrNull { it.first } ?: 0
+            val minY = currentPoints.minOfOrNull { it.second } ?: 0
+            currentPoints = currentPoints.map { (it.first - minX) to (it.second - minY) }
         }
-
-        return orientations
+        return orientations.toList()
     }
 
     /**
      * Check if a shape can be placed at position (placementX, placementY)
      * Returns false if any cell would be out of bounds or overlap existing shapes
      */
-    private fun canPlaceShape(shape: Shape, placementX: Int, placementY: Int, grid: SimpleGrid<Boolean>): Boolean {
-        for (point in shape.points) {
-            val point = Point(placementX + point.x, placementY + point.y)
-            if (!grid.contains(point) || grid[point]) {
+    private fun canPlaceShape(
+        shape: Shape,
+        placementX: Int,
+        placementY: Int,
+        grid: BooleanArray,
+        width: Int,
+        height: Int
+    ): Boolean {
+        for ((px, py) in shape.points) {
+            val x = placementX + px
+            val y = placementY + py
+
+            // Check bounds and collision
+            if (x >= width || y >= height || grid[y * width + x]) {
                 return false
             }
         }
@@ -294,13 +300,13 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         shape: Shape,
         placementX: Int,
         placementY: Int,
-        grid: SimpleGrid<Boolean>,
+        grid: BooleanArray,
+        width: Int,
         occupied: Boolean
     ) {
-        for (point in shape.points) {
-            val point = Point(placementX + point.x, placementY + point.y)
-            grid[point] = occupied
+        for ((px, py) in shape.points) {
+            val flatIndex = (placementY + py) * width + (placementX + px)
+            grid[flatIndex] = occupied
         }
     }
 }
-
