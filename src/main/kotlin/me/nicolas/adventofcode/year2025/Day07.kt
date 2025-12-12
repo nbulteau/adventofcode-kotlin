@@ -49,8 +49,8 @@ class Day07(year: Int, day: Int, title: String = "Laboratories") : AdventOfCodeD
             val newBeams = mutableSetOf<Point>()
 
             for (beam in activeBeams) {
-                // Move down: increment row (x in SimpleGrid convention)
-                val nextPoint = Point(beam.x + 1, beam.y)
+                // Move down: increment row (y in SimpleGrid convention)
+                val nextPoint = Point(beam.x, beam.y + 1)
 
                 // Check if beam exits the manifold (reached bottom)
                 if (nextPoint !in grid) {
@@ -73,9 +73,9 @@ class Day07(year: Int, day: Int, title: String = "Laboratories") : AdventOfCodeD
                             splitCount++
                         }
 
-                        // Create two beams at left and right positions relative to the splitter
-                        val leftPoint = Point(nextPoint.x, nextPoint.y - 1)
-                        val rightPoint = Point(nextPoint.x, nextPoint.y + 1)
+                        // Create two beams that continue down-left and down-right from the splitter
+                        val leftPoint = Point(nextPoint.x - 1, nextPoint.y + 1)
+                        val rightPoint = Point(nextPoint.x + 1, nextPoint.y + 1)
 
                         // Only add beams if they're still within the grid bounds
                         if (leftPoint in grid) {
@@ -119,7 +119,8 @@ class Day07(year: Int, day: Int, title: String = "Laboratories") : AdventOfCodeD
 
         // Dynamic programming: Map of column -> number of paths reaching that column in current row
         var currentRowPaths = mutableMapOf<Int, Long>()
-        currentRowPaths[startPoint.y] = 1L  // Start with 1 path at the starting column
+        // column is startPoint.x (col)
+        currentRowPaths[startPoint.x] = 1L  // Start with 1 path at the starting column
 
         val maxRow =  grid.rows.last
 
@@ -127,12 +128,12 @@ class Day07(year: Int, day: Int, title: String = "Laboratories") : AdventOfCodeD
         var totalTimelines = 0L
 
         // Process each row from start to end
-        for (row in startPoint.x..maxRow) {
+        for (row in startPoint.y..maxRow) {
             val nextRowPaths = mutableMapOf<Int, Long>()
 
             // For each column that has paths in the current row
             for ((col, pathCount) in currentRowPaths) {
-                val nextPoint = Point(row + 1, col)
+                val nextPoint = Point(col, row + 1)
 
                 // Check if paths exit the manifold (reached bottom)
                 if (nextPoint !in grid) {
@@ -155,8 +156,8 @@ class Day07(year: Int, day: Int, title: String = "Laboratories") : AdventOfCodeD
                         val leftCol = col - 1
                         val rightCol = col + 1
 
-                        val leftPoint = Point(row + 1, leftCol)
-                        val rightPoint = Point(row + 1, rightCol)
+                        val leftPoint = Point(leftCol, row + 1)
+                        val rightPoint = Point(rightCol, row + 1)
 
                         // Left paths: add to next row if within bounds, else they exit
                         if (leftPoint in grid) {

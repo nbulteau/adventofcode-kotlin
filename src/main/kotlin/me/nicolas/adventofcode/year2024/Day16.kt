@@ -92,11 +92,12 @@ class Day16(year: Int, day: Int, title: String = "Reindeer Maze") : AdventOfCode
     }
 
     private object Directions {
-
-        val up = -1 to 0
-        val right = 0 to 1
-        val down = 1 to 0
-        val left = 0 to -1
+        // Point(x, y) = Point(col, row)
+        // Pair(dx, dy) where dx affects x (col) and dy affects y (row)
+        val up = 0 to -1      // Decrease row (move up)
+        val right = 1 to 0    // Increase col (move right)
+        val down = 0 to 1     // Increase row (move down)
+        val left = -1 to 0    // Decrease col (move left)
 
         val cardinals = listOf(up, right, down, left)
     }

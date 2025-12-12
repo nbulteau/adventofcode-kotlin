@@ -126,7 +126,7 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
 
             // Filter buttons relevant to this component
             val relevantButtons = machine.buttons.withIndex()
-                .filter { (_, btn) -> btn.any { it in comp } }
+                .filter { (_, buttons) -> buttons.any { it in comp } }
 
             val l = relevantButtons.size
             val aMat = Array(k) { DoubleArray(l) }
@@ -229,7 +229,7 @@ class Day10(year: Int, day: Int, title: String = "Factory") : AdventOfCodeDay(ye
         }
 
         // Minimize sum of all variables
-        variables.forEach { it.weight(1) }
+        variables.forEach { variable -> variable.weight(1) }
 
         // Solve
         val result = model.minimise()

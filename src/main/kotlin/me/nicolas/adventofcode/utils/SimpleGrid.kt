@@ -27,7 +27,7 @@ class SimpleGrid<T>(
     }
 
     private val data: MutableMap<Point, T> = buildMap {
-        matrix.forEachIndexed { y: Int, row -> row.forEachIndexed { x: Int, item -> set(Point(y, x), item) } }
+        matrix.forEachIndexed { y: Int, row -> row.forEachIndexed { x: Int, item -> set(Point(x, y), item) } }
     }.toMutableMap()
 
     /**

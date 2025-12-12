@@ -110,13 +110,13 @@ class Day10(year: Int, day: Int, title: String = "Monitoring Station") : AdventO
 
                     // Check if this is the 200th asteroid
                     if (vaporized.size == 200) {
-                        println("200th vaporized asteroid at problem coords: (${asteroid.y}, ${asteroid.x})")
+                        println("200th vaporized asteroid at problem coords: (${asteroid.x}, ${asteroid.y})")
 
                         // Convert Point coordinates back to problem coordinates:
-                        // SimpleGrid stores Point(x=row, y=col), but problem uses (X=col, Y=row)
-                        // So: problem X = asteroid.y, problem Y = asteroid.x
+                        // SimpleGrid stores Point(x=col, y=row), and problem uses (X=col, Y=row)
+                        // So: problem X = asteroid.x, problem Y = asteroid.y
                         // Answer format: X * 100 + Y
-                        return asteroid.y * 100 + asteroid.x
+                        return asteroid.x * 100 + asteroid.y
                     }
                 }
                 // If the list is empty, the laser just passes through this direction
@@ -134,19 +134,19 @@ class Day10(year: Int, day: Int, title: String = "Monitoring Station") : AdventO
      * Calculates the angle in degrees from the station to a direction vector.
      * Angle 0 is straight up (decreasing row), and increases clockwise.
      *
-     * Point(x, y) represents (row, col), so:
-     * - dx = row difference (positive = down, negative = up)
-     * - dy = col difference (positive = right, negative = left)
+     * Point(x, y) represents (col, row), so:
+     * - dx = col difference (positive = right, negative = left)
+     * - dy = row difference (positive = down, negative = up)
      *
      * @param direction Normalized direction vector (dx, dy)
      * @return Angle in degrees [0, 360)
      */
     private fun calculateAngle(direction: Pair<Int, Int>): Double {
         val (dx, dy) = direction
-        // atan2(dx, dy) gives angle with dy as x-axis
-        // Adding 90 degrees rotates to make "up" (dx=-1, dy=0) be at 0 degrees
-        val angleRadians = kotlin.math.atan2(dx.toDouble(), dy.toDouble())
-        var angleDegrees = Math.toDegrees(angleRadians) + 90.0
+        // atan2(dy, dx) gives angle with dx as x-axis
+        // We need to adjust to make "up" (dx=0, dy=-1) be at 0 degrees
+        val angleRadians = kotlin.math.atan2(dx.toDouble(), -dy.toDouble())
+        var angleDegrees = Math.toDegrees(angleRadians)
 
         // Normalize to [0, 360)
         angleDegrees = (angleDegrees + 360.0) % 360.0
