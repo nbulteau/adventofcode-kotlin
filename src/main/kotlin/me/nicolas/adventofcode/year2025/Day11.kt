@@ -15,9 +15,9 @@ fun main() {
     prettyPrintPartTwo { day.partTwoOptimised(data) }
 }
 
-class Day11(year: Int, day: Int, title: String = "Reactor") : AdventOfCodeDay(year, day, title) {
+class Day11(year: Int = 2025, day: Int = 11, title: String = "Reactor") : AdventOfCodeDay(year, day, title) {
     /**
-     * Counts the number of distinct paths from "you" to "out" in the given graph.
+     * Count the number of distinct paths from "you" to "out" in the given graph.
      * The graph is represented as a map where keys are node names and values are lists of connected nodes.
      * It uses a depth-first search (DFS) with memoization to avoid re-computing path counts.
      */
@@ -26,7 +26,7 @@ class Day11(year: Int, day: Int, title: String = "Reactor") : AdventOfCodeDay(ye
     }
 
     /**
-     * Counts the number of paths from "svr" to "out" that pass through both "dac" and "fft".
+     * Count the number of paths from "svr" to "out" that pass through both "dac" and "fft".
      * It calculates the paths for two separate cases:
      * 1. svr -> ... -> dac -> ... -> fft -> ... -> out
      * 2. svr -> ... -> fft -> ... -> dac -> ... -> out
