@@ -37,12 +37,12 @@ private fun generateDay(day: Int?, year: Int) {
         // https://adventofcode.com/$year/day/$day
         fun main() {
             val data = readFileDirectlyAsText("/$packageName/day${day.toString().padStart(2, '0')}/data.txt")
-            val day = $className($year, $day)
+            val day = $className()
             prettyPrintPartOne { day.partOne(data) }
             prettyPrintPartTwo { day.partTwo(data) }
         }
 
-        class $className(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day, title) {
+        class $className(year: Int = $year, day: Int = $day, title: String = "") : AdventOfCodeDay(year, day, title) {
             fun partOne(data: String): Int {
                 return 0
             }
@@ -63,13 +63,15 @@ private fun generateDay(day: Int?, year: Int) {
     file.writeText(fileContent)
 
     // Generate the data file
-    val dataFileName = "src/main/resources/me/nicolas/adventofcode/$packageName/day${day.toString().padStart(2, '0')}/data.txt"
+    val dataFileName =
+        "src/main/resources/me/nicolas/adventofcode/$packageName/day${day.toString().padStart(2, '0')}/data.txt"
     val dataFile = File(dataFileName)
     dataFile.parentFile.mkdirs()
     dataFile.writeText("")
 
     // Generate the riddle file
-    val riddleFileName = "src/main/resources/me/nicolas/adventofcode/$packageName/day${day.toString().padStart(2, '0')}/riddle.txt"
+    val riddleFileName =
+        "src/main/resources/me/nicolas/adventofcode/$packageName/day${day.toString().padStart(2, '0')}/riddle.txt"
     val riddleFile = File(riddleFileName)
     riddleFile.parentFile.mkdirs()
     riddleFile.writeText("")
@@ -84,7 +86,7 @@ private fun generateDay(day: Int?, year: Int) {
         import kotlin.test.assertEquals
 
         class ${className}Test {
-            private val day = $className($year, $day)
+            private val day = $className()
             
             val test = ""${'"'}
                 
