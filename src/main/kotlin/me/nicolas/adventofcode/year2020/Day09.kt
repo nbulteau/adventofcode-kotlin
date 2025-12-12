@@ -1,64 +1,70 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 9: Encoding Error ---
+// --- Day 09: Encoding Error ---
 // https://adventofcode.com/2020/day/9
 fun main() {
-
-    println("--- Day 9: Encoding Error ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day09/training.txt")
     val data = readFileDirectlyAsText("/year2020/day09/data.txt")
-
-    val numbers = data.split("\n").map { str -> str.toLong() }
-
-    // Part One
-    val sum = partOne(numbers, preamble = 25)
-
-    // Part Two
-    partTwo(numbers, sum)
+    val day = Day09(2020, 9, "Encoding Error")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(numbers: List<Long>, preamble: Int): Long {
-    var index = 0
-    var wrongNumber: Long? = null
+class Day09(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    while (index < numbers.size && wrongNumber == null) {
-        val previous = numbers.subList(index, index + preamble)
-        val nextNumbers = numbers.subList(index + preamble, numbers.size)
-
-        val filter = previous.filter { nextNumbers[0] - it in previous && (nextNumbers[0] - it) * 2 != it }
-        if (filter.isEmpty()) {
-            wrongNumber = nextNumbers[0]
-        }
-        index++
+    fun partOne(data: String, preamble: Int = 25): Long {
+        val numbers = data.split("\n").filter { line -> line.isNotEmpty() }.map { line -> line.trim().toLong() }
+        return findFirstInvalidNumber(numbers, preamble)
     }
 
-    println("Part one = $wrongNumber")
+    fun partTwo(data: String, preamble: Int = 25): Long {
+        val numbers = data.split("\n").filter { line -> line.isNotEmpty() }.map { line -> line.trim().toLong() }
+        val invalidNumber = findFirstInvalidNumber(numbers, preamble)
+        return findEncryptionWeakness(numbers, invalidNumber)
+    }
 
-    return wrongNumber!!
-}
-
-
-private fun partTwo(numbers: List<Long>, sum: Long) {
-    val list = numbers.subList(0, numbers.indexOf(sum))
-
-    var index = 0
-    do {
-        var k = index + 1
-        do {
-            val contiguousRange = list.subList(index, k)
-            if (contiguousRange.sum() == sum) {
-                println("Part two = ${contiguousRange.minOf { it } + contiguousRange.maxOf { it }}")
-                return // done -> exit partTwo
+    private fun findFirstInvalidNumber(numbers: List<Long>, preamble: Int): Long {
+        for (i in preamble until numbers.size) {
+            val currentNumber = numbers[i]
+            val previousNumbers = numbers.subList(i - preamble, i)
+            if (!isValid(currentNumber, previousNumbers)) {
+                return currentNumber
             }
+        }
+        throw IllegalStateException("No invalid number found")
+    }
 
-            k++
-        } while (k < list.size)
+    private fun isValid(number: Long, previous: List<Long>): Boolean {
+        for (i in previous.indices) {
+            for (j in i + 1 until previous.size) {
+                if (previous[i] + previous[j] == number) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
-        index++
-    } while (index < list.size)
+    private fun findEncryptionWeakness(numbers: List<Long>, target: Long): Long {
+        var start = 0
+        var end = 0
+        var sum = 0L
+        while (end < numbers.size) {
+            sum += numbers[end]
+            while (sum > target) {
+                sum -= numbers[start]
+                start++
+            }
+            if (sum == target && end > start) {
+                val range = numbers.subList(start, end + 1)
+                return range.minOrNull()!! + range.maxOrNull()!!
+            }
+            end++
+        }
+        throw IllegalStateException("No encryption weakness found")
+    }
 }
-

@@ -1,106 +1,79 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
-
 
 // --- Day 21: Allergen Assessment ---
 // https://adventofcode.com/2020/day/21
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 21: Allergen Assessment ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day21/training.txt")
     val data = readFileDirectlyAsText("/year2020/day21/data.txt")
-
-    val lines = data.split("\n")
-
-    // Part One
-    val (ingredients, allergens) = Day21().partOne(lines)
-
-    // Part Two
-    val duration = measureTime { Day21().partTwo(ingredients, allergens.values.sortedBy { allergen -> allergen.name }) }
-    println("Part two duration : $duration")
+    val day = Day21(2020, 21, "Allergen Assessment")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
+class Day21(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-class Day21 {
+    fun partOne(data: String): Int {
+        val lines = data.split("\n")
+        val (ingredients, allergens) = extractFoods(lines)
+        checkAllergens(allergens)
+        return ingredients.values
+            .filter { ingredient -> ingredient.allergen == null }
+            .sumOf { ingredient -> ingredient.occurrence }
+    }
 
-    data class Food(val ingredients: MutableList<Ingredient>)
+    fun partTwo(data: String): String {
+        val lines = data.split("\n")
+        val (ingredients, allergens) = extractFoods(lines)
+        checkAllergens(allergens)
+        val allergensSortedByName = allergens.values.sortedBy { allergen -> allergen.name }
+        val allergenIngredient = ingredients.values
+            .filter { ingredient -> ingredient.allergen != null }
+            .associate { ingredient -> ingredient.allergen!! to ingredient.name }
+        return allergensSortedByName.joinToString(",") { allergen -> allergenIngredient[allergen]!! }
+    }
 
-    data class Ingredient(val name: String) {
+    private data class Food(val ingredients: MutableList<Ingredient>)
 
+    private data class Ingredient(val name: String) {
         var occurrence = 0
-
-        // one ingredient = 1 or 0 allergen
         var allergen: Allergen? = null
-
         fun incOccurrence() {
             occurrence++
         }
     }
 
-    data class Allergen(val name: String) {
-
+    private data class Allergen(val name: String) {
         val inFoodList = mutableListOf<Food>()
-
         fun addToInFoodList(food: Food) {
             inFoodList.add(food)
         }
     }
 
     private fun extractFoods(lines: List<String>): Pair<MutableMap<String, Ingredient>, MutableMap<String, Allergen>> {
-
         val ingredients = mutableMapOf<String, Ingredient>()
         val allergens = mutableMapOf<String, Allergen>()
 
         lines.forEach { line ->
-            val ingredientsStr = line.substringBefore(" (contains ")
-            val allergensStr = line.substringAfter(" (contains ").substringBefore(")")
+            if (line.isNotEmpty()) {
+                val ingredientsStr = line.substringBefore(" (contains ")
+                val allergensStr = line.substringAfter(" (contains ").substringBefore(")")
 
-            // Create Ingredient
-            val ingredientsInFood = ingredientsStr.split(" ").map { name ->
-                if (!ingredients.containsKey(name)) {
-                    ingredients[name] = Ingredient(name)
-                }
-                ingredients[name]!!.apply { this.incOccurrence() }
-            }.toMutableList()
+                val ingredientsInFood = ingredientsStr.split(" ").map { name ->
+                    ingredients.computeIfAbsent(name) { Ingredient(it) }.apply { incOccurrence() }
+                }.toMutableList()
 
-            // Create Allergen
-            allergensStr.split(", ").map { name ->
-                if (!allergens.containsKey(name)) {
-                    allergens[name] = Allergen(name)
+                allergensStr.split(", ").forEach { name ->
+                    allergens.computeIfAbsent(name) { Allergen(it) }.addToInFoodList(Food(ingredientsInFood))
                 }
-                allergens[name]!!.apply { this.addToInFoodList(Food(ingredientsInFood)) }
-            }.toMutableList()
+            }
         }
-
         return Pair(ingredients, allergens)
     }
 
-    fun partOne(lines: List<String>): Pair<MutableMap<String, Ingredient>, MutableMap<String, Allergen>> {
-
-        val (ingredients, allergens) = extractFoods(lines)
-
-        checkAllergens(allergens)
-
-        val result = ingredients.values
-            .filter { ingredient -> ingredient.allergen == null }
-            .map { ingredient -> ingredient.occurrence }
-            .reduce { acc, i -> acc + i }
-
-        println("Part one = $result")
-
-        return Pair(ingredients, allergens)
-    }
-
-    /**
-     * Each allergen is found in exactly one ingredient.
-     * Each ingredient contains zero or one allergen.
-     */
     private fun checkAllergens(allergens: MutableMap<String, Allergen>) {
         val allergensToCheck = allergens.values.toMutableList()
 
@@ -130,17 +103,4 @@ class Day21 {
             allergensToCheck.removeAll(allergensChecked.toSet())
         }
     }
-
-    fun partTwo(ingredients: MutableMap<String, Ingredient>, allergensSortedByName: List<Allergen>) {
-
-        // in a food, an allergen is only in one ingredient
-        val allergenIngredient = ingredients.values
-            .filter { ingredient -> ingredient.allergen != null }
-            .associate { ingredient -> ingredient.allergen!! to ingredient.name }
-        val list = allergensSortedByName.joinToString(",") { allergen -> allergenIngredient[allergen]!! }
-
-        println("Part two = $list")
-    }
 }
-
-

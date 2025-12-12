@@ -1,75 +1,63 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 8: Handheld Halting ---
+// --- Day 08: Handheld Halting ---
 // https://adventofcode.com/2020/day/8
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2020/day08/training.txt")
     val data = readFileDirectlyAsText("/year2020/day08/data.txt")
-
-    val instructions = data.split("\n")
-
-    // Part One
-    partOne(instructions)
-
-    // Part Two
-    partTwo(instructions)
+    val day = Day08(2020, 8, "Handheld Halting")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(instructions: List<String>) {
+class Day08(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    val (accumulator, _) = instructionsEngine(instructions)
+    fun partOne(data: String): Int {
+        val instructions = data.split("\n").filter { it.isNotEmpty() }
+        val (accumulator, _) = runProgram(instructions)
+        return accumulator
+    }
 
-    println("Part one = $accumulator")
-}
-
-
-private fun partTwo(instructions: List<String>) {
-
-    var index = 0
-    var accumulator = 0
-    do {
-        val modifiedInstructions = instructions.toMutableList()
-
-        // By changing exactly one jmp or nop, try to repair the boot code and make it terminate correctly.
-        if (modifiedInstructions[index].startsWith("nop")) {
-            modifiedInstructions[index] = modifiedInstructions[index].replace("nop", "jmp")
-        } else {
-            modifiedInstructions[index] = modifiedInstructions[index].replace("jmp", "nop")
-        }
-
-        val (result, notALoop) = instructionsEngine(modifiedInstructions)
-        accumulator = result
-        index++
-    } while (!notALoop && index < instructions.size)
-
-    println("Part two = $accumulator")
-}
-
-private fun instructionsEngine(instructions: List<String>): Pair<Int, Boolean> {
-
-    var index = 0
-    var accumulator = 0
-    val alreadyVisited = BooleanArray(instructions.size)
-
-    do {
-        alreadyVisited[index] = true
-        val instruction = instructions[index]
-        when {
-            instruction.startsWith("nop") -> index++
-            instruction.startsWith("acc") -> {
-                accumulator += instruction.substringAfter(" ").toInt()
-                index++
+    fun partTwo(data: String): Int {
+        val instructions = data.split("\n").filter { it.isNotEmpty() }
+        for (i in instructions.indices) {
+            val modifiedInstructions = instructions.toMutableList()
+            val instruction = instructions[i]
+            when {
+                instruction.startsWith("nop") -> modifiedInstructions[i] = instruction.replace("nop", "jmp")
+                instruction.startsWith("jmp") -> modifiedInstructions[i] = instruction.replace("jmp", "nop")
+                else -> continue
             }
-
-            instruction.startsWith("jmp") -> {
-                index += instruction.substringAfter(" ").toInt()
+            val (accumulator, terminated) = runProgram(modifiedInstructions)
+            if (terminated) {
+                return accumulator
             }
         }
-    } while (index < instructions.size && !alreadyVisited[index])
+        throw IllegalStateException("No solution found")
+    }
 
-    // The program is supposed to terminate by attempting to execute an instruction immediately after the last instruction in the file.
-    return Pair(accumulator, index >= instructions.size)
+    private fun runProgram(instructions: List<String>): Pair<Int, Boolean> {
+        var accumulator = 0
+        var pointer = 0
+        val visited = mutableSetOf<Int>()
+
+        while (pointer < instructions.size && pointer !in visited) {
+            visited.add(pointer)
+            val instruction = instructions[pointer]
+            val (operation, argument) = instruction.split(" ")
+            when (operation) {
+                "acc" -> {
+                    accumulator += argument.toInt()
+                    pointer++
+                }
+                "jmp" -> pointer += argument.toInt()
+                "nop" -> pointer++
+            }
+        }
+        return Pair(accumulator, pointer == instructions.size)
+    }
 }

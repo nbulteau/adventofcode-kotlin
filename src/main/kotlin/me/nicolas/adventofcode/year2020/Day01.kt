@@ -1,35 +1,44 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 1: Report Repair ---
+// --- Day 01: Report Repair ---
 // https://adventofcode.com/2020/day/1
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2020/day01/training.txt")
     val data = readFileDirectlyAsText("/year2020/day01/data.txt")
-
-    val numbers = data.split("\n").map { string -> string.toInt() }
-
-    // Part One
-    partOne(numbers)
-
-    // Part Two
-    partTwo(numbers)
+    val day = Day01()
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(numbers: List<Int>) {
-    val list = numbers.filter { numbers.contains(2020 - it) }
-    if (list.isNotEmpty()) {
-        println("Part one answer = ${list[0]} * ${list[1]} = ${list[0] * list[1]}")
+class Day01(year: Int = 2020, day: Int = 1, title: String = "Report Repair") : AdventOfCodeDay(year, day, title) {
+
+    fun partOne(data: String): Int {
+        val numbers = data.split("\n").filter { it.isNotEmpty() }.map { it.toInt() }
+        for (i in numbers.indices) {
+            for (j in i + 1 until numbers.size) {
+                if (numbers[i] + numbers[j] == 2020) {
+                    return numbers[i] * numbers[j]
+                }
+            }
+        }
+        return 0
+    }
+
+    fun partTwo(data: String): Int {
+        val numbers = data.split("\n").filter { it.isNotEmpty() }.map { it.toInt() }
+        for (i in numbers.indices) {
+            for (j in i + 1 until numbers.size) {
+                for (k in j + 1 until numbers.size) {
+                    if (numbers[i] + numbers[j] + numbers[k] == 2020) {
+                        return numbers[i] * numbers[j] * numbers[k]
+                    }
+                }
+            }
+        }
+        return 0
     }
 }
-
-private fun partTwo(numbers: List<Int>) {
-    val list = numbers.flatMap { n -> numbers.filter { numbers.contains(2020 - n - it) } }
-    if (list.isNotEmpty()) {
-        println("Part two answer = ${list[0]} * ${list[1]} * ${list[2]} = ${list[0] * list[1] * list[2]}")
-    }
-}
-
-

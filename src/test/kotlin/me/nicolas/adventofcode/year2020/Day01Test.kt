@@ -3,22 +3,27 @@ package me.nicolas.adventofcode.year2020
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class Day13Test {
+class Day01Test {
 
     private val data = """
-        939
-        7,13,x,x,59,x,31,19
+        1721
+        979
+        366
+        299
+        675
+        1456
     """.trimIndent()
 
-    private val day = Day13(2020, 13, "Shuttle Search")
+    private val day = Day01()
 
     @Test
     fun `part one`() {
-        assertEquals(295, day.partOne(data))
+        assertEquals(514579, day.partOne(data))
     }
 
     @Test
     fun `part two`() {
-        assertEquals(1068781, day.partTwo(data))
+        assertEquals(241861950, day.partTwo(data))
     }
 }
+

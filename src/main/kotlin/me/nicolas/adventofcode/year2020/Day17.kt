@@ -1,34 +1,26 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
 
 // --- Day 17: Conway Cubes ---
 // https://adventofcode.com/2020/day/17
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 17: Conway Cubes ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day17/training.txt")
     val data = readFileDirectlyAsText("/year2020/day17/data.txt")
-
-    val layout = data.split("\n")
-
-    // Part One
-    Day17PartOne().partOne(layout)
-
-    // Part Two
-    val duration = measureTime { Day17PartTwo().partTwo(layout) }
-    println("Part two duration : $duration")
+    val dayP1 = Day17PartOne()
+    val dayP2 = Day17PartTwo()
+    prettyPrintPartOne { dayP1.partOne(data) }
+    prettyPrintPartTwo { dayP2.partTwo(data) }
 }
 
-private class Day17PartOne {
+class Day17PartOne(year: Int = 2020, day: Int = 17, title: String = "Conway Cubes") :
+    AdventOfCodeDay(year, day, title) {
 
-    fun partOne(layout: List<String>) {
+    fun partOne(data: String): Int {
+        val layout = data.split("\n")
 
         // init pocket
         var pocket: MutableMap<CubeCoord, Char> = initPocket(layout)
@@ -49,77 +41,7 @@ private class Day17PartOne {
             pocket = nextPocket.toMutableMap()
         }
 
-        println("Part one = ${pocket.values.count { cube -> cube == '#' }}")
-    }
-
-    data class CubeCoord(val x: Int, val y: Int, val z: Int) {
-
-        // look around
-        fun getNeighborsList(): List<CubeCoord> {
-            val neighbors = mutableListOf<CubeCoord>()
-            for (dx in -1..1) {
-                for (dy in -1..1) {
-                    for (dz in -1..1) {
-                        // don't add the coord itself
-                        if (!(dx == 0 && dy == 0 && dz == 0)) {
-                            neighbors.add(CubeCoord(dx + this.x, dy + this.y, dz + this.z))
-                        }
-                    }
-                }
-            }
-            return neighbors
-        }
-    }
-
-    private fun Map<CubeCoord, Char>.buildListOfCoords(): List<CubeCoord> {
-        val (minX, maxX) = getXMinMax()
-        val (minY, maxY) = getYMinMax()
-        val (minZ, maxZ) = getZMinMax()
-
-        val list = mutableListOf<CubeCoord>()
-        for (x in minX - 1..maxX + 1) {
-            for (y in minY - 1..maxY + 1) {
-                for (z in minZ - 1..maxZ + 1) {
-                    list.add(CubeCoord(x, y, z))
-                }
-            }
-        }
-        return list
-    }
-
-    private fun Map<CubeCoord, Char>.display() {
-        val (minX, maxX) = getXMinMax()
-        val (minY, maxY) = getYMinMax()
-        val (minZ, maxZ) = getZMinMax()
-
-        for (z in minZ..maxZ) {
-            println("z=$z")
-            for (x in minX..maxX) {
-                for (y in minY..maxY) {
-                    print(this[CubeCoord(x, y, z)])
-                }
-                println()
-            }
-            println()
-        }
-    }
-
-    private fun Map<CubeCoord, Char>.getZMinMax(): Pair<Int, Int> {
-        val minZ = this.keys.minOf { it.z }
-        val maxZ = 0 - minZ
-        return Pair(minZ, maxZ)
-    }
-
-    private fun Map<CubeCoord, Char>.getYMinMax(): Pair<Int, Int> {
-        val minY = this.keys.minOf { it.y }
-        val maxY = 0 - minY
-        return Pair(minY, maxY)
-    }
-
-    private fun Map<CubeCoord, Char>.getXMinMax(): Pair<Int, Int> {
-        val minX = this.keys.minOf { it.x }
-        val maxX = 0 - minX
-        return Pair(minX, maxX)
+        return pocket.values.count { cube -> cube == '#' }
     }
 
     private fun initPocket(layout: List<String>): MutableMap<CubeCoord, Char> {
@@ -136,9 +58,81 @@ private class Day17PartOne {
     }
 }
 
-private class Day17PartTwo {
+data class CubeCoord(val x: Int, val y: Int, val z: Int) {
+    // look around
+    fun getNeighborsList(): List<CubeCoord> {
+        val neighbors = mutableListOf<CubeCoord>()
+        for (dx in -1..1) {
+            for (dy in -1..1) {
+                for (dz in -1..1) {
+                    // don't add the coord itself
+                    if (!(dx == 0 && dy == 0 && dz == 0)) {
+                        neighbors.add(CubeCoord(dx + this.x, dy + this.y, dz + this.z))
+                    }
+                }
+            }
+        }
+        return neighbors
+    }
+}
 
-    fun partTwo(layout: List<String>) {
+private fun Map<CubeCoord, Char>.buildListOfCoords(): List<CubeCoord> {
+    val (minX, maxX) = getXMinMax()
+    val (minY, maxY) = getYMinMax()
+    val (minZ, maxZ) = getZMinMax()
+
+    val list = mutableListOf<CubeCoord>()
+    for (x in minX - 1..maxX + 1) {
+        for (y in minY - 1..maxY + 1) {
+            for (z in minZ - 1..maxZ + 1) {
+                list.add(CubeCoord(x, y, z))
+            }
+        }
+    }
+    return list
+}
+
+private fun Map<CubeCoord, Char>.display() {
+    val (minX, maxX) = getXMinMax()
+    val (minY, maxY) = getYMinMax()
+    val (minZ, maxZ) = getZMinMax()
+
+    for (z in minZ..maxZ) {
+        println("z=$z")
+        for (x in minX..maxX) {
+            for (y in minY..maxY) {
+                print(this[CubeCoord(x, y, z)])
+            }
+            println()
+        }
+        println()
+    }
+}
+
+private fun Map<CubeCoord, Char>.getZMinMax(): Pair<Int, Int> {
+    val minZ = this.keys.minOf { it.z }
+    val maxZ = 0 - minZ
+    return Pair(minZ, maxZ)
+}
+
+private fun Map<CubeCoord, Char>.getYMinMax(): Pair<Int, Int> {
+    val minY = this.keys.minOf { it.y }
+    val maxY = 0 - minY
+    return Pair(minY, maxY)
+}
+
+private fun Map<CubeCoord, Char>.getXMinMax(): Pair<Int, Int> {
+    val minX = this.keys.minOf { it.x }
+    val maxX = 0 - minX
+    return Pair(minX, maxX)
+}
+
+
+class Day17PartTwo(year: Int = 2020, day: Int = 17, title: String = "Conway Cubes") :
+    AdventOfCodeDay(year, day, title) {
+
+    fun partTwo(data: String): Int {
+        val layout = data.split("\n")
 
         // init pocket
         var pocket: MutableMap<CubeCoord, Char> = initPocket(layout)
@@ -158,6 +152,7 @@ private class Day17PartTwo {
         }
 
         println("Part two = ${pocket.values.count { cube -> cube == '#' }}")
+        return pocket.values.count { cube -> cube == '#' }
     }
 
     data class CubeCoord(val x: Int, val y: Int, val z: Int, val w: Int) {

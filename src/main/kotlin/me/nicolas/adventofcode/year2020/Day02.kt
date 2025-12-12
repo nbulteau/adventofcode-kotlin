@@ -1,49 +1,39 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 2: Password Philosophy ---
+// --- Day 02: Password Philosophy ---
 // https://adventofcode.com/2020/day/2
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2020/day02/training.txt")
     val data = readFileDirectlyAsText("/year2020/day02/data.txt")
-
-    val list = data.split("\n")
-
-    partOne(list)
-
-    partTwo(list)
+    val day = Day02()
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(list: List<String>) {
-    val result = list.count { string ->
-        val pattern = string.substringBefore(":")
-        val lower = pattern.substringBefore("-").toInt()
-        val upper = pattern.substringAfter("-").substringBefore(" ").toInt()
-        val letter = pattern.substringAfter(" ")
-        val password = string.substringAfter(":")
-        val count = password.count { letter.contains(it) }
+class Day02(year: Int = 2020, day: Int = 2, title: String = "Password Philosophy") : AdventOfCodeDay(year, day, title) {
 
-        (count <= upper) && (count >= lower)
+    fun partOne(data: String): Int {
+        val list = data.split("\n").filter { it.isNotEmpty() }
+        return list.count { string ->
+            val (policy, password) = string.split(": ")
+            val (range, letter) = policy.split(" ")
+            val (min, max) = range.split("-").map { it.toInt() }
+            val count = password.count { it == letter.first() }
+            count in min..max
+        }
     }
 
-    println("Part one : valid passwords $result")
-}
-
-private fun partTwo(list: List<String>) {
-    val result = list.count { string ->
-        val pattern = string.substringBefore(":")
-        val lower = pattern.substringBefore("-").toInt()
-        val upper = pattern.substringAfter("-").substringBefore(" ").toInt()
-        val letter = pattern.substringAfter(" ")[0]
-        val password = string.substringAfter(": ")
-
-        (password[lower - 1] == letter) xor (password[upper - 1] == letter)
+    fun partTwo(data: String): Int {
+        val list = data.split("\n").filter { it.isNotEmpty() }
+        return list.count { string ->
+            val (policy, password) = string.split(": ")
+            val (positions, letter) = policy.split(" ")
+            val (pos1, pos2) = positions.split("-").map { it.toInt() }
+            (password[pos1 - 1] == letter.first()) xor (password[pos2 - 1] == letter.first())
+        }
     }
-
-    println("Part two : valid passwords $result")
 }
-
-
-

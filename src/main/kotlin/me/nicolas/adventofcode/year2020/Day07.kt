@@ -1,90 +1,59 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 
-// --- Day 7: Handy Haversacks ---
+// --- Day 07: Handy Haversacks ---
 // https://adventofcode.com/2020/day/7
 fun main() {
-
-    val training = readFileDirectlyAsText("/year2020/day07/training.txt")
     val data = readFileDirectlyAsText("/year2020/day07/data.txt")
-
-    val bags = data.split("\n")
-
-    // Part One
-    partOne(bags)
-
-    // Part Two
-    partTwo(bags)
+    val day = Day07(2020, 7, "Handy Haversacks")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(bags: List<String>) {
-    val rules = parseRules(bags)
+class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    val set = recursiveFind("shiny gold", rules)
+    fun partOne(data: String): Int {
+        val rules = parseRules(data.split("\n").filter { it.isNotEmpty() })
+        return rules.keys.count { canContain("shiny gold", it, rules) }
+    }
 
-    println("Part one = ${set.size}")
-}
+    fun partTwo(data: String): Int {
+        val rules = parseRules(data.split("\n").filter { it.isNotEmpty() })
+        return countBags("shiny gold", rules)
+    }
 
-private fun partTwo(bags: List<String>) {
-    val rules = parseRules(bags)
-
-    val total = recursiveCount("shiny gold", rules)
-
-    println("Part two = $total")
-}
-
-private fun parseRules(bags: List<String>): MutableMap<String, Map<String, Int>?> {
-
-    val matchResult = Regex("""(\d) ([a-z ]*) bag""")
-    val rules = mutableMapOf<String, Map<String, Int>?>()
-
-    bags.forEach { line ->
-        val parts = line.split(" bags contain ")
-        val bagName = parts[0]
-        val bagCapacity = parts[1]
-
-        if (bagCapacity.contains("no other bags.")) {
-            rules[bagName] = null
-        } else {
-            val matchedResults = matchResult.findAll(bagCapacity)
-
-            val inBags = mutableMapOf<String, Int>()
-            for (matchedText in matchedResults) {
-                inBags[matchedText.groups[2]?.value!!] = matchedText.groups[1]?.value?.toInt()!!
+    private fun parseRules(bags: List<String>): Map<String, Map<String, Int>> {
+        val matchResult = Regex("""(\d+) ([a-z ]+) bags?""")
+        return bags.associate { line ->
+            val parts = line.split(" bags contain ")
+            val bagName = parts[0]
+            val content = parts[1]
+            val innerBags = if (content == "no other bags.") {
+                emptyMap()
+            } else {
+                matchResult.findAll(content).associate {
+                    val (count, color) = it.destructured
+                    color to count.toInt()
+                }
             }
-            rules[bagName] = inBags
+            bagName to innerBags
         }
     }
-    return rules
-}
 
-private fun recursiveFind(bag: String, rules: Map<String, Map<String, Int>?>): Set<String> {
-
-    return if (rules[bag] == null) {
-        emptySet()
-    } else {
-        val set = rules
-            .filterValues { map -> map != null && map.containsKey(bag) }
-            .map { it.key }
-            .toSet()
-        set + set.flatMap { recursiveFind(it, rules) }
-    }
-}
-
-private fun recursiveCount(bag: String, rules: Map<String, Map<String, Int>?>): Int {
-
-    var total = 0
-    rules[bag]?.forEach {
-        val count = it.value
-        val inBag = it.key
-        total += count + count * recursiveCount(inBag, rules)
+    private fun canContain(target: String, bag: String, rules: Map<String, Map<String, Int>>): Boolean {
+        val contents = rules[bag] ?: return false
+        if (target in contents) return true
+        return contents.keys.any { canContain(target, it, rules) }
     }
 
-    return total
+    private fun countBags(bag: String, rules: Map<String, Map<String, Int>>): Int {
+        val contents = rules[bag] ?: return 0
+        return contents.entries.sumOf { (color, count) ->
+            count * (1 + countBags(color, rules))
+        }
+    }
 }
-
-
-
-
-

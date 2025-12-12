@@ -1,68 +1,35 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
 // --- Day 10: Adapter Array ---
 // https://adventofcode.com/2020/day/10
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 10: Adapter Array ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day10/training.txt")
     val data = readFileDirectlyAsText("/year2020/day10/data.txt")
-
-    val adapters = data.split("\n").map { str -> str.toInt() }
-
-    // Part One
-    partOne(adapters)
-
-    // Part Two
-    val duration = measureTime { partTwo(adapters) }
-    println("Part two duration : $duration")
+    val day = Day10(2020, 10, "Adapter Array")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private fun partOne(adapters: List<Int>) {
-    val dif1 = mutableListOf<Int>()
-    val dif3 = mutableListOf<Int>()
+class Day10(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    var current = 0
-    do {
-        if ((current + 1) in adapters) {
-            current += 1
-            dif1.add(current)
-        } else {
-            current += 3
-            dif3.add(current)
-        }
-    } while (current <= adapters.maxOf { it })
-
-    println("Part one (${dif1.size} * ${dif3.size}) = ${dif1.size * dif3.size}")
-}
-
-private fun partTwo(adaptersList: List<Int>) {
-
-    // init all adapters
-    val adapters = adaptersList.toMutableList().apply {
-        add(0) // 0
-        add(adaptersList.maxOf { it } + 3)
+    fun partOne(data: String): Int {
+        val adapters = data.split("\n").filter { it.isNotEmpty() }.map { it.toInt() }.sorted()
+        val differences = (listOf(0) + adapters).zip(adapters + (adapters.last() + 3))
+            .map { (a, b) -> b - a }
+        return differences.count { it == 1 } * differences.count { it == 3 }
     }
 
-    // init all possible paths map
-    val allPossiblePaths: MutableMap<Int, Long> = adapters.associateWith { adapter -> 0L }.toMutableMap()
-    allPossiblePaths[adapters.maxOf { it }] = 1
-
-    // number of possible paths is the sum of child possible paths
-    for (adapter in adapters.sortedDescending()) {
-        for (index in 1..3) {
-            if ((adapter + index) in adapters) {
-                allPossiblePaths[adapter] = allPossiblePaths[adapter]!! + allPossiblePaths[adapter + index]!!
-            }
+    fun partTwo(data: String): Long {
+        val adapters = data.split("\n").filter { it.isNotEmpty() }.map { it.toInt() }.sorted()
+        val allAdapters = listOf(0) + adapters + (adapters.last() + 3)
+        val paths = mutableMapOf(0 to 1L)
+        for (adapter in allAdapters.drop(1)) {
+            paths[adapter] = (1..3).sumOf { diff -> paths.getOrDefault(adapter - diff, 0) }
         }
+        return paths[allAdapters.last()]!!
     }
-
-    println("Part two = ${allPossiblePaths[0]}")
 }

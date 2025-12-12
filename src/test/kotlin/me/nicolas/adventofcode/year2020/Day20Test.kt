@@ -1,146 +1,132 @@
 package me.nicolas.adventofcode.year2020
 
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+
 internal class Day20Test {
-/*
+
+    private val data = """
+        Tile 2311:
+        ..##.#..#.
+        ##..#.....
+        #...##..#.
+        ####.#...#
+        ##.##.###.
+        ##...#.###
+        .#.#.#..##
+        ..#....#..
+        ###...#.#.
+        ..###..###
+
+        Tile 1951:
+        #.##...##.
+        #.####...#
+        .....#..##
+        #...######
+        .##.#....#
+        .###.#####
+        ###.##.##.
+        .###....#.
+        ..#.#..#.#
+        #...##.#..
+
+        Tile 1171:
+        ####...##.
+        #..##.#..#
+        ##.#..#.#.
+        .###.####.
+        ..###.####
+        .##....##.
+        .#...####.
+        #.##.####.
+        ####..#...
+        .....##...
+
+        Tile 1427:
+        ###.##.#..
+        .#..#.##..
+        .#.##.#..#
+        #.#.#.##.#
+        ....#...##
+        ...##..##.
+        ...#.#####
+        .#.####.#.
+        ..#..###.#
+        ..##.#..#.
+
+        Tile 1489:
+        ##.#.#....
+        ..##...#..
+        .##..##...
+        ..#...#...
+        #####...#.
+        #..#.#.#.#
+        ...#.#.#..
+        ##.#...##.
+        ..##.##.##
+        ###.##.#..
+
+        Tile 2473:
+        #....####.
+        #..#.##...
+        #.##..#...
+        ######.#.#
+        .#...#.#.#
+        .#########
+        .###.#..#.
+        ########.#
+        ##...##.#.
+        ..###.#.#.
+
+        Tile 2971:
+        ..#.#....#
+        #...###...
+        #.#.###...
+        ##.##..#..
+        .#####..##
+        .#..####.#
+        #..#.#..#.
+        ..####.###
+        ..#.#.###.
+        ...#.#.#.#
+
+        Tile 2729:
+        ...#.#.#.#
+        ####.#....
+        ..#.#.....
+        ....#..#.#
+        .##..##.#.
+        .#.####...
+        ####.#.#..
+        ##.####...
+        ##..#.##..
+        #.##...##.
+
+        Tile 3079:
+        #.#.#####.
+        .#..######
+        ..#.......
+        ######....
+        ####.#..#.
+        .#...#.##.
+        #.#####.##
+        ..#.###...
+        ..#.......
+        ..#.###...
+    """.trimIndent()
+
+    private val day = Day2O()
+
     @Test
-    fun extractTiles() {
-        val data = """
-            Tile 2311:
-            ..##.#..#.
-            ##..#.....
-            #...##..#.
-            ####.#...#
-            ##.##.###.
-            ##...#.###
-            .#.#.#..##
-            ..#....#..
-            ###...#.#.
-            ..###..###
-        """.trimIndent()
-        val sections = data.split("\n\n")
-        val tiles = extractTiles(sections)
-        val tile = tiles[0]
-        assertEquals("..##.#..#.", tile.edges[0]) // North
-        assertEquals("...#.##..#", tile.edges[1]) // East
-        assertEquals("..###..###", tile.edges[2]) // South
-        assertEquals(".#####..#.", tile.edges[3]) // West
+    fun `part one`() {
+        Assertions.assertEquals(20899048083289, day.partOne(data))
     }
 
     @Test
-    fun rotate1() {
-
-        val data = """
-            Tile 2311:
-            ..##.#..#.
-            ##..#.....
-            #...##..#.
-            ####.#...#
-            ##.##.###.
-            ##...#.###
-            .#.#.#..##
-            ..#....#..
-            ###...#.#.
-            ..###..###
-        """.trimIndent()
-        val sections = data.split("\n\n")
-        val tiles = extractTiles(sections)
-        val tile = tiles[0]
-
-        tile.rotateClockwise()
-        assertEquals(".#..#####.", tile.edges[0]) // North
-        assertEquals("..##.#..#.", tile.edges[1]) // East
-        assertEquals("#..##.#...", tile.edges[2]) // South
-        assertEquals("..###..###", tile.edges[3]) // West
+    fun `part two`() {
+        Assertions.assertEquals(273, day.partTwo(data))
     }
-
-    @Test
-    fun rotate2() {
-
-        val data = """
-            Tile 2311:
-            ..##.#..#.
-            ##..#.....
-            #...##..#.
-            ####.#...#
-            ##.##.###.
-            ##...#.###
-            .#.#.#..##
-            ..#....#..
-            ###...#.#.
-            ..###..###
-        """.trimIndent()
-        val sections = data.split("\n\n")
-        val tiles = extractTiles(sections)
-        val tile = tiles[0]
-
-        tile.rotateClockwise()
-        tile.rotateClockwise()
-        tile.rotateClockwise()
-        tile.rotateClockwise()
-
-        assertEquals("..##.#..#.", tile.edges[0]) // North
-        assertEquals("...#.##..#", tile.edges[1]) // East
-        assertEquals("..###..###", tile.edges[2]) // South
-        assertEquals(".#####..#.", tile.edges[3]) // West
-    }
-
-    @Test
-    fun flip1() {
-
-        val data = """
-            Tile 2311:
-            ..##.#..#.
-            ##..#.....
-            #...##..#.
-            ####.#...#
-            ##.##.###.
-            ##...#.###
-            .#.#.#..##
-            ..#....#..
-            ###...#.#.
-            ..###..###
-        """.trimIndent()
-        val sections = data.split("\n\n")
-        val tiles = extractTiles(sections)
-        val tile = tiles[0]
-
-        tile.flipHorizontal()
-        assertEquals(".#..#.##..", tile.edges[0]) // North
-        assertEquals(".#####..#.", tile.edges[1]) // East
-        assertEquals("###..###..", tile.edges[2]) // South
-        assertEquals("...#.##..#", tile.edges[3]) // West
-    }
-
-    @Test
-    fun flip2() {
-
-        val data = """
-            Tile 2311:
-            ..##.#..#.
-            ##..#.....
-            #...##..#.
-            ####.#...#
-            ##.##.###.
-            ##...#.###
-            .#.#.#..##
-            ..#....#..
-            ###...#.#.
-            ..###..###
-        """.trimIndent()
-        val sections = data.split("\n\n")
-        val tiles = extractTiles(sections)
-
-        val tile = tiles[0]
-
-        tile.flipHorizontal()
-        tile.flipHorizontal()
-
-        assertEquals("..##.#..#.", tile.edges[0]) // North
-        assertEquals("...#.##..#", tile.edges[1]) // East
-        assertEquals("..###..###", tile.edges[2]) // South
-        assertEquals(".#####..#.", tile.edges[3]) // West
-    }
-
 
     @Test
     fun doRevealSeaMonsters() {
@@ -160,7 +146,7 @@ internal class Day20Test {
         image = addSeaMonster(image, 10, 10)
         image = addSeaMonster(image, 25, 25)
 
-        Day20().doRevealSeaMonsters(image, seaMonster)
+        day.doRevealSeaMonsters(image, seaMonster)
 
         val count = image.map { line -> line.count { it == 'O' } }.reduce { acc, i -> acc + i }
 
@@ -187,5 +173,4 @@ internal class Day20Test {
 
         return picture
     }
- */
 }

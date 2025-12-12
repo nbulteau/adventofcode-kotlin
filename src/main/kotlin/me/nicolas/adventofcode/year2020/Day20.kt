@@ -1,28 +1,24 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import kotlin.math.sqrt
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
 private typealias Grid = Array<CharArray>
 
 
 // --- Day 20: Jurassic Jigsaw ---
 // https://adventofcode.com/2020/day/20
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 20: Jurassic Jigsaw ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day20/training.txt")
     val data = readFileDirectlyAsText("/year2020/day20/data.txt")
-
-    Day20().solve(data)
+    val day = Day2O()
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day20 {
+class Day2O(year: Int = 2020, day: Int = 20, title: String = "Jurassic Jigsaw") : AdventOfCodeDay(year, day, title) {
 
     private fun Grid.rotateClockwise(): Grid {
         val arrayOfCharArrays = Array(this.size) { CharArray(this[0].size) }
@@ -45,20 +41,6 @@ class Day20 {
         }
         return arrayOfCharArrays
     }
-
-    fun solve(input: String) {
-
-        val sections = input.split("\n\n")
-        val tiles = extractTiles(sections)
-
-        // Part One
-        Day20().partOne(tiles)
-
-        // Part Two
-        val duration = measureTime { Day20().partTwo(tiles.toMutableList()) }
-        println("Part two duration : $duration")
-    }
-
 
     private fun extractTiles(sections: List<String>): List<Tile> {
 
@@ -145,16 +127,17 @@ class Day20 {
     }
 
     // we only need to find ids of corners, no need to match anything else
-    fun partOne(tiles: List<Tile>) {
-
+    fun partOne(data: String): Long {
+        val sections = data.split("\n\n")
+        val tiles = extractTiles(sections)
         val corners = findCorners(tiles)
 
-        val result = corners.map { tile -> tile.id.toLong() }.reduce { acc: Long, l -> l * acc }
-
-        println("Part two = $result")
+        return corners.map { tile -> tile.id.toLong() }.reduce { acc: Long, l -> l * acc }
     }
 
-    fun partTwo(tiles: MutableList<Tile>) {
+    fun partTwo(data: String): Int {
+        val sections = data.split("\n\n")
+        val tiles = extractTiles(sections).toMutableList()
 
         // puzzle is a square
         val puzzleSize = sqrt(tiles.size.toDouble()).toInt()
@@ -165,9 +148,7 @@ class Day20 {
         var image = buildImage(puzzleSize, tileSize, puzzle)
         image = revealSeaMonsters(image)
 
-        val result = image.map { line -> line.count { it == '#' } }.reduce { acc, i -> acc + i }
-
-        println("Part two = $result")
+        return image.map { line -> line.count { it == '#' } }.reduce { acc, i -> acc + i }
     }
 
     private enum class Edges {
@@ -423,7 +404,7 @@ class Day20 {
         return image
     }
 
-    private fun doRevealSeaMonsters(image: Array<CharArray>, seaMonster: List<Pair<Int, Int>>) {
+    fun doRevealSeaMonsters(image: Array<CharArray>, seaMonster: List<Pair<Int, Int>>) {
         val seaMonsterHeight = seaMonster.maxOf { pair -> pair.first }
         val seaMonsterWidth = seaMonster.maxOf { pair -> pair.second }
 

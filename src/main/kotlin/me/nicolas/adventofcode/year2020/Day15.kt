@@ -1,69 +1,56 @@
 package me.nicolas.adventofcode.year2020
 
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
-
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 
 // --- Day 15: Rambunctious Recitation ---
 // https://adventofcode.com/2020/day/15
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 15: Rambunctious Recitation ---")
-    println()
-
-    val numbers = listOf(14, 8, 16, 0, 1, 17)
-
-    // Part One
-    Day15().partOne(numbers, 2020)
-
-    // Part Two
-    val duration = measureTime { Day15().partTwo(numbers, 30000000) }
-    println("Part two duration : $duration")
+    val data = "14,8,16,0,1,17"
+    val day = Day15()
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day15 {
+class Day15(year: Int = 2020, day: Int = 15, title: String = "Rambunctious Recitation") :
+    AdventOfCodeDay(year, day, title) {
 
-    fun partOne(numbers: List<Int>, lastTurn: Int) {
-
-        val last = process(numbers, lastTurn)
-
-        println("Part one = $last")
+    fun partOne(data: String): Int {
+        val numbers = data.split(",").map { it.toInt() }
+        return process(numbers, 2020)
     }
 
-    fun partTwo(numbers: List<Int>, lastTurn: Int) {
-
-        val last = process(numbers, lastTurn)
-
-        println("Part two = $last")
+    fun partTwo(data: String): Int {
+        val numbers = data.split(",").map { it.toInt() }
+        return process(numbers, 30000000)
     }
 
     private fun process(numbers: List<Int>, lastTurn: Int): Int {
 
-        val spoken = numbers.toMutableList()
-        // List of Pair
-        val memory = numbers.mapIndexed { index, it -> it to Pair<Int?, Int?>(index + 1, null) }.toMap().toMutableMap()
+        // Use an IntArray to store the last turn a number was spoken.
+        // This avoids boxing and keeping the full spoken history in memory.
+        // We allocate size lastTurn + 1 because numbers produced can be up to ~lastTurn.
+        val size = lastTurn + 1
+        val lastSeen = IntArray(size) // default 0 means "not seen"
+
+        // Initialize lastSeen for all starting numbers except the last one.
+        for (i in 0 until numbers.size - 1) {
+            val n = numbers[i]
+            if (n < size) lastSeen[n] = i + 1
+        }
+
+        var last = numbers.last()
 
         for (turn in numbers.size + 1..lastTurn) {
-            val last = spoken.last()
+            val lastSeenAt = if (last < size) lastSeen[last] else 0
+            val current = if (lastSeenAt == 0) 0 else (turn - 1 - lastSeenAt)
 
-            // get current
-            val current: Int = when {
-                memory[last]!!.first == null -> 0
-                memory[last]!!.second == null -> 0
-                else -> (memory[last]!!.second!! - memory[last]!!.first!!)
+            if (last < size) lastSeen[last] = turn - 1
 
-            }
-
-            // update memory
-            memory[current] = when {
-                memory[current] == null || memory[current]!!.first == null -> Pair(turn, null)
-                memory[current]!!.second == null -> Pair(memory[current]!!.first, turn)
-                else -> Pair(memory[current]!!.second, turn)
-            }
-
-            spoken.add(current)
+            last = current
         }
-        return spoken.last()
+
+        return last
     }
 }

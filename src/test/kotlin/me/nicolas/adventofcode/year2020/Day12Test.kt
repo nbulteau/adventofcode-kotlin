@@ -5,6 +5,26 @@ import org.junit.jupiter.api.Test
 
 internal class Day12Test {
 
+    private val data = """
+        F10
+        N3
+        F7
+        R90
+        F11
+    """.trimIndent()
+
+    private val day = Day12(2020, 12, "Rain Risk")
+
+    @Test
+    fun `part one`() {
+        assertEquals(25, day.partOne(data))
+    }
+
+    @Test
+    fun `part two`() {
+        assertEquals(286, day.partTwo(data))
+    }
+
     @Test
     fun getNextDirection() {
 

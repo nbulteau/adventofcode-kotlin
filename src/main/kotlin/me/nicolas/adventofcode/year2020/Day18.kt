@@ -1,57 +1,39 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import java.math.BigInteger
 import java.util.*
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
-
 
 // --- Day 18: Operation Order ---
 // https://adventofcode.com/2020/day/18
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 18: Operation Order ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day18/training.txt")
     val data = readFileDirectlyAsText("/year2020/day18/data.txt")
-
-    val expressions = data.split("\n")
-
-    // Part One
-    Day18().partOne(expressions)
-
-    // Part Two
-    val duration = measureTime { Day18().partTwo(expressions) }
-    println("Part two duration : $duration")
+    val day = Day18(2020, 18, "Operation Order")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-private class Day18 {
+class Day18(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(expressions: List<String>) {
-
+    fun partOne(data: String): BigInteger {
+        val expressions = data.split("\n").filter { it.isNotEmpty() }
         // operators don't have priority
         val priority = mapOf(";" to 0, "(" to 1, ")" to 2, "*" to 3, "+" to 3)
-
-        val result = expressions
+        return expressions
             .map { expression -> BigInteger.valueOf(solve(expression, priority)) }
             .reduce { acc: BigInteger, bigInteger -> acc + bigInteger }
-
-        println("Part one = $result")
     }
 
-    fun partTwo(expressions: List<String>) {
-
+    fun partTwo(data: String): BigInteger {
+        val expressions = data.split("\n").filter { it.isNotEmpty() }
         // addition is evaluated before multiplication
         val priority = mapOf(";" to 0, "(" to 1, ")" to 2, "*" to 3, "+" to 4)
-
-        val result = expressions
+        return expressions
             .map { expression -> BigInteger.valueOf(solve(expression, priority)) }
             .reduce { acc: BigInteger, bigInteger -> acc + bigInteger }
-
-        println("Part two = $result")
     }
 
     private fun solve(expression: String, priority: Map<String, Int>): Long {

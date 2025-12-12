@@ -1,50 +1,33 @@
 package me.nicolas.adventofcode.year2020
 
+import me.nicolas.adventofcode.utils.AdventOfCodeDay
+import me.nicolas.adventofcode.utils.prettyPrintPartOne
+import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import java.math.BigDecimal
-import kotlin.math.pow
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
-
 
 // --- Day 14: Docking Data ---
 // https://adventofcode.com/2020/day/14
-@ExperimentalTime
 fun main() {
-
-    println("--- Day 14: Docking Data ---")
-    println()
-
-    val training = readFileDirectlyAsText("/year2020/day14/training.txt")
     val data = readFileDirectlyAsText("/year2020/day14/data.txt")
-
-    val program = data.split("\n")
-
-    // Part One
-    Day14().partOne(program, Day14().computeBlockPartOne)
-
-    // Part Two
-    val duration = measureTime { Day14().partTwo(program, Day14().computeBlockPartTwo) }
-    println("Part two duration : $duration")
-
+    val day = Day14(2020, 14, "Docking Data")
+    prettyPrintPartOne { day.partOne(data) }
+    prettyPrintPartTwo { day.partTwo(data) }
 }
 
-class Day14 {
+class Day14(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     private val matchResult = Regex("""mem\[(\d+)\] = (\d+)""")
 
-    fun partOne(program: List<String>, function: (String, List<String>, MutableMap<Long, String>) -> Unit) {
-
-        val memory = process(program, function)
-
-        println("Part one = ${memory.values.sumOf { value -> value.toDecimal() }}")
+    fun partOne(data: String): Long {
+        val program = data.split("\n").filter { it.isNotEmpty() }
+        val memory = process(program, ::computeBlockPartOne)
+        return memory.values.sumOf { it.toDecimal() }
     }
 
-    fun partTwo(program: List<String>, function: (String, List<String>, MutableMap<Long, String>) -> Unit) {
-
-        val memory = process(program, function)
-
-        println("Part two = ${memory.values.sumOf { value -> value.toDecimal() }}")
+    fun partTwo(data: String): Long {
+        val program = data.split("\n").filter { it.isNotEmpty() }
+        val memory = process(program, ::computeBlockPartTwo)
+        return memory.values.sumOf { it.toDecimal() }
     }
 
     private fun process(
@@ -52,7 +35,6 @@ class Day14 {
         function: (String, List<String>, MutableMap<Long, String>) -> Unit,
     ): MutableMap<Long, String> {
         val memory = mutableMapOf<Long, String>()
-
         var index = 0
         do {
             val mask = program[index].substring("mask = ".length)
@@ -67,33 +49,29 @@ class Day14 {
         return memory
     }
 
-    val computeBlockPartOne = { mask: String, instructions: List<String>, memory: MutableMap<Long, String> ->
-
+    private fun computeBlockPartOne(mask: String, instructions: List<String>, memory: MutableMap<Long, String>) {
         instructions.forEach {
             val (address, value) = it.getInstruction()
             memory[address] = value.applyMaskPartOne(mask)
         }
     }
 
-    val computeBlockPartTwo = { mask: String, instructions: List<String>, memory: MutableMap<Long, String> ->
-
+    private fun computeBlockPartTwo(mask: String, instructions: List<String>, memory: MutableMap<Long, String>) {
         instructions.forEach {
             val (address, value) = it.getInstruction()
             val maskedAddress = address.applyMaskPartTwo(mask)
             val addressList = maskedAddress.expandResult()
-            addressList.forEach { addressToSet -> memory[addressToSet.toDecimal().toLong()] = value }
+            addressList.forEach { addressToSet -> memory[addressToSet.toDecimal()] = value }
         }
     }
 
     private fun String.expandResult(): List<String> {
-
         val addressList = mutableListOf<String>()
         recursiveExpand(this, "", addressList)
         return addressList
     }
 
     private fun recursiveExpand(stringToExpand: String, current: String, list: MutableList<String>) {
-
         if (stringToExpand.isEmpty()) {
             list.add(current)
         } else {
@@ -125,25 +103,19 @@ class Day14 {
     /**
      * to get Decimal number from input binary number
      */
-    private fun String.toDecimal(): BigDecimal {
-        var binaryNumber = this.trimStart('0').toBigDecimal()
-        var decimalNo = BigDecimal.ZERO
-        var power = 0
-
-        while (binaryNumber > BigDecimal.ZERO) {
-            val r = binaryNumber % BigDecimal.valueOf(10)
-            decimalNo = (decimalNo + r * BigDecimal.valueOf(2.0.pow(power)))
-            binaryNumber /= BigDecimal.valueOf(10)
-            power++
-        }
-        return decimalNo
+    private fun String.toDecimal(): Long {
+        // Parse binary string to Long. Keep it robust for strings that are all zeros.
+        val s = this.trimStart('0')
+        return if (s.isEmpty()) 0L else s.toLong(2)
     }
 
     private fun String.getInstruction(): Pair<Long, String> {
         val matchedResults = matchResult.findAll(this)
         val matchedText = matchedResults.first()
-
-        return Pair(matchedText.groups[1]?.value?.toLong()!!, matchedText.groups[2]?.value?.toLong()?.toBinary()!!)
+        return Pair(
+            matchedText.groups[1]?.value?.toLong()!!,
+            matchedText.groups[2]?.value?.toLong()?.toBinary()!!
+        )
     }
 
     private fun String.applyMaskPartOne(mask: String): String {
@@ -156,14 +128,12 @@ class Day14 {
     }
 
     private fun Long.applyMaskPartTwo(mask: String): String {
-
-        val binaryaddress = this.toBinary()
-
+        val binaryAddress = this.toBinary()
         return mask.mapIndexed { index, char ->
             when (char) {
-                '0' -> binaryaddress[index]
+                '0' -> binaryAddress[index]
                 '1' -> "1"
-                else -> mask[index]
+                else -> 'X'
             }
         }.joinToString("")
     }
