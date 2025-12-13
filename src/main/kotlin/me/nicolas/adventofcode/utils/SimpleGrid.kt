@@ -57,6 +57,10 @@ class SimpleGrid<T>(
             value === t
         }.keys.toList()
 
+    // New: find all points whose value matches the given predicate
+    fun findAll(predicate: (T) -> Boolean): List<Point> =
+        entries.filter { (_, value) -> predicate(value) }.keys.toList()
+
     operator fun get(point: Point): T {
         if (point !in this) throw IndexOutOfBoundsException("Point $point not within bounds of grid: ($height, $width)")
         return data[point]!!
