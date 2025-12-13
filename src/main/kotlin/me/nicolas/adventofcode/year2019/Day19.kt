@@ -32,7 +32,7 @@ class Day19(year: Int = 2019, day: Int = 19, title: String = "Tractor Beam") : A
     }
 
     /**
-     * PART ONE
+     * Part one:
      *
      * Count how many points are affected by the tractor beam in the 50x50 area
      * with X and Y in the range [0, 49].
@@ -61,7 +61,7 @@ class Day19(year: Int = 2019, day: Int = 19, title: String = "Tractor Beam") : A
     }
 
     /**
-     * PART TWO
+     * Part two:
      *
      * Find the coordinates of the top-left corner of the first square of size
      * 100x100 that fits entirely inside the tractor beam, and return x*10000 + y.

@@ -22,7 +22,7 @@ class Day18(year: Int, day: Int, title: String = "Many-Worlds Interpretation") :
 
 
     /**
-     * PART ONE
+     * Part One:
      *
      * Algorithm overview:
      * 1) Parse the input grid and locate the start position and keys.
@@ -48,7 +48,7 @@ class Day18(year: Int, day: Int, title: String = "Many-Worlds Interpretation") :
     }
 
     /**
-     * PART TWO
+     * Part two:
      *
      * The maze is modified so the single starting position is replaced by four
      * robots positioned on the four diagonal cells around the original start.
