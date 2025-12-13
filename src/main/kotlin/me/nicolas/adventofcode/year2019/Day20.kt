@@ -70,18 +70,6 @@ class Day20(year: Int, day: Int, title: String = "Donut Maze") : AdventOfCodeDay
         val minDotY = dots.minOfOrNull { it.y } ?: 0
         val maxDotY = dots.maxOfOrNull { it.y } ?: 0
         sb.append("Corridor bbox: x=[$minDotX..$maxDotX], y=[$minDotY..$maxDotY]\n")
-
-        // attempt to reflect entrance->letter mapping if available via reflection hack (private class)
-        try {
-            val mazeClass = maze::class.java
-            val portalsField = mazeClass.getDeclaredField("portals")
-            val portalMapField = mazeClass.getDeclaredField("portalMap")
-            val entranceToLetterField = mazeClass.enclosingClass?.getDeclaredField("entranceToLetter")
-            // cannot reliably access companion locals; instead just show portalMap
-        } catch (e: Exception) {
-            // ignore
-        }
-
         sb.append("PortalMap (entrance -> (other, isOuter)):\n")
         for ((entr, pair) in maze.portalMap) {
             val (other, isOuter) = pair
