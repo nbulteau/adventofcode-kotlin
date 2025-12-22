@@ -1,19 +1,23 @@
 package me.nicolas.adventofcode.year2019
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.selects.select
+import kotlinx.coroutines.selects.onTimeout
 import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import me.nicolas.adventofcode.utils.writeFileDirectlyAsText
 
 // --- Day 23: Category Six ---
 // https://adventofcode.com/2019/day/23
@@ -26,6 +30,7 @@ fun main() {
     prettyPrintPartTwo { day.partTwo(data) }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class Day23(year: Int, day: Int, title: String = "Category Six") : AdventOfCodeDay(year, day, title) {
 
     /**
@@ -48,10 +53,42 @@ class Day23(year: Int, day: Int, title: String = "Category Six") : AdventOfCodeD
 
     /**
      * partTwo:
-     * - Currently does not contain an implementation.
+     * - Implement NAT behaviour: remember last packet sent to address 255; when
+     *   the network is idle, send that packet to address 0. Return the first Y
+     *   value the NAT delivers to address 0 twice in a row.
      */
     fun partTwo(data: String): Int {
-        return 0
+        val program: MutableMap<Long, Long> = data
+            .split(",")
+            .withIndex()
+            .associateTo(mutableMapOf()) { it.index.toLong() to it.value.toLong() }
+
+        return runDroids(program) { droids, natChannel, responseChannel ->
+            coroutineScope {
+                var mostRecentNatValue: Pair<Long, Long> = natChannel.receive()
+                launch {
+                    while (true) {
+                        mostRecentNatValue = natChannel.receive()
+                    }
+                }
+                launch {
+                    var latestDelivery: Long? = null
+                    while (true) {
+                        if (droids.all { it.input.isEmpty }) {
+                            val toSend = mostRecentNatValue
+                            droids[0].input.send(toSend.first)
+                            droids[0].input.send(toSend.second)
+
+                            if (latestDelivery == toSend.second) {
+                                responseChannel.send(toSend)
+                            }
+                            latestDelivery = toSend.second
+                        }
+                        delay(10) // Give the computers a chance to work
+                    }
+                }
+            }
+        }
     }
 
     /**
