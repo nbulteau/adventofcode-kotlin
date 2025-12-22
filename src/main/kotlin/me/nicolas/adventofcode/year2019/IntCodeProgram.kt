@@ -39,7 +39,7 @@ class IntCodeProgram(program: List<Long>) {
     private var relativeBase = 0L
 
     // Instruction pointer (current position in program)
-    private var index = 0L
+    private var instructionPointer = 0L
 
     // Flag indicating if the program has halted (opcode 99)
     private var halted = false
@@ -63,29 +63,29 @@ class IntCodeProgram(program: List<Long>) {
     fun execute(inputs: MutableList<Long>): List<Long> {
         val output = mutableListOf<Long>()
 
-        var instruction = getMemory(index)
+        var instruction = readMemory(instructionPointer)
         do {
             // Extract opcode from last 2 digits of instruction
             val operation = (instruction % 100).toInt()
 
             // Execute operation and update instruction pointer
-            index = when (operation) {
-                1 -> addOperation(index, instruction)           // Add
-                2 -> multiplyOperation(index, instruction)      // Multiply
-                3 -> inputOperation(index, instruction, inputs) // Input
-                4 -> outputOperation(index, instruction, output)// Output
-                5 -> jumpIfTrueOperation(index, instruction)    // Jump-if-true
-                6 -> jumpIfFalseOperation(index, instruction)   // Jump-if-false
-                7 -> lessThanOperation(index, instruction)      // Less than
-                8 -> equalsOperation(index, instruction)        // Equals
-                9 -> adjustRelativeBaseOperation(index, instruction) // Adjust relative base
+            instructionPointer = when (operation) {
+                1 -> opAdd(instructionPointer, instruction)           // Add
+                2 -> opMultiply(instructionPointer, instruction)      // Multiply
+                3 -> opInput(instructionPointer, instruction, inputs) // Input
+                4 -> opOutput(instructionPointer, instruction, output)// Output
+                5 -> jumpIfTrue(instructionPointer, instruction)    // Jump-if-true
+                6 -> jumpIfFalse(instructionPointer, instruction)   // Jump-if-false
+                7 -> opLessThan(instructionPointer, instruction)      // Less than
+                8 -> opEquals(instructionPointer, instruction)        // Equals
+                9 -> adjustRelativeBase(instructionPointer, instruction) // Adjust relative base
                 99 -> {
                     halted = true
                     break
                 }
                 else -> throw IllegalArgumentException("Unknown operation: $operation")
             }
-            instruction = getMemory(index)
+            instruction = readMemory(instructionPointer)
         } while (true)
 
         return output
@@ -105,33 +105,33 @@ class IntCodeProgram(program: List<Long>) {
      * @return The output value if opcode 4 was executed, or null if program halted
      */
     fun executeUntilOutput(inputs: MutableList<Long>): Long? {
-        var instruction = getMemory(index)
+        var instruction = readMemory(instructionPointer)
         while (true) {
             // Extract opcode from last 2 digits of instruction
             val operation = (instruction % 100).toInt()
             when (operation) {
-                1 -> index = addOperation(index, instruction)
-                2 -> index = multiplyOperation(index, instruction)
-                3 -> index = inputOperation(index, instruction, inputs)
+                1 -> instructionPointer = opAdd(instructionPointer, instruction)
+                2 -> instructionPointer = opMultiply(instructionPointer, instruction)
+                3 -> instructionPointer = opInput(instructionPointer, instruction, inputs)
                 4 -> {
                     // Output operation: extract parameter mode and get output value
                     val parameterMode = (instruction / 100 % 10).toInt()
-                    val output = getValue(parameterMode, index + 1)
-                    index += 2 // Move past output instruction
-                    return output // Pause execution and return output
+                    val out = getValue(parameterMode, instructionPointer + 1)
+                    instructionPointer += 2 // Move past output instruction
+                    return out // Pause execution and return output
                 }
-                5 -> index = jumpIfTrueOperation(index, instruction)
-                6 -> index = jumpIfFalseOperation(index, instruction)
-                7 -> index = lessThanOperation(index, instruction)
-                8 -> index = equalsOperation(index, instruction)
-                9 -> index = adjustRelativeBaseOperation(index, instruction)
+                5 -> instructionPointer = jumpIfTrue(instructionPointer, instruction)
+                6 -> instructionPointer = jumpIfFalse(instructionPointer, instruction)
+                7 -> instructionPointer = opLessThan(instructionPointer, instruction)
+                8 -> instructionPointer = opEquals(instructionPointer, instruction)
+                9 -> instructionPointer = adjustRelativeBase(instructionPointer, instruction)
                 99 -> {
                     halted = true
                     return null // Program has halted
                 }
                 else -> throw IllegalArgumentException("Unknown operation: $operation")
             }
-            instruction = getMemory(index)
+            instruction = readMemory(instructionPointer)
         }
     }
 
@@ -152,7 +152,7 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (current + 2)
      */
-    private fun adjustRelativeBaseOperation(index: Long, instruction: Long): Long {
+    private fun adjustRelativeBase(index: Long, instruction: Long): Long {
         val parameterMode = (instruction / 100 % 10).toInt()
         val parameter = getValue(parameterMode, index + 1)
         relativeBase += parameter
@@ -167,14 +167,14 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (current + 4)
      */
-    private fun equalsOperation(index: Long, instruction: Long): Long {
-        val firstParameterMode = (instruction / 100 % 10).toInt()
-        val secondParameterMode = (instruction / 1000 % 10).toInt()
-        val thirdParameterMode = (instruction / 10000 % 10).toInt()
-        val parameter1 = getValue(firstParameterMode, index + 1)
-        val parameter2 = getValue(secondParameterMode, index + 2)
-        val address = getAddress(thirdParameterMode, index + 3)
-        setMemory(address, if (parameter1 == parameter2) 1 else 0)
+    private fun opEquals(index: Long, instruction: Long): Long {
+        val m1 = (instruction / 100 % 10).toInt()
+        val m2 = (instruction / 1000 % 10).toInt()
+        val m3 = (instruction / 10000 % 10).toInt()
+        val p1 = getValue(m1, index + 1)
+        val p2 = getValue(m2, index + 2)
+        val addr = getAddress(m3, index + 3)
+        writeMemory(addr, if (p1 == p2) 1 else 0)
 
         return index + 4
     }
@@ -186,14 +186,14 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (current + 4)
      */
-    private fun lessThanOperation(index: Long, instruction: Long): Long {
-        val firstParameterMode = (instruction / 100 % 10).toInt()
-        val secondParameterMode = (instruction / 1000 % 10).toInt()
-        val thirdParameterMode = (instruction / 10000 % 10).toInt()
-        val parameter1 = getValue(firstParameterMode, index + 1)
-        val parameter2 = getValue(secondParameterMode, index + 2)
-        val address = getAddress(thirdParameterMode, index + 3)
-        setMemory(address, if (parameter1 < parameter2) 1 else 0)
+    private fun opLessThan(index: Long, instruction: Long): Long {
+        val m1 = (instruction / 100 % 10).toInt()
+        val m2 = (instruction / 1000 % 10).toInt()
+        val m3 = (instruction / 10000 % 10).toInt()
+        val p1 = getValue(m1, index + 1)
+        val p2 = getValue(m2, index + 2)
+        val addr = getAddress(m3, index + 3)
+        writeMemory(addr, if (p1 < p2) 1 else 0)
 
         return index + 4
     }
@@ -205,13 +205,13 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (address if parameter is 0, else current + 3)
      */
-    private fun jumpIfFalseOperation(index: Long, instruction: Long): Long {
-        val firstParameterMode = (instruction / 100 % 10).toInt()
-        val secondParameterMode = (instruction / 1000 % 10).toInt()
-        val parameter = getValue(firstParameterMode, index + 1)
-        val address = getValue(secondParameterMode, index + 2)
+    private fun jumpIfFalse(index: Long, instruction: Long): Long {
+        val m1 = (instruction / 100 % 10).toInt()
+        val m2 = (instruction / 1000 % 10).toInt()
+        val param = getValue(m1, index + 1)
+        val addr = getValue(m2, index + 2)
 
-        return if (parameter == 0L) address else index + 3
+        return if (param == 0L) addr else index + 3
     }
 
     /**
@@ -221,13 +221,13 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (address if parameter != 0, else current + 3)
      */
-    private fun jumpIfTrueOperation(index: Long, instruction: Long): Long {
-        val firstParameterMode = (instruction / 100 % 10).toInt()
-        val secondParameterMode = (instruction / 1000 % 10).toInt()
-        val parameter = getValue(firstParameterMode, index + 1)
-        val address = getValue(secondParameterMode, index + 2)
+    private fun jumpIfTrue(index: Long, instruction: Long): Long {
+        val m1 = (instruction / 100 % 10).toInt()
+        val m2 = (instruction / 1000 % 10).toInt()
+        val param = getValue(m1, index + 1)
+        val addr = getValue(m2, index + 2)
 
-        return if (parameter != 0L) address else index + 3
+        return if (param != 0L) addr else index + 3
     }
 
     /**
@@ -238,7 +238,7 @@ class IntCodeProgram(program: List<Long>) {
      * @param output Mutable list to append the output value
      * @return New instruction pointer (current + 2)
      */
-    private fun outputOperation(index: Long, instruction: Long, output: MutableList<Long>): Long {
+    private fun opOutput(index: Long, instruction: Long, output: MutableList<Long>): Long {
         val parameterMode = (instruction / 100 % 10).toInt()
         output.add(getValue(parameterMode, index + 1))
 
@@ -255,10 +255,10 @@ class IntCodeProgram(program: List<Long>) {
      * @param inputs Mutable list of input values
      * @return New instruction pointer (current + 2)
      */
-    private fun inputOperation(index: Long, instruction: Long, inputs: MutableList<Long>): Long {
+    private fun opInput(index: Long, instruction: Long, inputs: MutableList<Long>): Long {
         val parameterMode = (instruction / 100 % 10).toInt()
-        val address = getAddress(parameterMode, index + 1)
-        setMemory(address, inputs.removeAt(0))
+        val addr = getAddress(parameterMode, index + 1)
+        writeMemory(addr, inputs.removeAt(0))
 
         return index + 2
     }
@@ -270,14 +270,14 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (current + 4)
      */
-    private fun multiplyOperation(index: Long, instruction: Long): Long {
-        val firstParameterMode = (instruction / 100 % 10).toInt()
-        val secondParameterMode = (instruction / 1000 % 10).toInt()
-        val thirdParameterMode = (instruction / 10000 % 10).toInt()
-        val operand1 = getValue(firstParameterMode, index + 1)
-        val operand2 = getValue(secondParameterMode, index + 2)
-        val address = getAddress(thirdParameterMode, index + 3)
-        setMemory(address, operand1 * operand2)
+    private fun opMultiply(index: Long, instruction: Long): Long {
+        val m1 = (instruction / 100 % 10).toInt()
+        val m2 = (instruction / 1000 % 10).toInt()
+        val m3 = (instruction / 10000 % 10).toInt()
+        val o1 = getValue(m1, index + 1)
+        val o2 = getValue(m2, index + 2)
+        val addr = getAddress(m3, index + 3)
+        writeMemory(addr, o1 * o2)
 
         return index + 4
     }
@@ -289,14 +289,14 @@ class IntCodeProgram(program: List<Long>) {
      * @param instruction Full instruction including opcode and parameter modes
      * @return New instruction pointer (current + 4)
      */
-    private fun addOperation(index: Long, instruction: Long): Long {
-        val firstParameterMode = (instruction / 100 % 10).toInt()
-        val secondParameterMode = (instruction / 1000 % 10).toInt()
-        val thirdParameterMode = (instruction / 10000 % 10).toInt()
-        val operand1 = getValue(firstParameterMode, index + 1)
-        val operand2 = getValue(secondParameterMode, index + 2)
-        val address = getAddress(thirdParameterMode, index + 3)
-        setMemory(address, operand1 + operand2)
+    private fun opAdd(index: Long, instruction: Long): Long {
+        val m1 = (instruction / 100 % 10).toInt()
+        val m2 = (instruction / 1000 % 10).toInt()
+        val m3 = (instruction / 10000 % 10).toInt()
+        val o1 = getValue(m1, index + 1)
+        val o2 = getValue(m2, index + 2)
+        val addr = getAddress(m3, index + 3)
+        writeMemory(addr, o1 + o2)
 
         return index + 4
     }
@@ -315,9 +315,9 @@ class IntCodeProgram(program: List<Long>) {
      */
     private fun getValue(mode: Int, index: Long): Long =
         when (mode) {
-            0 -> getMemory(getMemory(index)) // position mode
-            1 -> getMemory(index) // immediate mode
-            2 -> getMemory(relativeBase + getMemory(index)) // relative mode
+            0 -> readMemory(readMemory(index)) // position mode
+            1 -> readMemory(index) // immediate mode
+            2 -> readMemory(relativeBase + readMemory(index)) // relative mode
             else -> throw IllegalArgumentException("Unknown mode: $mode")
         }
 
@@ -333,8 +333,8 @@ class IntCodeProgram(program: List<Long>) {
      */
     private fun getAddress(mode: Int, index: Long): Long =
         when (mode) {
-            0 -> getMemory(index) // position mode
-            2 -> relativeBase + getMemory(index) // relative mode
+            0 -> readMemory(index) // position mode
+            2 -> relativeBase + readMemory(index) // relative mode
             else -> throw IllegalArgumentException("Invalid address mode: $mode")
         }
 
@@ -347,7 +347,7 @@ class IntCodeProgram(program: List<Long>) {
      * @return Value at the address, or 0 if not initialized
      * @throws IllegalArgumentException if address is negative
      */
-    private fun getMemory(address: Long): Long {
+    private fun readMemory(address: Long): Long {
         if (address < 0) throw IllegalArgumentException("Invalid memory address: $address")
         return memory.getOrDefault(address, 0L)
     }
@@ -359,7 +359,7 @@ class IntCodeProgram(program: List<Long>) {
      * @param value Value to write
      * @throws IllegalArgumentException if address is negative
      */
-    private fun setMemory(address: Long, value: Long) {
+    private fun writeMemory(address: Long, value: Long) {
         if (address < 0) throw IllegalArgumentException("Invalid memory address: $address")
         memory[address] = value
     }
