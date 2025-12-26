@@ -55,20 +55,24 @@ class NIC(
                 memory[writeParam(3)] = readParam(1) + readParam(2)
                 instructionPointer += 4
             }
+
             2 -> { // Multiply
                 memory[writeParam(3)] = readParam(1) * readParam(2)
                 instructionPointer += 4
             }
+
             3 -> { // Input
                 // Suspend until an input value is available on the channel.
                 memory[writeParam(1)] = input.receive()
                 instructionPointer += 2
             }
+
             4 -> { // Output
                 // Send the resolved parameter value to the output channel.
                 output.send(readParam(1))
                 instructionPointer += 2
             }
+
             5 -> { // JumpIfTrue
                 if (readParam(1) != 0L) {
                     instructionPointer = readParam(2)
@@ -76,6 +80,7 @@ class NIC(
                     instructionPointer += 3
                 }
             }
+
             6 -> { // JumpIfFalse
                 if (readParam(1) == 0L) {
                     instructionPointer = readParam(2)
@@ -83,22 +88,27 @@ class NIC(
                     instructionPointer += 3
                 }
             }
+
             7 -> { // LessThan
                 memory[writeParam(3)] = if (readParam(1) < readParam(2)) 1L else 0L
                 instructionPointer += 4
             }
+
             8 -> { // Equals
                 memory[writeParam(3)] = if (readParam(1) == readParam(2)) 1L else 0L
                 instructionPointer += 4
             }
+
             9 -> { // AdjustRelativeBase
                 // Modify relative base by the value of the parameter.
                 relativeBase += readParam(1)
                 instructionPointer += 2
             }
+
             99 -> { // Halt
                 halted = true
             }
+
             else -> throw IllegalArgumentException("Unknown operation: $opId")
         }
 
@@ -161,5 +171,7 @@ class NIC(
             2 -> getOrDefault(at, 0L) + relativeBase
             else -> throw IllegalArgumentException("Unknown write mode: $mode")
         }
-
 }
+
+fun <T, R> Map<T, R>.copyOf(): Map<T, R> =
+    mutableMapOf<T, R>().also { it.putAll(this) }
