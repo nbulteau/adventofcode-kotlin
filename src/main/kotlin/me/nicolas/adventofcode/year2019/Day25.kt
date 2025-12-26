@@ -65,6 +65,96 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         }
     }
 
+    private data class Room(
+        val name: String,
+        val text: String,
+        val items: List<String> = emptyList(),
+        val doors: List<String> = emptyList()
+    )
+
+    private fun parseRoom(text: String, logDebug: ((String) -> Unit)? = null): Room {
+        val nameLine = text.lineSequence().map { it.trimEnd() }
+            .firstOrNull { it.trim().startsWith("==") && it.trim().endsWith("==") }
+        val name =
+            nameLine?.let { Regex("^==\\s*(.+?)\\s*==\\s*$").find(it.trim())?.groupValues?.get(1) } ?: "<unknown>"
+
+        val lines = text.lineSequence().toList()
+        val idxItems = lines.indexOfFirst { it.trim().equals("Items here:", ignoreCase = true) }
+        val items = if (idxItems == -1) emptyList() else run {
+            val res = mutableListOf<String>()
+            for (i in idxItems + 1 until lines.size) {
+                val line = lines[i].trim()
+                if (line.isEmpty()) break
+                if (line.startsWith("- ")) res.add(line.removePrefix("- ").trim()) else break
+            }
+            res
+        }
+
+        val idxDoors = lines.indexOfFirst { it.trim().equals("Doors here lead:", ignoreCase = true) }
+        val doors = if (idxDoors == -1) emptyList() else run {
+            val res = mutableListOf<String>()
+            for (i in idxDoors + 1 until lines.size) {
+                val line = lines[i].trim()
+                if (line.isEmpty()) break
+                if (line.startsWith("- ")) res.add(line.removePrefix("- ").trim().lowercase()) else break
+            }
+            res
+        }
+
+        if (name == "<unknown>") logDebug?.invoke(
+            "DEBUG: could not parse room name from output snippet: ${text.lines().take(6).joinToString(" ") }"
+        )
+        return Room(name, text, items, doors)
+    }
+
+    private fun generateDotFile(edges: Map<Int, Map<String, Int>>, visited: Map<Int, Room>) {
+        try {
+            val path = Paths.get("src/main/resources/me/nicolas/adventofcode/year2019/day25/day25-explored-map.dot")
+            val sb = StringBuilder()
+            sb.appendLine("digraph G {")
+            for ((fromId, map) in edges) {
+                val fromRoom = visited[fromId]
+                val fromLabel = fromRoom?.name?.replace("\"", "\\\"") ?: "room_$fromId"
+                for ((dir, toId) in map) {
+                    val toRoom = visited[toId]
+                    val toLabel = toRoom?.name?.replace("\"", "\\\"") ?: "room_$toId"
+                    sb.appendLine("  \"$fromLabel\" -> \"$toLabel\" [label=\"$dir\"];")
+                }
+            }
+            sb.appendLine("}")
+            Files.writeString(path, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+            println("Wrote explored map DOT file to: ${path.toAbsolutePath()}")
+        } catch (t: Throwable) {
+            println("Could not write DOT file: ${t::class.simpleName}: ${t.message}")
+        }
+    }
+
+    private suspend fun readUntilPrompt(computer: NIC): String {
+        val sb = StringBuilder()
+        try {
+            while (true) {
+                val v = computer.output.receive()
+                sb.append(v.toInt().toChar())
+                if (sb.endsWith("Command?\n")) break
+            }
+        } catch (_: ClosedReceiveChannelException) {
+            return sb.toString()
+        }
+        return sb.toString()
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private suspend fun sendCommand(cmd: String, computer: NIC) {
+        if (computer.input.isClosedForSend) return
+        ("$cmd\n").forEach { ch ->
+            if (computer.input.isClosedForSend) return
+            try {
+                computer.input.send(ch.code.toLong())
+            } catch (_: Throwable) {
+                return
+            }
+        }
+    }
 
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     fun exploreAll(program: MutableMap<Long, Long>): String = runBlocking {
@@ -80,46 +170,12 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             }
         }
 
-        suspend fun readUntilPrompt(): String {
-            val sb = StringBuilder()
-            try {
-                while (true) {
-                    val v = computer.output.receive()
-                    sb.append(v.toInt().toChar())
-                    if (sb.endsWith("Command?\n")) break
-                }
-            } catch (_: ClosedReceiveChannelException) {
-                return sb.toString()
-            }
-            return sb.toString()
-        }
-
-        suspend fun sendCommand(cmd: String) {
-            if (computer.input.isClosedForSend) return
-            ("$cmd\n").forEach { ch ->
-                if (computer.input.isClosedForSend) return
-                try {
-                    computer.input.send(ch.code.toLong())
-                } catch (_: Throwable) {
-                    return
-                }
-            }
-        }
-
-        val reverse = mapOf("north" to "south", "south" to "north", "west" to "east", "east" to "west")
-
-        data class Room(
-            val name: String,
-            val text: String,
-            val items: List<String> = emptyList(),
-            val doors: List<String> = emptyList()
-        )
-
-        // graph structures
+        // exploration state (was previously class-level/local) - keep local to avoid cross-run pollution
         val visited = mutableMapOf<Int, Room>()
         val edges = mutableMapOf<Int, MutableMap<String, Int>>()
-        var nextId = 0
-        val startId = nextId++
+        val reverse = mapOf("north" to "south", "south" to "north", "east" to "west", "west" to "east")
+        val startId = 0
+        var nextId = 1
 
         // local BFS helper that uses `edges`
         fun findPath(start: Int, goal: Int): List<String>? {
@@ -159,75 +215,16 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             }
         }
 
-        fun parseRoom(text: String): Room {
-            val nameLine = text.lineSequence().map { it.trimEnd() }
-                .firstOrNull { it.trim().startsWith("==") && it.trim().endsWith("==") }
-            val name =
-                nameLine?.let { Regex("^==\\s*(.+?)\\s*==\\s*$").find(it.trim())?.groupValues?.get(1) } ?: "<unknown>"
-
-            val lines = text.lineSequence().toList()
-            val idxItems = lines.indexOfFirst { it.trim().equals("Items here:", ignoreCase = true) }
-            val items = if (idxItems == -1) emptyList() else run {
-                val res = mutableListOf<String>()
-                for (i in idxItems + 1 until lines.size) {
-                    val line = lines[i].trim()
-                    if (line.isEmpty()) break
-                    if (line.startsWith("- ")) res.add(line.removePrefix("- ").trim()) else break
-                }
-                res
-            }
-
-            val idxDoors = lines.indexOfFirst { it.trim().equals("Doors here lead:", ignoreCase = true) }
-            val doors = if (idxDoors == -1) emptyList() else run {
-                val res = mutableListOf<String>()
-                for (i in idxDoors + 1 until lines.size) {
-                    val line = lines[i].trim()
-                    if (line.isEmpty()) break
-                    if (line.startsWith("- ")) res.add(line.removePrefix("- ").trim().lowercase()) else break
-                }
-                res
-            }
-
-            if (name == "<unknown>") dbg(
-                "DEBUG: could not parse room name from output snippet: ${
-                    text.lines().take(6).joinToString(" ")
-                }"
-            )
-            return Room(name, text, items, doors)
-        }
-
         // initialize starting room
         val initial = try {
-            readUntilPrompt()
+            readUntilPrompt(computer)
         } catch (_: ClosedReceiveChannelException) {
             ""
         }
         if (initial.isNotEmpty()) {
-            val r = parseRoom(initial)
+            val r = parseRoom(initial, ::dbg)
             visited[startId] = r
             dbg("DEBUG: startId=${0} -> ${r.name} [${r.items.joinToString(", ")}]")
-        }
-
-        fun generateDotFile(edges: Map<Int, Map<String, Int>>, visited: Map<Int, Room>) {
-            try {
-                val path = Paths.get("src/main/resources/me/nicolas/adventofcode/year2019/day25/day25-explored-map.dot")
-                val sb = StringBuilder()
-                sb.appendLine("digraph G {")
-                for ((fromId, map) in edges) {
-                    val fromRoom = visited[fromId]
-                    val fromLabel = fromRoom?.name?.replace("\"", "\\\"") ?: "room_$fromId"
-                    for ((dir, toId) in map) {
-                        val toRoom = visited[toId]
-                        val toLabel = toRoom?.name?.replace("\"", "\\\"") ?: "room_$toId"
-                        sb.appendLine("  \"$fromLabel\" -> \"$toLabel\" [label=\"$dir\"];")
-                    }
-                }
-                sb.appendLine("}")
-                Files.writeString(path, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
-                println("Wrote explored map DOT file to: ${path.toAbsolutePath()}")
-            } catch (t: Throwable) {
-                println("Could not write DOT file: ${t::class.simpleName}: ${t.message}")
-            }
         }
 
         // DFS over roomId graph (suspend)
@@ -238,8 +235,8 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             for (dir in doors) {
                 dbg("DEBUG: at roomId=$currentId (${room.name}) trying dir='$dir')")
 
-                sendCommand(dir)
-                val out = readUntilPrompt()
+                sendCommand(dir, computer)
+                val out = readUntilPrompt(computer)
 
                 // ignore outright invalid moves
                 if (out.contains("You can't go that way", ignoreCase = true) || out.contains(
@@ -258,9 +255,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                 ) || out.contains("heavier", true))
                 if (looksLikeTrap) {
                     dbg(
-                        "DEBUG: detected trap/ejection after moving '$dir' from $currentId; snippet: ${
-                            out.lines().take(4).joinToString(" | ")
-                        }"
+                        "DEBUG: detected trap/ejection after moving '$dir' from $currentId; snippet: ${out.lines().take(4).joinToString(" | ") }"
                     )
                     val checkpointEntry = visited.entries.firstOrNull {
                         it.value.name.contains(
@@ -271,18 +266,16 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                     if (checkpointEntry != null) {
                         val pathBack = findPath(checkpointEntry.key, currentId)
                         if (pathBack != null) for (d in pathBack) {
-                            sendCommand(d); readUntilPrompt()
+                            sendCommand(d, computer); readUntilPrompt(computer)
                         }
                     }
                     continue
                 }
 
-                val newRoom = parseRoom(out)
+                val newRoom = parseRoom(out, ::dbg)
                 if (newRoom.name == "<unknown>") {
                     dbg(
-                        "DEBUG: parseRoom returned <unknown>; treating as trap/ejection. snippet: ${
-                            out.lines().take(6).joinToString(" | ")
-                        }"
+                        "DEBUG: parseRoom returned <unknown>; treating as trap/ejection. snippet: ${out.lines().take(6).joinToString(" | ") }"
                     )
                     val checkpointEntry2 = visited.entries.firstOrNull {
                         it.value.name.contains(
@@ -293,7 +286,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                     if (checkpointEntry2 != null) {
                         val pathBack2 = findPath(checkpointEntry2.key, currentId)
                         if (pathBack2 != null) for (d in pathBack2) {
-                            sendCommand(d); readUntilPrompt()
+                            sendCommand(d, computer); readUntilPrompt(computer)
                         }
                     }
                     continue
@@ -319,8 +312,8 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                 if (existing == null) dfs(neighborId)
 
                 dbg("DEBUG: backtracking from roomId=$neighborId to $currentId via '${reverse[dir]!!}'")
-                sendCommand(reverse[dir]!!)
-                readUntilPrompt()
+                sendCommand(reverse[dir]!!, computer)
+                readUntilPrompt(computer)
             }
         }
 
@@ -336,11 +329,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             dbg("\nRooms (id -> name [items]):")
             visited.forEach { (id, r) ->
                 dbg(
-                    if (r.items.isEmpty()) "$id -> ${if (id == 0) "${r.name} (START)" else r.name}" else "$id -> ${if (id == 0) "${r.name} (START)" else r.name} [${
-                        r.items.joinToString(
-                            ", "
-                        )
-                    }]"
+                    if (r.items.isEmpty()) "$id -> ${if (id == 0) "${r.name} (START)" else r.name}" else "$id -> ${if (id == 0) "${r.name} (START)" else r.name} [${r.items.joinToString(", ") }]"
                 )
             }
 
@@ -457,11 +446,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
 
             val missing = desiredSafeItems.filter { it !in itemRooms.keys }
             if (missing.isNotEmpty()) dbg(
-                "Could not locate these required items in the explored map: ${
-                    missing.joinToString(
-                        ", "
-                    )
-                }"
+                "Could not locate these required items in the explored map: ${missing.joinToString(", ") }"
             )
             else {
                 val checkpointEntry = visited.entries.firstOrNull {
@@ -480,7 +465,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                     if (pathToCheckpoint == null) dbg("No path from start to checkpoint found")
                     else {
                         for (d in pathToCheckpoint) {
-                            sendCommand(d); readUntilPrompt()
+                            sendCommand(d, computer); readUntilPrompt(computer)
                         }
 
                         // collect items
@@ -488,11 +473,11 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                             val coord = itemRooms[it] ?: continue
                             val path = findPath(checkpointId, coord) ?: continue
                             for (d in path) {
-                                sendCommand(d); readUntilPrompt()
+                                sendCommand(d, computer); readUntilPrompt(computer)
                             }
-                            sendCommand("take $it"); readUntilPrompt()
+                            sendCommand("take $it", computer); readUntilPrompt(computer)
                             for (d in path.asReversed()) {
-                                sendCommand(reverse[d]!!); readUntilPrompt()
+                                sendCommand(reverse[d]!!, computer); readUntilPrompt(computer)
                             }
                         }
 
@@ -504,28 +489,24 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                         for (mask in 0 until (1 shl nbSafeItems)) {
                             // drop all first
                             for (itm in desiredSafeItems) {
-                                sendCommand("drop $itm"); readUntilPrompt()
+                                sendCommand("drop $itm", computer); readUntilPrompt(computer)
                             }
 
                             // take subset
                             val subset = mutableListOf<String>()
                             for (i in 0 until nbSafeItems) if ((mask shr i) and 1 == 1) subset.add(desiredSafeItems[i])
 
-                            dbg("DEBUG: TRY subset mask=$mask -> [${subset.joinToString(", ")}] (size=${subset.size})")
+                            dbg("DEBUG: TRY subset mask=$mask -> [${subset.joinToString(", ")} ] (size=${subset.size})")
                             for (itm in subset) {
-                                sendCommand("take $itm"); readUntilPrompt()
+                                sendCommand("take $itm", computer); readUntilPrompt(computer)
                             }
 
                             for (dir in candidateDirs) {
                                 dbg(
-                                    "DEBUG: attempting direction '$dir' from checkpoint with items [${
-                                        subset.joinToString(
-                                            ", "
-                                        )
-                                    }]"
+                                    "DEBUG: attempting direction '$dir' from checkpoint with items [${subset.joinToString(", ")}]"
                                 )
-                                sendCommand(dir)
-                                val out = readUntilPrompt()
+                                sendCommand(dir, computer)
+                                val out = readUntilPrompt(computer)
                                 val outSnippet = out.lines().joinToString(" | ") { it.trim() }.take(400)
                                 dbg("DEBUG: output snippet for dir='$dir': $outSnippet")
 
@@ -539,7 +520,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                                 }
 
                                 if (out.contains("==") && out.contains("Command?")) {
-                                    sendCommand(reverse[dir]!!); readUntilPrompt()
+                                    sendCommand(reverse[dir]!!, computer); readUntilPrompt(computer)
                                 } else dbg("DEBUG: did not move into a room for dir='$dir' (likely ejected or blocked)")
                             }
                             if (found) break
