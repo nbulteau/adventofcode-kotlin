@@ -30,7 +30,6 @@ class Day21(year: Int, day: Int, title: String = "Springdroid Adventure") : Adve
      * which is encoded with the available instructions using T as temporary storage.
      */
     fun partOne(data: String): Int {
-        if (data.isBlank()) return 0
 
         val script = listOf(
             "NOT A J",
@@ -61,7 +60,6 @@ class Day21(year: Int, day: Int, title: String = "Springdroid Adventure") : Adve
      * The implemented script uses T as temporary and ends with RUN.
      */
     fun partTwo(data: String): Int {
-        if (data.isBlank()) return 0
 
         val script = listOf(
             "NOT A J",
