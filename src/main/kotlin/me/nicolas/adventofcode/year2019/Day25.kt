@@ -26,12 +26,26 @@ fun main() {
 
 class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay(year, day, title) {
 
-    private val logSb = StringBuilder()
-
-    private fun dbg(msg: String) {
-        logSb.append(msg).append('\n')
-    }
-
+    /**
+     * Entry for part one of Day 25.
+     *
+     * Algorithm (high-level):
+     * - Parse the input Intcode program into a mutable memory map indexed by address (Long -> Long).
+     * - If run in interactive mode, start an interactive game session with the Intcode NIC and
+     *   relay stdin/stdout so the user can manually explore and issue commands.
+     * - Otherwise, run the automated exploration routine `exploreAll` which performs the following:
+     *   - Launches an Intcode NIC running the supplied program.
+     *   - Reads the textual room descriptions emitted by the NIC and parses them into `Room` objects.
+     *   - Performs a depth-first exploration of reachable rooms, building a graph of rooms (visited)
+     *     and directed edges labeled by movement directions (north/south/east/west).
+     *   - Detects traps/ejections by inspecting output snippets and avoids revisiting identical room
+     *     signatures (name+doors+items).
+     *   - After exploration, collects items found in rooms and filters known deadly items.
+     *   - Tests each remaining item by launching ephemeral NIC instances and attempting to pick it up
+     *     to detect items that immediately kill or eject the player.
+     *   - Using the set of safe items, moves to the security checkpoint and tries every subset of
+     *     items (dropping/taking) to find the correct weight combination that yields the password.
+     */
     fun partOne(data: String, interactive: Boolean = false): String {
         val program: Map<Long, Long> = data
             .split(",")
@@ -47,6 +61,24 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         }
     }
 
+    /**
+     * Interactive play mode for the Intcode-based game.
+     *
+     * Purpose:
+     * - Start the Intcode NIC and let a user interact with it via the terminal.
+     *
+     * High-level behavior:
+     * - Create a NIC instance with a copy of the program and an unbounded output channel.
+     * - Start the NIC in a coroutine so it runs concurrently with the I/O relay.
+     * - Launch a coroutine that continuously reads bytes from the NIC's output channel and
+     *   prints them to stdout so the user sees room descriptions and prompts.
+     * - When a prompt appears, read a line from the user's stdin and forward every character
+     *   to the NIC's input channel (including the newline) so the NIC receives commands.
+     *
+     * Notes:
+     * - This mode is intended for debugging or manual play. It does not return a result;
+     *   the user interacts directly with the running NIC.
+     */
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     fun playGame(program: Map<Long, Long>) = runBlocking {
         val computer = NIC(
@@ -78,6 +110,12 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         val items: List<String> = emptyList(),
         val doors: List<String> = emptyList()
     )
+
+    private val logSb = StringBuilder()
+
+    private fun dbg(msg: String) {
+        logSb.append(msg).append('\n')
+    }
 
     // parseRoom now uses class-level dbg directly
     private fun parseRoom(text: String): Room {
@@ -115,7 +153,11 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         return Room(name, text, items, doors)
     }
 
-    private fun generateDotFile(edges: Map<Int, Map<String, Int>>, visited: Map<Int, Room>, knownDeadlyItems: Set<String> = emptySet()) {
+    private fun generateDotFile(
+        edges: Map<Int, Map<String, Int>>,
+        visited: Map<Int, Room>,
+        knownDeadlyItems: Set<String> = emptySet()
+    ) {
         try {
             val path = Paths.get("src/main/resources/me/nicolas/adventofcode/year2019/day25/day25-explored-map.dot")
             val stringBuilder = StringBuilder()
@@ -182,6 +224,27 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         }
     }
 
+    /**
+     * Automated exploration and password discovery routine.
+     *
+     * Purpose:
+     * - Drive the Intcode NIC automatically to explore all reachable rooms, collect safe items,
+     *   and search for the security checkpoint password using item-weight combinations.
+     *
+     * High-level steps:
+     * 1. Start the NIC and read the initial room description.
+     * 2. Parse room output into `Room` objects (name, items, doors).
+     * 3. Perform a depth-first exploration of rooms:
+     *    - Maintain `visited` (id -> Room) and `edges` (id -> dir -> id).
+     *    - Use a room signature (name+items+doors) to avoid duplicates.
+     *    - Detect traps/ejections by inspecting output snippets and backtrack as needed.
+     * 4. After exploration, generate a DOT file for visualization (rooms labeled with items).
+     * 5. Filter known-deadly items and test remaining items by spawning ephemeral NICs that
+     *    pick up the item and observe if the player is ejected/killed.
+     * 6. Using the set of safe items, move to the security checkpoint and try every subset
+     *    of items (drop/take) to find the correct weight combination; return the password
+     *    string when found.
+     */
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     fun exploreAll(program: Map<Long, Long>): String = runBlocking {
         val computer = NIC(
@@ -192,7 +255,8 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         launch {
             try {
                 computer.start()
-            } catch (_: Throwable) { /* ignore NIC start errors */
+            } catch (_: Throwable) {
+                // ignore NIC start errors
             }
         }
 
@@ -572,5 +636,4 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
 
         return@runBlocking "PASSWORD NOT FOUND"
     }
-
 }
