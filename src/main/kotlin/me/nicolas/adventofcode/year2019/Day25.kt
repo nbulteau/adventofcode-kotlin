@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.channels.ClosedSendChannelException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -25,8 +26,14 @@ fun main() {
 
 class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay(year, day, title) {
 
+    private val logSb = StringBuilder()
+
+    private fun dbg(msg: String) {
+        logSb.append(msg).append('\n')
+    }
+
     fun partOne(data: String, interactive: Boolean = false): String {
-        val program: MutableMap<Long, Long> = data
+        val program: Map<Long, Long> = data
             .split(",")
             .withIndex()
             .associateTo(mutableMapOf()) { it.index.toLong() to it.value.toLong() }
@@ -41,9 +48,9 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
     }
 
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
-    fun playGame(program: MutableMap<Long, Long>) = runBlocking {
+    fun playGame(program: Map<Long, Long>) = runBlocking {
         val computer = NIC(
-            memory = program.copyOf(),
+            memory = program.copyOf().toMutableMap(),
             output = Channel(Channel.UNLIMITED)
         ).also { launch { it.start() } }
 
@@ -72,7 +79,8 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         val doors: List<String> = emptyList()
     )
 
-    private fun parseRoom(text: String, logDebug: ((String) -> Unit)? = null): Room {
+    // parseRoom now uses class-level dbg directly
+    private fun parseRoom(text: String): Room {
         val nameLine = text.lineSequence().map { it.trimEnd() }
             .firstOrNull { it.trim().startsWith("==") && it.trim().endsWith("==") }
         val name =
@@ -101,28 +109,43 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             res
         }
 
-        if (name == "<unknown>") logDebug?.invoke(
-            "DEBUG: could not parse room name from output snippet: ${text.lines().take(6).joinToString(" ") }"
+        if (name == "<unknown>") dbg(
+            "DEBUG: could not parse room name from output snippet: ${text.lines().take(6).joinToString(" ")}"
         )
         return Room(name, text, items, doors)
     }
 
-    private fun generateDotFile(edges: Map<Int, Map<String, Int>>, visited: Map<Int, Room>) {
+    private fun generateDotFile(edges: Map<Int, Map<String, Int>>, visited: Map<Int, Room>, knownDeadlyItems: Set<String> = emptySet()) {
         try {
             val path = Paths.get("src/main/resources/me/nicolas/adventofcode/year2019/day25/day25-explored-map.dot")
-            val sb = StringBuilder()
-            sb.appendLine("digraph G {")
+            val stringBuilder = StringBuilder()
+            stringBuilder.appendLine("digraph G {")
             for ((fromId, map) in edges) {
                 val fromRoom = visited[fromId]
-                val fromLabel = fromRoom?.name?.replace("\"", "\\\"") ?: "room_$fromId"
+                val fromBase = fromRoom?.name ?: "room_$fromId"
+                val fromItems = fromRoom?.items?.takeIf { it.isNotEmpty() }?.map { item ->
+                    if (item.lowercase() in knownDeadlyItems) "${item}*" else item
+                }?.joinToString(", ")
+                val fromLabelRaw = if (fromItems != null) "$fromBase [$fromItems]" else fromBase
+                val fromLabel = fromLabelRaw.replace("\"", "\\\"")
                 for ((dir, toId) in map) {
                     val toRoom = visited[toId]
-                    val toLabel = toRoom?.name?.replace("\"", "\\\"") ?: "room_$toId"
-                    sb.appendLine("  \"$fromLabel\" -> \"$toLabel\" [label=\"$dir\"];")
+                    val toBase = toRoom?.name ?: "room_$toId"
+                    val toItems = toRoom?.items?.takeIf { it.isNotEmpty() }?.map { item ->
+                        if (item.lowercase() in knownDeadlyItems) "${item}*" else item
+                    }?.joinToString(", ")
+                    val toLabelRaw = if (toItems != null) "$toBase [$toItems]" else toBase
+                    val toLabel = toLabelRaw.replace("\"", "\\\"")
+                    stringBuilder.appendLine("  \"$fromLabel\" -> \"$toLabel\" [label=\"$dir\"];")
                 }
             }
-            sb.appendLine("}")
-            Files.writeString(path, sb.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+            stringBuilder.appendLine("}")
+            Files.writeString(
+                path,
+                stringBuilder.toString(),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING
+            )
             println("Wrote explored map DOT file to: ${path.toAbsolutePath()}")
         } catch (t: Throwable) {
             println("Could not write DOT file: ${t::class.simpleName}: ${t.message}")
@@ -130,26 +153,29 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
     }
 
     private suspend fun readUntilPrompt(computer: NIC): String {
-        val sb = StringBuilder()
+        val stringBuilder = StringBuilder()
         try {
             while (true) {
                 val v = computer.output.receive()
-                sb.append(v.toInt().toChar())
-                if (sb.endsWith("Command?\n")) break
+                stringBuilder.append(v.toInt().toChar())
+                if (stringBuilder.endsWith("Command?\n")) break
             }
         } catch (_: ClosedReceiveChannelException) {
-            return sb.toString()
+            return stringBuilder.toString()
         }
-        return sb.toString()
+
+        return stringBuilder.toString()
     }
 
+    // sendCommand uses try/catch rather than isClosedForSend checks to avoid delicate API warnings
     @OptIn(DelicateCoroutinesApi::class)
     private suspend fun sendCommand(cmd: String, computer: NIC) {
-        if (computer.input.isClosedForSend) return
-        ("$cmd\n").forEach { ch ->
-            if (computer.input.isClosedForSend) return
+        val seq = "$cmd\n"
+        for (ch in seq) {
             try {
                 computer.input.send(ch.code.toLong())
+            } catch (_: ClosedSendChannelException) {
+                return
             } catch (_: Throwable) {
                 return
             }
@@ -157,9 +183,9 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
     }
 
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
-    fun exploreAll(program: MutableMap<Long, Long>): String = runBlocking {
+    fun exploreAll(program: Map<Long, Long>): String = runBlocking {
         val computer = NIC(
-            memory = program.copyOf(),
+            memory = program.copyOf().toMutableMap(),
             output = Channel(Channel.UNLIMITED)
         )
 
@@ -176,6 +202,9 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
         val reverse = mapOf("north" to "south", "south" to "north", "east" to "west", "west" to "east")
         val startId = 0
         var nextId = 1
+
+        // reset class-level logger for this run
+        logSb.setLength(0)
 
         // local BFS helper that uses `edges`
         fun findPath(start: Int, goal: Int): List<String>? {
@@ -207,14 +236,6 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             return null
         }
 
-        // logging
-        val logSb = StringBuilder()
-        fun dbg(msg: String, debug: Boolean = false) {
-            if (debug && msg.startsWith("DEBUG: ")) {
-                logSb.append(msg).append('\n')
-            }
-        }
-
         // initialize starting room
         val initial = try {
             readUntilPrompt(computer)
@@ -222,7 +243,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             ""
         }
         if (initial.isNotEmpty()) {
-            val r = parseRoom(initial, ::dbg)
+            val r = parseRoom(initial)
             visited[startId] = r
             dbg("DEBUG: startId=${0} -> ${r.name} [${r.items.joinToString(", ")}]")
         }
@@ -255,7 +276,9 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                 ) || out.contains("heavier", true))
                 if (looksLikeTrap) {
                     dbg(
-                        "DEBUG: detected trap/ejection after moving '$dir' from $currentId; snippet: ${out.lines().take(4).joinToString(" | ") }"
+                        "DEBUG: detected trap/ejection after moving '$dir' from $currentId; snippet: ${
+                            out.lines().take(4).joinToString(" | ")
+                        }"
                     )
                     val checkpointEntry = visited.entries.firstOrNull {
                         it.value.name.contains(
@@ -272,10 +295,12 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                     continue
                 }
 
-                val newRoom = parseRoom(out, ::dbg)
+                val newRoom = parseRoom(out)
                 if (newRoom.name == "<unknown>") {
                     dbg(
-                        "DEBUG: parseRoom returned <unknown>; treating as trap/ejection. snippet: ${out.lines().take(6).joinToString(" | ") }"
+                        "DEBUG: parseRoom returned <unknown>; treating as trap/ejection. snippet: ${
+                            out.lines().take(6).joinToString(" | ")
+                        }"
                     )
                     val checkpointEntry2 = visited.entries.firstOrNull {
                         it.value.name.contains(
@@ -329,7 +354,11 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             dbg("\nRooms (id -> name [items]):")
             visited.forEach { (id, r) ->
                 dbg(
-                    if (r.items.isEmpty()) "$id -> ${if (id == 0) "${r.name} (START)" else r.name}" else "$id -> ${if (id == 0) "${r.name} (START)" else r.name} [${r.items.joinToString(", ") }]"
+                    if (r.items.isEmpty()) "$id -> ${if (id == 0) "${r.name} (START)" else r.name}" else "$id -> ${if (id == 0) "${r.name} (START)" else r.name} [${
+                        r.items.joinToString(
+                            ", "
+                        )
+                    }]"
                 )
             }
 
@@ -337,12 +366,12 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             edges.forEach { (id, map) -> dbg("$id -> ${map.entries.joinToString(", ") { "${it.key}->${it.value}" }}") }
 
             // generate dot file for visualization
-            generateDotFile(edges, visited)
+            val knownDeadlyItems = setOf("infinite loop", "molten lava", "photons", "escape pod", "giant electromagnet")
+            generateDotFile(edges, visited, knownDeadlyItems)
 
             // collect items and test deadly items
             val itemsToTest = mutableListOf<Pair<String, Int>>()
             visited.forEach { (id, r) -> r.items.forEach { item -> itemsToTest.add(item to id) } }
-            val knownDeadlyItems = setOf("infinite loop", "molten lava", "photons", "escape pod", "giant electromagnet")
             knownDeadlyItems.forEach { itemsToTest.removeIf { (item, _) -> item == it } }
 
             println("\nTesting ${itemsToTest.size} items for deadly behavior...")
@@ -351,7 +380,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                 val path =
                     findPath(startId, roomId) ?: run { dbg("Could not find path to $item at room $roomId"); continue }
 
-                val testComputer = NIC(memory = program.copyOf(), output = Channel(Channel.UNLIMITED))
+                val testComputer = NIC(memory = program.copyOf().toMutableMap(), output = Channel(Channel.UNLIMITED))
                 var died = false
                 var reasonText = ""
                 val job = launch {
@@ -361,42 +390,17 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                     }
                 }
 
-                suspend fun readUntilPromptTest(): String {
-                    val sb = StringBuilder()
-                    try {
-                        while (true) {
-                            val v = testComputer.output.receive()
-                            sb.append(v.toInt().toChar())
-                            if (sb.endsWith("Command?\n")) break
-                        }
-                    } catch (_: ClosedReceiveChannelException) {
-                        return sb.toString()
-                    }
-                    return sb.toString()
-                }
-
-                suspend fun sendCommandTest(cmd: String) {
-                    if (testComputer.input.isClosedForSend) return
-                    ("$cmd\n").forEach { ch ->
-                        if (testComputer.input.isClosedForSend) return else try {
-                            testComputer.input.send(ch.code.toLong())
-                        } catch (_: Throwable) {
-                            return
-                        }
-                    }
-                }
-
                 try {
                     for (d in path) {
-                        sendCommandTest(d)
+                        sendCommand(d, testComputer)
                         try {
-                            readUntilPromptTest()
+                            readUntilPrompt(testComputer)
                         } catch (_: ClosedReceiveChannelException) { /* ignore */
                         }
                     }
-                    sendCommandTest("take $item")
+                    sendCommand("take $item", testComputer)
                     val out: String = try {
-                        readUntilPromptTest()
+                        readUntilPrompt(testComputer)
                     } catch (_: ClosedReceiveChannelException) {
                         ""
                     }
@@ -405,8 +409,8 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                         died = true
                         reasonText = out.lines().joinToString(" ") { it.trim() }.take(200)
                     } else {
-                        sendCommandTest("drop $item"); try {
-                            readUntilPromptTest()
+                        sendCommand("drop $item", testComputer); try {
+                            readUntilPrompt(testComputer)
                         } catch (_: ClosedReceiveChannelException) { /* ignore */
                         }
                     }
@@ -415,7 +419,10 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
                     reasonText = "Exception: ${e::class.simpleName}: ${e.message}"
                 } finally {
                     try {
-                        if (!testComputer.input.isClosedForSend) testComputer.input.close()
+                        try {
+                            testComputer.input.close()
+                        } catch (_: Exception) {
+                        }
                     } catch (_: Exception) {
                     }
                     job.cancel()
@@ -446,7 +453,7 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
 
             val missing = desiredSafeItems.filter { it !in itemRooms.keys }
             if (missing.isNotEmpty()) dbg(
-                "Could not locate these required items in the explored map: ${missing.joinToString(", ") }"
+                "Could not locate these required items in the explored map: ${missing.joinToString(", ")}"
             )
             else {
                 val checkpointEntry = visited.entries.firstOrNull {
@@ -503,7 +510,11 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
 
                             for (dir in candidateDirs) {
                                 dbg(
-                                    "DEBUG: attempting direction '$dir' from checkpoint with items [${subset.joinToString(", ")}]"
+                                    "DEBUG: attempting direction '$dir' from checkpoint with items [${
+                                        subset.joinToString(
+                                            ", "
+                                        )
+                                    }]"
                                 )
                                 sendCommand(dir, computer)
                                 val out = readUntilPrompt(computer)
@@ -538,7 +549,10 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             visited.forEach { (id, r) -> dbg("$id -> ${r.name}") }
         } finally {
             try {
-                if (!computer.input.isClosedForSend) computer.input.close()
+                try {
+                    computer.input.close()
+                } catch (_: Exception) {
+                }
             } catch (_: Exception) {
             }
 
