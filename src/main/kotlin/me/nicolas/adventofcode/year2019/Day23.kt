@@ -1,19 +1,11 @@
 package me.nicolas.adventofcode.year2019
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.selects.select
-import kotlinx.coroutines.selects.onTimeout
 import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
@@ -106,11 +98,11 @@ class Day23(year: Int, day: Int, title: String = "Category Six") : AdventOfCodeD
      *   and then cancel all children coroutines.
      */
     private fun runDroids(
-        program: MutableMap<Long, Long>,
+        program: Map<Long, Long>,
         natHandler: suspend (Array<NIC>, ReceiveChannel<Pair<Long, Long>>, SendChannel<Pair<Long, Long>>) -> Unit
     ): Int = runBlocking {
         val droids = Array(50) {
-            NIC(memory = program.copyOf(), output = Channel(UNLIMITED))
+            NIC(memory = program.copyOf().toMutableMap(), output = Channel(UNLIMITED))
         }
         val responseChannel = Channel<Pair<Long, Long>>(CONFLATED)
         val natChannel = Channel<Pair<Long, Long>>(UNLIMITED)
@@ -173,6 +165,5 @@ class Day23(year: Int, day: Int, title: String = "Category Six") : AdventOfCodeD
         return input
     }
 
-    fun <T, R> MutableMap<T, R>.copyOf(): MutableMap<T, R> =
-        mutableMapOf<T, R>().also { it.putAll(this) }
+
 }
