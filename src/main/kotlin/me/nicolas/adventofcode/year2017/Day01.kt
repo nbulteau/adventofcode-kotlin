@@ -34,15 +34,16 @@ class Day01(year: Int = 2017, day: Int = 1, title: String = "Inverse Captcha") :
      */
     fun partOne(data: String): Int {
         // Convert to digits and ignore any non-digit characters (robust input parsing).
-        val digits = data.trim().filter { it.isDigit() }.map { it - '0' }
-        if (digits.isEmpty()) return 0
+        val digits = data.trim().filter { char -> char.isDigit() }.map { char -> char - '0' }
 
         var sum = 0
         val n = digits.size
         // Loop once: compare current digit to the next (wrap-around using modulo).
         for (i in 0 until n) {
             val next = (i + 1) % n
-            if (digits[i] == digits[next]) sum += digits[i]
+            if (digits[i] == digits[next]){
+                sum += digits[i]
+            }
         }
 
         return sum
@@ -60,8 +61,7 @@ class Day01(year: Int = 2017, day: Int = 1, title: String = "Inverse Captcha") :
      */
     fun partTwo(data: String): Int {
         // Reuse the same parsing logic to get digits array.
-        val digits = data.trim().filter { it.isDigit() }.map { it - '0' }
-        if (digits.isEmpty()) return 0
+        val digits = data.trim().filter { char -> char.isDigit() }.map { char -> char - '0' }
 
         val n = digits.size
         val step = n / 2 // halfway around the circular list
@@ -69,7 +69,9 @@ class Day01(year: Int = 2017, day: Int = 1, title: String = "Inverse Captcha") :
         // Compare each digit with the digit 'step' positions ahead (wrap-around).
         for (i in 0 until n) {
             val j = (i + step) % n
-            if (digits[i] == digits[j]) sum += digits[i]
+            if (digits[i] == digits[j]) {
+                sum += digits[i]
+            }
         }
 
         return sum
