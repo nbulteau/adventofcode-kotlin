@@ -1,7 +1,7 @@
 package me.nicolas.adventofcode.year2024
 
 import me.nicolas.adventofcode.utils.*
-import java.util.LinkedList
+import java.util.*
 
 // --- Day 18: RAM Run ---
 // https://adventofcode.com/2024/day/18

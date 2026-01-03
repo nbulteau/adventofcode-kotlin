@@ -59,7 +59,8 @@ class Day11(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
         fun count(charToCount: Char) = this.rows.sumOf { string -> string.count { char -> char == charToCount } }
 
-        private fun lookAround(x: Int, y: Int) = Direction.values().sumOf { direction -> this.lookAround(x, y, direction) }
+        private fun lookAround(x: Int, y: Int) = Direction.entries.toTypedArray()
+            .sumOf { direction -> this.lookAround(x, y, direction) }
 
         private fun lookAround(x: Int, y: Int, direction: Direction): Int {
             val nextX = x + direction.dx
@@ -67,7 +68,8 @@ class Day11(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             return if (nextX in this.rows[0].indices && nextY in this.rows.indices && this.rows[nextY][nextX] == '#') 1 else 0
         }
 
-        private fun lookInDirection(x: Int, y: Int) = Direction.values().sumOf { direction -> this.lookInDirection(x, y, direction) }
+        private fun lookInDirection(x: Int, y: Int) = Direction.entries.toTypedArray()
+            .sumOf { direction -> this.lookInDirection(x, y, direction) }
 
         private fun lookInDirection(x: Int, y: Int, direction: Direction): Int {
             var nextX = x + direction.dx

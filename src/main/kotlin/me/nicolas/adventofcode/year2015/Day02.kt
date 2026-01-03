@@ -18,24 +18,22 @@ fun main() {
 class Day02(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, title) {
 
     fun partOne(dimensions: String): Int {
-        return dimensions.split("\n")
-            .map { line ->
-                val (l, w, h) = extractLengthWidthHeight(line)
-                val lw = l * w
-                val wh = w * h
-                val hl = h * l
-                2 * lw + 2 * wh + 2 * hl + minOf(lw, wh, hl)
-            }.sum()
+        return dimensions.split("\n").sumOf { line ->
+            val (l, w, h) = extractLengthWidthHeight(line)
+            val lw = l * w
+            val wh = w * h
+            val hl = h * l
+            2 * lw + 2 * wh + 2 * hl + minOf(lw, wh, hl)
+        }
     }
 
     fun partTwo(dimensions: String): Int {
-        return dimensions.split("\n")
-            .map { line ->
-                val (l, w, h) = extractLengthWidthHeight(line)
-                val smallestPerimeter = listOf(2 * (l + w), 2 * (w + h), 2 * (h + l)).minOrNull()!!
-                val volume = l * w * h
-                smallestPerimeter + volume
-            }.sum()
+        return dimensions.split("\n").sumOf { line ->
+            val (l, w, h) = extractLengthWidthHeight(line)
+            val smallestPerimeter = listOf(2 * (l + w), 2 * (w + h), 2 * (h + l)).minOrNull()!!
+            val volume = l * w * h
+            smallestPerimeter + volume
+        }
     }
 
     private fun extractLengthWidthHeight(line: String): Triple<Int, Int, Int> {

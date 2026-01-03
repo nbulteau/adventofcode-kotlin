@@ -4,7 +4,6 @@ import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import kotlin.collections.fold
 
 // --- Day 6: Trash Compactor ---
 // https://adventofcode.com/2025/day/6

@@ -1,11 +1,6 @@
 package me.nicolas.adventofcode.year2025
 
-import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.Point
-import me.nicolas.adventofcode.utils.SimpleGrid
-import me.nicolas.adventofcode.utils.prettyPrintPartOne
-import me.nicolas.adventofcode.utils.prettyPrintPartTwo
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.*
 
 // --- Day 12: Christmas Tree Farm ---
 // https://adventofcode.com/2025/day/12
@@ -13,7 +8,7 @@ fun main() {
     val data = readFileDirectlyAsText("/year2025/day12/data.txt")
     val day = Day12()
     prettyPrintPartOne { day.partOne(data) }
-    prettyPrintPartTwo { day.partTwo(data) }
+    // No part two for this day
 }
 
 class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Farm") :
@@ -62,9 +57,6 @@ class Day12(year: Int = 2025, day: Int = 12, title: String = "Christmas Tree Far
         }
     }
 
-    fun partTwo(data: String): Int {
-        return 0
-    }
 
     /**
      * Check if all presents can fit in the given region using backtracking

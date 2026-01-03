@@ -45,7 +45,7 @@ class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         var count = 0
 
         fun dfsHelper(x: Int, y: Int) {
-            if (x < 0 || x >= rows || y < 0 || y >= columns || visited[y][x]) return
+            if (x !in 0..<rows || y < 0 || y >= columns || visited[y][x]) return
 
             visited[y][x] = true
 
@@ -88,7 +88,7 @@ class Day10(year: Int, day: Int, title: String = "") : AdventOfCodeDay(year, day
         val columns = map.size
 
         fun dfsHelper(x: Int, y: Int, path: MutableList<Pair<Int, Int>>, visited: Array<BooleanArray>) {
-            if (x < 0 || x >= rows || y < 0 || y >= columns) return
+            if (x !in 0..<rows || y < 0 || y >= columns) return
 
             visited[y][x] = true
 

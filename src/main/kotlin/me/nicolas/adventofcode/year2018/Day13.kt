@@ -36,7 +36,7 @@ class Day13(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
     }
 
     // Solve the puzzle by iterating over the carts until the stop condition is met (all carts crashed or only one cart left)
-    private fun solve(carts: Set<Cart>, tracks: Grid<Char>, stopCondition: (Set<Cart>) -> Boolean, ) {
+    private fun solve(carts: Set<Cart>, tracks: Grid<Char>, stopCondition: (Set<Cart>) -> Boolean) {
         while (stopCondition(carts)) {
             // Sort carts by position (top to bottom, left to right)
             val sortedCarts = carts.sortedWith(compareBy({ it.position.second }, { it.position.first }))

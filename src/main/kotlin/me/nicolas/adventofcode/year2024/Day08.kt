@@ -22,7 +22,7 @@ class Day08(year: Int, day: Int, title: String = "Resonant Collinearity") : Adve
             val deltaX = b.x - a.x
             val deltaY = b.y - a.y
 
-            return mutableListOf<Point>(
+            return mutableListOf(
                 Point(a.y - deltaY, a.x - deltaX),
                 Point(b.y + deltaY, b.x + deltaX)
             )

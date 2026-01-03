@@ -27,10 +27,10 @@ internal object GFG {
 
 fun main() {
     val f = arrayOf(
-        GFG.Data(100,6536, ),
-        GFG.Data(500,167004, ),
+        GFG.Data(100, 6536),
+        GFG.Data(500, 167004),
         //GFG.Data(1000, 668697, ),
-        GFG.Data(5000, 16733044, )
+        GFG.Data(5000, 16733044)
     )
 
     // Using the interpolate function to obtain

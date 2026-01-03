@@ -21,7 +21,7 @@ class Day24(year: Int, day: Int, title: String = "Planet of Discord") : AdventOf
         private const val CENTER_X = 2
         private const val CENTER_Y = 2
         private const val CENTER_INDEX = CENTER_Y * WIDTH + CENTER_X
-        private val INV_CENTER_MASK: Int = (Int.MAX_VALUE) xor (1 shl CENTER_INDEX)
+        private const val INV_CENTER_MASK: Int = (Int.MAX_VALUE) xor (1 shl CENTER_INDEX)
     }
 
     /**

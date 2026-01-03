@@ -126,7 +126,7 @@ private class Day07(year: Int, day: Int, title: String) : AdventOfCodeDay(year, 
             return this
         }
 
-        fun isDirectory() = children.size > 0
+        fun isDirectory() = children.isNotEmpty()
     }
 
 }

@@ -8,7 +8,7 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 // https://adventofcode.com/2021/day/9
 fun main() {
     val data = readFileDirectlyAsText("/year2021/day09/data.txt")
-    val day = Day09(2021, 9, )
+    val day = Day09(2021, 9)
     val inputs = data.split("\n")
     val lines = inputs.map { line -> line.toList().map { point -> point.toString().toInt() } }
     prettyPrintPartOne { day.partOne(lines) }

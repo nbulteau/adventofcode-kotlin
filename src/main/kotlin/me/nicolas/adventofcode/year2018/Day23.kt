@@ -4,7 +4,7 @@ import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import java.util.PriorityQueue
+import java.util.*
 
 
 // https://adventofcode.com/2018/day/23

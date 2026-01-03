@@ -4,7 +4,7 @@ import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import java.util.ArrayDeque
+import java.util.*
 
 // --- Day 20: Donut Maze ---
 // https://adventofcode.com/2019/day/20

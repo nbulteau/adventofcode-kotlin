@@ -31,7 +31,6 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             number++
         }
 
-        return 0
     }
 
     fun partTwo(secretKey: String): Int {
@@ -47,5 +46,5 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
             number++
         }
 
-        return 0    }
+    }
 }

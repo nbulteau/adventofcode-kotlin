@@ -1,10 +1,6 @@
 package me.nicolas.adventofcode.year2019
 
-import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.prettyPrintPartOne
-import me.nicolas.adventofcode.utils.prettyPrintPartTwo
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
-import me.nicolas.adventofcode.utils.lcm
+import me.nicolas.adventofcode.utils.*
 import kotlin.math.abs
 
 // --- Day 12: The N-Body Problem ---
@@ -187,9 +183,9 @@ class Day12(year: Int, day: Int, title: String, private val data: String) : Adve
 
         // Find cycle length for each axis independently
         // The motion on each axis is independent, so we can find when each axis repeats
-        val xCycle = findAxisCycle(moons.map { it.copy() }, { it.x })
-        val yCycle = findAxisCycle(moons.map { it.copy() }, { it.y })
-        val zCycle = findAxisCycle(moons.map { it.copy() }, { it.z })
+        val xCycle = findAxisCycle(moons.map { it.copy() }) { it.x }
+        val yCycle = findAxisCycle(moons.map { it.copy() }) { it.y }
+        val zCycle = findAxisCycle(moons.map { it.copy() }) { it.z }
 
         // The overall cycle is the LCM of all three axis cycles
         return xCycle.lcm(yCycle).lcm(zCycle)

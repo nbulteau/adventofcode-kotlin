@@ -49,13 +49,13 @@ class Day02(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         // Decrease
         this.windowed(2, 1).all { ints ->
             val delta = ints.first() - ints.last()
-            delta > 0 && delta <= 3
+            delta in 1..3
         }
     } else if (this[0] < this[1]) {
         // Increase
         this.windowed(2, 1).all { ints ->
             val delta = ints.last() - ints.first()
-            delta > 0 && delta <= 3
+            delta in 1..3
         }
     } else {
         false

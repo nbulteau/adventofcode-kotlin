@@ -1,8 +1,7 @@
 package me.nicolas.adventofcode.year2018
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class Day11Test {
     private val day = Day11(2018, 11, "Chronal Charge")

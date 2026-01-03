@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class Day12Test {
     private val day = Day12(2025, 12, "Christmas Tree Farm")
 
-    private val data ="""
+    private val data = """
         0:
         ###
         ##.
@@ -41,7 +41,7 @@ class Day12Test {
         12x5: 1 0 1 0 2 2
     """.trimIndent()
 
-    private val longRunningData ="""
+    private val longRunningData = """
         0:
         ###
         ##.
@@ -80,11 +80,6 @@ class Day12Test {
     @Test
     fun partOne() {
         assertEquals(2, day.partOne(data))
-    }
-
-    @Test
-    fun partTwo() {
-        assertEquals(0, day.partTwo(data))
     }
 }
 

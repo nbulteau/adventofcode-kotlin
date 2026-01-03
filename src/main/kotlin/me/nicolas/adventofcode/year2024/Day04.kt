@@ -23,7 +23,7 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val rows = grid.size
         val columns = grid[0].size
 
-        fun isValid(x: Int, y: Int) = x >= 0 && x < rows && y >= 0 && y < columns
+        fun isValid(x: Int, y: Int) = x in 0..<rows && y >= 0 && y < columns
 
         val word = "XMAS"
 
@@ -72,7 +72,7 @@ class Day04(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         val rows = grid.size
         val columns = grid[0].size
 
-        fun isValid(x: Int, y: Int) = x >= 0 && x < rows && y >= 0 && y < columns
+        fun isValid(x: Int, y: Int) = x in 0..<rows && y >= 0 && y < columns
 
         fun isMS(first: Char, second: Char) = (second == 'M' && first == 'S') || (second == 'S' && first == 'M')
 

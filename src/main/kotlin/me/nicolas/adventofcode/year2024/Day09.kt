@@ -31,7 +31,7 @@ class Day09(year: Int, day: Int, title: String = "Disk Fragmenter") : AdventOfCo
         val idBlocksWithSize = mutableListOf<Pair<Int, Int>>()
         // Pair<IdBlock, Size>
         val freeSpaceBlocksWithSize = mutableListOf<Pair<Int, Int>>()
-        val blockArray: MutableList<Long?> = data.foldIndexed(emptyList<Long?>()) { index, acc: List<Long?>, char ->
+        val blockArray: MutableList<Long?> = data.foldIndexed(emptyList()) { index, acc: List<Long?>, char ->
             val amount = char.digitToInt()
             if (index % 2 == 0) {
                 idBlocksWithSize.add(acc.size to amount)
@@ -76,7 +76,7 @@ class Day09(year: Int, day: Int, title: String = "Disk Fragmenter") : AdventOfCo
 
     // Each character's digit value indicates how many consecutive elements follow it (either filled with IDs or nulls for free space).
     private fun parseDiskMap(data: String): List<Long?> =
-        data.foldIndexed(emptyList<Long?>()) { index, acc: List<Long?>, char ->
+        data.foldIndexed(emptyList()) { index, acc: List<Long?>, char ->
             val amount = char.digitToInt()
             if (index % 2 == 0) {
                 acc + List(amount) { (index / 2).toLong() }

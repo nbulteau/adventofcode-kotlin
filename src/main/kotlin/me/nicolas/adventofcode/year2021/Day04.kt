@@ -8,7 +8,7 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 // https://adventofcode.com/2021/day/4
 fun main() {
     val data = readFileDirectlyAsText("/year2021/day04/data.txt")
-    val day = Day04(2021, 4, )
+    val day = Day04(2021, 4)
     val input = data.split("\n")
     val drawnNumbers = input[0].split(",").map { str -> str.toInt() }
     val boards = day.buildBoards(input.subList(2, input.size))
@@ -82,7 +82,7 @@ class Day04(year: Int, day: Int, title: String = "Giant Squid") : AdventOfCodeDa
         var index = 0
         do {
             val listOfTiles = mutableListOf<List<Tile>>()
-            for (x in 0..4) {
+            repeat(5) {
                 val line = lines[index++].windowed(2, 3).map { str -> Tile(str.trim().toInt()) }
                 listOfTiles.add(line)
             }

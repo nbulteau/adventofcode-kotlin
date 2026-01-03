@@ -17,7 +17,7 @@ fun main() {
 
 class Day12(year: Int, day: Int, title: String = "JSAbacusFramework.io") : AdventOfCodeDay(year, day, title) {
 
-    fun partOne(data: String) = Regex("-?\\d+").findAll(data).map { it.value.toInt() }.sum()
+    fun partOne(data: String) = Regex("-?\\d+").findAll(data).sumOf { it.value.toInt() }
 
     fun partTwo(data: String) = Json.parseToJsonElement(data).sumNumbersExcludingRed()
 
@@ -28,11 +28,11 @@ class Day12(year: Int, day: Int, title: String = "JSAbacusFramework.io") : Adven
                 if (this.values.any { it is JsonPrimitive && it.content == "red" }) {
                     return 0
                 }
-                return this.values.sumOf { jsonElement -> jsonElement.sumNumbersExcludingRed() }
+                this.values.sumOf { jsonElement -> jsonElement.sumNumbersExcludingRed() }
             }
 
             is JsonArray -> {
-                return this.sumOf { jsonElement -> jsonElement.sumNumbersExcludingRed() }
+                this.sumOf { jsonElement -> jsonElement.sumNumbersExcludingRed() }
             }
         }
     }

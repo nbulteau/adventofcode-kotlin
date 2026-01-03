@@ -1,10 +1,6 @@
 package me.nicolas.adventofcode.year2018
 
-import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.Point
-import me.nicolas.adventofcode.utils.prettyPrintPartOne
-import me.nicolas.adventofcode.utils.prettyPrintPartTwo
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.*
 
 
 // https://adventofcode.com/2018/day/22

@@ -105,7 +105,7 @@ class Day24(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         }
 
         fun getNeighbors(): List<Coord> {
-            return Direction.values().map { this.move(it) }
+            return Direction.entries.map { this.move(it) }
         }
     }
 

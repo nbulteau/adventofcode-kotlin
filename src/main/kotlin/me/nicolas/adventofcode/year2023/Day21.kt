@@ -27,10 +27,10 @@ class Day21(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         currentPositions.add(start)
 
         var nextPositions = mutableSetOf<Pair<Int, Int>>()
-        for (i in 1..stepsToDo) {
+        repeat(stepsToDo) {
             for (point in currentPositions) {
                 for (nextPoint in point.getAdjacentPoints()) {
-                    if (nextPoint.first < 0 || nextPoint.first > maxX || nextPoint.second < 0 || nextPoint.second > maxY) {
+                    if (nextPoint.first !in 0..maxX || nextPoint.second < 0 || nextPoint.second > maxY) {
                         continue
                     }
                     if (obstacles.contains(nextPoint)) {
@@ -55,9 +55,8 @@ class Day21(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
 
         // The map is a square
         val width = lines.size
-        val height = width
 
-        fun Pair<Int, Int>.floorMod() = Pair(Math.floorMod(first, width), Math.floorMod(second, height))
+        fun Pair<Int, Int>.floorMod() = Pair(Math.floorMod(first, width), Math.floorMod(second, width))
 
         val visited = mutableSetOf<Pair<Int, Int>>()
 

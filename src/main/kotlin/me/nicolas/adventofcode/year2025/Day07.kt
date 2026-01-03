@@ -1,11 +1,6 @@
 package me.nicolas.adventofcode.year2025
 
-import me.nicolas.adventofcode.utils.AdventOfCodeDay
-import me.nicolas.adventofcode.utils.Point
-import me.nicolas.adventofcode.utils.SimpleGrid
-import me.nicolas.adventofcode.utils.prettyPrintPartOne
-import me.nicolas.adventofcode.utils.prettyPrintPartTwo
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
+import me.nicolas.adventofcode.utils.*
 
 // --- Day 7: Laboratories ---
 // https://adventofcode.com/2025/day/7

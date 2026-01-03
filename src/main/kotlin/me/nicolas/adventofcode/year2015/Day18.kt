@@ -94,7 +94,7 @@ class Day18(year: Int, day: Int, title: String = "Like a GIF For Your Yard") : A
 
     private fun countOnNeighbors(grid: SimpleGrid<Char>, point: Point): Int {
         return directions.count { direction ->
-            val neighbor = Point( point.x + direction.x, point.y + direction.y,)
+            val neighbor = Point(point.x + direction.x, point.y + direction.y)
             neighbor in grid && grid[neighbor] == '#'
         }
     }

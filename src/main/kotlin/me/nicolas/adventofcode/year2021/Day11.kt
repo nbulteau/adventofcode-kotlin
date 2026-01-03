@@ -5,7 +5,7 @@ import me.nicolas.adventofcode.utils.*
 // https://adventofcode.com/2021/day/11
 fun main() {
     val data = readFileDirectlyAsText("/year2021/day11/data.txt")
-    val day = Day11(2021, 11, )
+    val day = Day11(2021, 11)
     val inputs = data.split("\n")
     val lines = inputs.map { line -> line.toList().map { point -> point.toString().toInt() } }
     prettyPrintPartOne { day.partOne(lines) }
@@ -159,7 +159,7 @@ class Day11(year: Int, day: Int, title: String = "Dumbo Octopus") : AdventOfCode
         val octopuses = lines.flatMap { row -> row.map { energy -> Octopus(energy) } }
         val grid = Grid(octopuses)
 
-        for (index in 1..100) {
+        repeat(100) {
             grid.processStep()
         }
         println("After step 100:")

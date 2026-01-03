@@ -99,8 +99,7 @@ class Day18(year: Int, day: Int, title: String) : AdventOfCodeDay(year, day, tit
         return data.lines().map { line ->
             val parts = line.trim().split(" ")
             val distance = parts[2].subSequence(2, 7).toString().toLong(16) //
-            val move = parts[2][7].toString() // 7 is the index of the direction
-            val direction = when (move) {
+            val direction = when (val move = parts[2][7].toString()) { // 7 is the index of the direction
                 "0" -> Direction.EAST
                 "2" -> Direction.WEST
                 "3" -> Direction.NORTH

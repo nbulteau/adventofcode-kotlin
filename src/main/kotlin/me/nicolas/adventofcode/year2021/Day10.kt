@@ -9,7 +9,7 @@ import java.util.*
 // https://adventofcode.com/2021/day/10
 fun main() {
     val data = readFileDirectlyAsText("/year2021/day10/data.txt")
-    val day = Day10(2021, 10, )
+    val day = Day10(2021, 10)
     val lines = data.split("\n")
     prettyPrintPartOne { day.partOne(lines) }
     prettyPrintPartTwo { day.partTwo(lines) }

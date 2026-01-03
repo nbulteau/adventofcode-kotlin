@@ -26,7 +26,7 @@ class Day06(year: Int, day: Int, title: String = "Universal Orbit Map") : Advent
         var totalNumberOfOrbits = 0
 
         val graph = initGraph(inputs)
-        graph.keys.map { key ->
+        graph.keys.forEach { key ->
             var prev = graph[key]
             while (prev != null) {
                 prev = graph[prev]

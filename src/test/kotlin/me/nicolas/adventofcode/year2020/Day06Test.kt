@@ -1,6 +1,5 @@
 package me.nicolas.adventofcode.year2020
 
-import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

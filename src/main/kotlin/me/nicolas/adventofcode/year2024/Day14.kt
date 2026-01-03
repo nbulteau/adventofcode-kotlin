@@ -76,7 +76,7 @@ class Day14(year: Int, day: Int, title: String = "Restroom Redoubt", val width: 
     }
 
     private fun buildGrid(robots: List<Point>): List<String> {
-        val grid = Array(height) { Array<Int>(width) { 0 } }
+        val grid = Array(height) { Array(width) { 0 } }
         for ((x, y) in robots) {
             grid[y][x]++
         }

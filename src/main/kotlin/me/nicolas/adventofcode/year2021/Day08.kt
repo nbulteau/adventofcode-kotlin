@@ -34,9 +34,7 @@ class Day08(year: Int, day: Int, title: String = "Seven Segment Search") : Adven
             val fourDigitOutputValue = line.split(" | ")[1]
             val signalPatterns = processMap(uniqueSignalPatterns.split(" "))
 
-            fourDigitOutputValue.split(" ")
-                .map { str -> signalPatterns[str.toSortedSet()] }
-                .joinToString("")
+            fourDigitOutputValue.split(" ").joinToString("") { str -> signalPatterns[str.toSortedSet()].toString() }
                 .toInt()
         }
     }

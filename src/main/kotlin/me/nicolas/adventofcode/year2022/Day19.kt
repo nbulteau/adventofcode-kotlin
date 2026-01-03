@@ -116,17 +116,15 @@ private class Day19(year: Int, day: Int, title: String, inputs: List<String>) :
             // Since we can only produce one robot per turn,
             // we don't need more material-collecting robots than the maximum of what is needed for any particular recipe
             val maxOreCosts = maxOf(oreRobotOreCosts, clayRobotOreCosts, obsidianRobotOreCosts, geodeRobotOreCosts)
-            val maxClayCosts = obsidianRobotClayCosts
-            val maxObsidianCosts = geodeRobotObsidianCosts
 
             oreRobot = min(oreRobot, maxOreCosts)
-            clayRobot = min(clayRobot, maxClayCosts)
-            obsidianRobot = min(obsidianRobot, maxObsidianCosts)
+            clayRobot = min(clayRobot, obsidianRobotClayCosts)
+            obsidianRobot = min(obsidianRobot, geodeRobotObsidianCosts)
 
             // Resources
             ore = min(ore, maxOreCosts * time - oreRobot * (time - 1))
-            clay = min(clay, maxClayCosts * time - clayRobot * (time - 1))
-            obsidian = min(obsidian, maxObsidianCosts * time - obsidianRobot * (time - 1))
+            clay = min(clay, obsidianRobotClayCosts * time - clayRobot * (time - 1))
+            obsidian = min(obsidian, geodeRobotObsidianCosts * time - obsidianRobot * (time - 1))
 
             // has enough ore and obsidian to build geode robot -> it is the optimal option
             if (ore >= geodeRobotOreCosts && obsidian >= geodeRobotObsidianCosts) {

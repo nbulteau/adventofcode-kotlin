@@ -108,8 +108,7 @@ class IntCodeProgram(program: List<Long>) {
         var instruction = readMemory(instructionPointer)
         while (true) {
             // Extract opcode from last 2 digits of instruction
-            val operation = (instruction % 100).toInt()
-            when (operation) {
+            when (val operation = (instruction % 100).toInt()) {
                 1 -> instructionPointer = opAdd(instructionPointer, instruction)
                 2 -> instructionPointer = opMultiply(instructionPointer, instruction)
                 3 -> instructionPointer = opInput(instructionPointer, instruction, inputs)

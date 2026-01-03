@@ -6,11 +6,11 @@ import kotlin.test.assertEquals
 class Day20Test {
     private val day = Day20()
 
-    private val test1 = "^WNE\$"
+    private val test1 = $$"^WNE$"
 
-    private val test2 = "^ENWWW(NEEE|SSE(EE|N))\$"
+    private val test2 = $$"^ENWWW(NEEE|SSE(EE|N))$"
 
-    private val test3 = "^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN${'$'}"
+    private val test3 = $$"^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$"
 
     @Test
     fun partOne() {

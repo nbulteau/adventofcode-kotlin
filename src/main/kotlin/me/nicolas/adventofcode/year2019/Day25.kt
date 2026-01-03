@@ -1,20 +1,15 @@
 package me.nicolas.adventofcode.year2019
 
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.channels.ClosedSendChannelException
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.readFileDirectlyAsText
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 
 // --- Day 25: Cryostasis ---
 // https://adventofcode.com/2019/day/25
@@ -165,17 +160,17 @@ class Day25(year: Int, day: Int, title: String = "Cryostasis") : AdventOfCodeDay
             for ((fromId, map) in edges) {
                 val fromRoom = visited[fromId]
                 val fromBase = fromRoom?.name ?: "room_$fromId"
-                val fromItems = fromRoom?.items?.takeIf { it.isNotEmpty() }?.map { item ->
+                val fromItems = fromRoom?.items?.takeIf { it.isNotEmpty() }?.joinToString(", ") { item ->
                     if (item.lowercase() in knownDeadlyItems) "${item}*" else item
-                }?.joinToString(", ")
+                }
                 val fromLabelRaw = if (fromItems != null) "$fromBase [$fromItems]" else fromBase
                 val fromLabel = fromLabelRaw.replace("\"", "\\\"")
                 for ((dir, toId) in map) {
                     val toRoom = visited[toId]
                     val toBase = toRoom?.name ?: "room_$toId"
-                    val toItems = toRoom?.items?.takeIf { it.isNotEmpty() }?.map { item ->
+                    val toItems = toRoom?.items?.takeIf { it.isNotEmpty() }?.joinToString(", ") { item ->
                         if (item.lowercase() in knownDeadlyItems) "${item}*" else item
-                    }?.joinToString(", ")
+                    }
                     val toLabelRaw = if (toItems != null) "$toBase [$toItems]" else toBase
                     val toLabel = toLabelRaw.replace("\"", "\\\"")
                     stringBuilder.appendLine("  \"$fromLabel\" -> \"$toLabel\" [label=\"$dir\"];")

@@ -1,10 +1,6 @@
 package me.nicolas.adventofcode.year2025
 
-import com.microsoft.z3.BoolExpr
-import com.microsoft.z3.Context
-import com.microsoft.z3.IntExpr
-import com.microsoft.z3.IntNum
-import com.microsoft.z3.Status
+import com.microsoft.z3.*
 import me.nicolas.adventofcode.utils.AdventOfCodeDay
 import me.nicolas.adventofcode.utils.prettyPrintPartOne
 import me.nicolas.adventofcode.utils.prettyPrintPartTwo
@@ -12,7 +8,6 @@ import me.nicolas.adventofcode.utils.readFileDirectlyAsText
 import org.ojalgo.optimisation.ExpressionsBasedModel
 import java.util.*
 import kotlin.math.roundToInt
-import kotlin.use
 
 // --- Day 10: Factory ---
 // https://adventofcode.com/2025/day/10

@@ -19,14 +19,10 @@ fun main() {
 private class Day22(year: Int, day: Int, title: String, mapOfTheBoard: String, val pathYouMustFollow: String) :
     AdventOfCodeDay(year, day, title) {
 
-    private val map: Map<Pair<Int, Int>, Char>
-
-    init {
-        this.map = mapOfTheBoard.split('\n').flatMapIndexed { column, string ->
-            string.asIterable()
-                .mapIndexedNotNull { row, char -> if (char == ' ') null else Pair(Pair(row, column), char) }
-        }.toMap()
-    }
+    private val map: Map<Pair<Int, Int>, Char> = mapOfTheBoard.split('\n').flatMapIndexed { column, string ->
+        string.asIterable()
+            .mapIndexedNotNull { row, char -> if (char == ' ') null else Pair(Pair(row, column), char) }
+    }.toMap()
 
     private enum class Direction {
         RIGHT, DOWN, LEFT, UP;

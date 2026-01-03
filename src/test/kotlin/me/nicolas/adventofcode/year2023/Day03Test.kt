@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class Day03Test {
 
     private val day = Day03(2023, 3, "Gear Ratios")
-    private val data = """
+    private val data = $$"""
         467..114..
         ...*......
         ..35..633.
@@ -15,7 +15,7 @@ class Day03Test {
         .....+.58.
         ..592.....
         ......755.
-        ...${'$'}.*....
+        ...$.*....
         .664.598..      
     """.trimIndent()
 

@@ -18,15 +18,11 @@ fun main() {
 
 private class Day23(year: Int, day: Int, title: String, inputs: List<String>) : AdventOfCodeDay(year, day, title) {
 
-    private val elves: Set<Pair<Int, Int>>
-
-    init {
-        elves = inputs.flatMapIndexed { column: Int, line: String ->
-            line.mapIndexedNotNull { row, char ->
-                if (char == '#') Pair(row, column) else null
-            }
-        }.toSet()
-    }
+    private val elves: Set<Pair<Int, Int>> = inputs.flatMapIndexed { column: Int, line: String ->
+        line.mapIndexedNotNull { row, char ->
+            if (char == '#') Pair(row, column) else null
+        }
+    }.toSet()
 
     private enum class Direction(var dx: Int, var dy: Int) {
         NORTH(0, -1), SOUTH(0, 1), WEST(-1, 0), EAST(1, 0);

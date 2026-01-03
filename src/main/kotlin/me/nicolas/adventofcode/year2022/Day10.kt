@@ -112,7 +112,7 @@ private class Day10(year: Int, day: Int, title: String) : AdventOfCodeDay(year, 
         }
     }
 
-    fun Map<Pair<Int, Int>, Char>.display() {
+    private fun Map<Pair<Int, Int>, Char>.display() {
         for (y in 0..keys.maxOf { it.second }) {
             for (x in 0..keys.maxOf { it.first }) {
                 print(getOrDefault(Pair(x, y), " "))
